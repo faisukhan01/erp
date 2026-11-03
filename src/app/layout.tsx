@@ -1,52 +1,55 @@
-import type { Metadata } from "next";
-import { Bricolage_Grotesque, Inter, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { JetBrains_Mono, Space_Grotesk, Unbounded } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const grotesk = Space_Grotesk({
+  variable: "--font-grotesk",
   subsets: ["latin"],
   display: "swap",
 });
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const mono = JetBrains_Mono({
+  variable: "--font-mono-code",
   subsets: ["latin"],
-  axes: ["opsz"],
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const brand = Unbounded({
+  variable: "--font-brand",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Buildora — Describe it. Watch it ship.",
+  title: "ONYX — The AI-native IDE",
   description:
-    "Buildora turns a sentence into a stunning, working web app, then lets you refine it through conversation. An AI app-builder platform powered by Z.AI, FastAPI and Neon PostgreSQL.",
+    "Onyx is a machined-black, AI-native browser IDE: Monaco editor, real terminal, git bridge and an AI pair programmer powered by Z.AI.",
   keywords: [
-    "Buildora",
-    "AI app builder",
+    "Onyx IDE",
+    "AI IDE",
+    "browser IDE",
+    "Monaco editor",
+    "AI pair programmer",
     "Z.AI",
-    "Lovable alternative",
-    "Base44 alternative",
-    "FastAPI",
+    "xterm",
     "Next.js",
-    "PostgreSQL",
   ],
-  authors: [{ name: "Buildora" }],
+  authors: [{ name: "Onyx" }],
   openGraph: {
-    title: "Buildora — Describe it. Watch it ship.",
-    description: "The AI app-builder platform powered by Z.AI. One sentence in, a working web app out.",
-    siteName: "Buildora",
+    title: "ONYX — The AI-native IDE",
+    description:
+      "Monaco editor, real terminal, git bridge and Z.AI pair programming — in one machined-black workspace.",
+    siteName: "Onyx",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Buildora — Describe it. Watch it ship.",
-    description: "The AI app-builder platform powered by Z.AI. One sentence in, a working web app out.",
-  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#030303",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -57,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${bricolage.variable} ${jetbrainsMono.variable} antialiased bg-[#050505] font-sans text-zinc-100`}
+        className={`${grotesk.variable} ${mono.variable} ${brand.variable} antialiased bg-[#030303] font-sans text-[#ededed]`}
       >
         {children}
       </body>
