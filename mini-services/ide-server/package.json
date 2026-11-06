@@ -1,0 +1,16 @@
+{
+  "name": "onyx-ide-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Onyx IDE companion server: persistent shell sessions + Z.AI streaming over socket.io",
+  "scripts": {
+    "dev": "bun --hot index.ts"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1",
+    "z-ai-web-dev-sdk": "^0.0.18"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.1"
+  }
+}
