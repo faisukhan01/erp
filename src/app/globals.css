@@ -120,3 +120,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Buildora — slim custom scrollbars */
+.buildora-scroll::-webkit-scrollbar,
+[role="log"]::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.buildora-scroll::-webkit-scrollbar-track,
+[role="log"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+.buildora-scroll::-webkit-scrollbar-thumb,
+[role="log"]::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+}
+.buildora-scroll::-webkit-scrollbar-thumb:hover,
+[role="log"]::-webkit-scrollbar-thumb:hover {
+  background: rgba(217, 70, 239, 0.35);
+}
+.buildora-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
