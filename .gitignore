@@ -39,7 +39,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# buildora
+# onyx workspace (user data, has its own git)
 /db/
 /dev.log
 /logs/
@@ -49,3 +49,6 @@ mini-services/api/api.log
 mini-services/ai-worker/*.log
 *.db
 *.sqlite3
+/public/monaco
+/ide-workspace/
+dev.log
