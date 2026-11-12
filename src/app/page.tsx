@@ -1,132 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import Landing from "@/components/buildora/landing";
-import Dashboard from "@/components/buildora/dashboard";
-import Builder from "@/components/buildora/builder";
-import { ensureBoot } from "@/lib/api";
-import { useStore } from "@/lib/store";
-import type { ProjectMeta } from "@/lib/types";
+import dynamic from "next/dynamic";
 
-export default function Home() {
-  const { view, projects, projectsLoading, detail, detailLoading, setView, init, goDashboard, openProject, newProject, removeProject } =
-    useStore();
+const OnyxIDE = dynamic(() => import("@/components/ide/onyx-ide").then((m) => m.OnyxIDE), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-dvh items-center justify-center bg-[#030303]">
+      <span className="micro-label anim-dot">onyx</span>
+    </div>
+  ),
+});
 
-  const [booted, setBooted] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<ProjectMeta | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      await ensureBoot();
-      await init();
-      if (!cancelled) setBooted(true);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [init]);
-
-  const handleBuild = async (prompt: string) => {
-    toast.loading("Buildora is warming up…", { id: "new-project" });
-    try {
-      await newProject(prompt);
-      toast.dismiss("new-project");
-    } catch (err) {
-      toast.dismiss("new-project");
-      toast.error(err instanceof Error ? err.message : "Could not create the project. Is the backend awake?");
-    }
-  };
-
-  const handleOpen = async (id: string) => {
-    await openProject(id);
-  };
-
-  const confirmDelete = async () => {
-    if (!deleteTarget) return;
-    try {
-      await removeProject(deleteTarget.id);
-      toast.success(`Deleted "${deleteTarget.name}"`);
-    } catch {
-      toast.error("Could not delete the project.");
-    }
-    setDeleteTarget(null);
-  };
-
-  if (!booted) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#050505]">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-6"
-        >
-          <div className="animate-pulse relative flex h-12 w-12 items-center justify-center rounded-xl border border-white/15 bg-white/[0.03]">
-            <span className="h-2 w-2 rounded-[2px] bg-cyan-400" />
-          </div>
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">
-            <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-400 [animation-delay:0ms]" />
-            <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-400 [animation-delay:150ms]" />
-            <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-400 [animation-delay:300ms]" />
-            <span className="ml-2">Waking the machines</span>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      {view === "landing" && (
-        <Landing onBuild={handleBuild} onDashboard={goDashboard} projectCount={projects.length} />
-      )}
-      {view === "dashboard" && (
-        <Dashboard
-          projects={projects}
-          loading={projectsLoading && projects.length === 0}
-          onOpen={handleOpen}
-          onNew={() => setView("landing")}
-          onDelete={(id) => setDeleteTarget(projects.find((p) => p.id === id) || null)}
-        />
-      )}
-      {(view === "builder" || detail || detailLoading) && <Builder />}
-      <Toaster theme="dark" position="bottom-center" richColors closeButton />
-
-      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent className="border-white/10 bg-[#0a0a0a] text-zinc-100">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete “{deleteTarget?.name}”?</AlertDialogTitle>
-            <AlertDialogDescription className="text-zinc-400">
-              This permanently removes the project, its chat history and every saved version from
-              the cloud database. This cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-white/10 bg-white/[0.03] text-zinc-200 hover:bg-white/[0.08] hover:text-white">
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-red-500/90 text-white hover:bg-red-500"
-            >
-              Delete forever
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
-  );
+export default function Page() {
+  return <OnyxIDE />;
 }
