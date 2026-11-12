@@ -16,13 +16,13 @@ import httpx
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from database import Base, SessionLocal, engine, get_db
 from models import Message, Project, User, Version
-from prompts import BUILDER_SYSTEM, NAMING_SYSTEM, NAMING_USER_TMPL
+from prompts import BUILDER_SYSTEM, NAMING_SYSTEM, NAMING_USER_TMPL, PLANNER_SYSTEM
 from schemas import (
     ChatCreate,
     ProjectCreate,
@@ -43,7 +43,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Buildora API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Buildora API", version="2.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -96,6 +96,53 @@ def extract_json_object(raw: str) -> dict | None:
         return json.loads(t[start : end + 1])
     except Exception:
         return None
+
+
+SCRIPT_BLOCK_RE = re.compile(r"<script\b([^>]*)>(.*?)</script>", re.S | re.I)
+ATTR_TYPE_RE = re.compile(r"type\s*=\s*[\"']([^\"']*)[\"']", re.I)
+
+
+def is_complete_html(t: str | None) -> bool:
+    """A build is only shippable if the document actually closes."""
+    return bool(t) and t.lower().rstrip().endswith("</html>")
+
+
+def extract_inline_scripts(html: str) -> list[str]:
+    """Inline, executable <script> bodies (skips src=, modules, JSON-LD...)."""
+    out: list[str] = []
+    for attrs, body in SCRIPT_BLOCK_RE.findall(html or ""):
+        if re.search(r"\bsrc\s*=", attrs, re.I):
+            continue
+        m = ATTR_TYPE_RE.search(attrs)
+        typ = (m.group(1).strip().lower() if m else "")
+        if typ in {"module", "application/json", "application/ld+json", "importmap", "speculationrules"}:
+            continue
+        if typ and not (typ.startswith("text/javascript") or typ.startswith("application/javascript") or typ == "text/babel"):
+            continue
+        if body.strip():
+            out.append(body)
+    return out
+
+
+async def validate_build(client: httpx.AsyncClient, html: str) -> list[str]:
+    """Ask the ai-worker to parse every inline script with a real JS engine and
+    verify inline on* handlers reference top-level globals. Returns a list of
+    human-readable errors (empty = valid)."""
+    scripts = extract_inline_scripts(html)
+    if not scripts and not html:
+        return []
+    try:
+        r = await client.post(
+            f"{AI_WORKER_URL}/v1/check-js",
+            json={"scripts": scripts, "html": html},
+            timeout=httpx.Timeout(30.0, connect=10.0),
+        )
+        data = r.json()
+        if data.get("ok"):
+            return []
+        return [str(e.get("message") or e) for e in data.get("errors", [])]
+    except Exception:
+        return []  # validator unreachable — never block a build on the validator itself
 
 
 def project_to_out(p: Project, version_count: int) -> ProjectOut:
@@ -213,12 +260,46 @@ def get_project(pid: str, db: Session = Depends(get_db)):
     return project_to_detail(get_project_or_404(db, pid))
 
 
+@app.patch("/api/projects/{pid}", response_model=ProjectDetail)
+def rename_project(pid: str, body: dict, db: Session = Depends(get_db)):
+    project = get_project_or_404(db, pid)
+    name = (body.get("name") or "").strip()
+    if name:
+        project.name = name[:200]
+    description = body.get("description")
+    if description is not None:
+        project.description = str(description).strip()[:500]
+    project.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(project)
+    return project_to_detail(project)
+
+
 @app.delete("/api/projects/{pid}")
 def delete_project(pid: str, db: Session = Depends(get_db)):
     project = get_project_or_404(db, pid)
     db.delete(project)
     db.commit()
     return {"ok": True}
+
+
+# ---------------------------------------------------------------- raw preview
+
+@app.get("/api/projects/{pid}/preview", response_class=HTMLResponse)
+def preview_project(pid: str, v: int | None = None, db: Session = Depends(get_db)):
+    """Serve the generated app as raw HTML — used for open-in-new-tab
+    and the dashboard live thumbnails."""
+    project = get_project_or_404(db, pid)
+    html = None
+    if v is not None:
+        version = next((x for x in project.versions if x.version_number == v), None)
+        html = version.html_code if version else None
+    elif project.current_version_id:
+        version = next((x for x in project.versions if x.id == project.current_version_id), None)
+        html = version.html_code if version else None
+    if not html:
+        raise HTTPException(status_code=404, detail="No build available yet")
+    return HTMLResponse(content=html)
 
 
 # ---------------------------------------------------------------- chat
@@ -275,14 +356,43 @@ def restore_version(pid: str, body: RestoreCreate, db: Session = Depends(get_db)
 
 # ---------------------------------------------------------------- AI generation
 
+async def plan_blueprint(client: httpx.AsyncClient, user_request: str) -> dict | None:
+    """Ask Z.AI for a compact build blueprint (name, features, palette...)."""
+    try:
+        r = await client.post(
+            f"{AI_WORKER_URL}/v1/chat",
+            json={
+                "messages": [
+                    {"role": "system", "content": PLANNER_SYSTEM},
+                    {"role": "user", "content": user_request[:2000]},
+                ]
+            },
+            timeout=httpx.Timeout(90.0, connect=10.0),
+        )
+        data = extract_json_object(r.json().get("content", ""))
+        if data and isinstance(data.get("features"), list):
+            return {
+                "name": (str(data.get("name") or "").strip() or None),
+                "description": (str(data.get("description") or "").strip() or None),
+                "tagline": (str(data.get("tagline") or "").strip() or None),
+                "features": [str(f).strip() for f in data["features"]][:6],
+                "palette": [str(c).strip() for c in (data.get("palette") or []) if c][:4],
+                "vibe": (str(data.get("vibe") or "").strip() or None),
+            }
+    except Exception:
+        pass
+    return None
+
+
 @app.post("/api/projects/{pid}/generate")
 async def generate(pid: str):
     """Stream the AI build of the app for the latest user request.
 
     SSE events:
-      status  -> {stage: naming|building}
-      chunk   -> {text}      (progressive code stream)
-      done    -> {version_id, version_number, html, message_id, name, description}
+      status  -> {stage: planning|building}
+      plan    -> {blueprint: {name, description, tagline, features, palette, vibe}}
+      chunk   -> {text}      (true token-level code stream)
+      done    -> {version_id, version_number, html, message_id, name, description, elapsed_seconds, chars}
       error   -> {message}
     """
     # Capture all inputs up-front with a short-lived session
@@ -297,8 +407,62 @@ async def generate(pid: str):
         if project.current_version_id:
             v = db.get(Version, project.current_version_id)
             current_html = v.html_code if v else None
+        # Never iterate on top of a truncated document — rebuild fresh instead.
+        if current_html and not is_complete_html(current_html):
+            current_html = None
         version_number = max((v.version_number for v in project.versions), default=0) + 1
         user_request = last_user.content
+        initial_prompt = project.initial_prompt or user_request
+        base_broken = current_html is None and project.current_version_id is not None
+
+    async def stream_build(client: httpx.AsyncClient, build_prompt: str, result: dict):
+        """Yield ("delta", text) tuples while consuming the worker's SSE stream.
+        Fills result["text"] with the full response and result["error"] if any."""
+        collected = []
+        error_message = None
+        async with client.stream(
+            "POST",
+            f"{AI_WORKER_URL}/v1/chat/stream",
+            json={
+                "messages": [
+                    {"role": "system", "content": BUILDER_SYSTEM},
+                    {"role": "user", "content": build_prompt},
+                ]
+            },
+            timeout=httpx.Timeout(600.0, connect=15.0),
+        ) as resp:
+            if resp.status_code != 200:
+                body = await resp.aread()
+                result["text"] = ""
+                result["error"] = (
+                    f"AI worker error ({resp.status_code}): {body[:200].decode(errors='ignore')}"
+                )
+                return
+            buffer = ""
+            async for raw in resp.aiter_bytes():
+                buffer += raw.decode(errors="ignore")
+                lines = buffer.split("\n")
+                buffer = lines.pop() or ""
+                for line in lines:
+                    line = line.strip()
+                    if not line.startswith("data:"):
+                        continue
+                    payload = line[5:].strip()
+                    if not payload:
+                        continue
+                    try:
+                        evt = json.loads(payload)
+                    except Exception:
+                        continue
+                    if evt.get("delta"):
+                        collected.append(evt["delta"])
+                        yield "delta", evt["delta"]
+                    elif evt.get("error"):
+                        error_message = evt["error"]
+                    elif evt.get("done"):
+                        pass
+        result["text"] = "".join(collected)
+        result["error"] = error_message
 
     async def stream() -> AsyncGenerator[str, None]:
         started = datetime.now(timezone.utc)
@@ -306,64 +470,99 @@ async def generate(pid: str):
         description = None
         try:
             async with httpx.AsyncClient(timeout=httpx.Timeout(600.0, connect=15.0)) as client:
-                # 1) Name the project on first build
+                # 1) Blueprint on the first build (fast, non-streaming)
                 if version_number == 1:
-                    yield sse("status", {"stage": "naming"})
-                    try:
-                        r = await client.post(
-                            f"{AI_WORKER_URL}/v1/chat",
-                            json={
-                                "messages": [
-                                    {"role": "assistant", "content": NAMING_SYSTEM},
-                                    {
-                                        "role": "user",
-                                        "content": NAMING_USER_TMPL.format(prompt=user_request[:1500]),
-                                    },
-                                ]
-                            },
-                        )
-                        data = extract_json_object(r.json().get("content", ""))
-                        if data:
-                            name = (data.get("name") or "").strip()[:200] or None
-                            description = (data.get("description") or "").strip() or None
-                    except Exception:
-                        pass
+                    yield sse("status", {"stage": "planning"})
+                    blueprint = await plan_blueprint(client, user_request)
+                    if blueprint:
+                        name = blueprint.get("name")
+                        description = blueprint.get("description")
+                        yield sse("plan", {"blueprint": blueprint})
+                else:
+                    yield sse("status", {"stage": "building"})
 
-                # 2) Build the app
-                yield sse("status", {"stage": "building"})
+                # 2) Build the app with true token streaming (+ 1 automatic retry)
                 if current_html:
                     build_prompt = (
                         f"CURRENT CODE:\n```html\n{current_html}\n```\n\n"
                         f"CHANGE REQUEST: {user_request}\n\n"
                         "Return the COMPLETE updated HTML document."
                     )
-                else:
+                elif base_broken:
+                    # Previous version was unusable — rebuild the whole idea fresh.
                     build_prompt = (
-                        f"Build this web app: {user_request}\n\n"
-                        "Make it spectacular — a design people screenshot, with real working features."
+                        f"Build this web app: {initial_prompt}\n"
+                        f"Latest change request from the user: {user_request}\n\n"
+                        "Rebuild it from scratch, complete and spectacular, with real working features."
                     )
-                r = await client.post(
-                    f"{AI_WORKER_URL}/v1/chat",
-                    json={
-                        "messages": [
-                            {"role": "assistant", "content": BUILDER_SYSTEM},
-                            {"role": "user", "content": build_prompt},
-                        ]
-                    },
-                )
-                raw = r.json().get("content", "")
-                html = extract_html(raw)
-                if not html or ("<!doctype" not in html.lower() and "<html" not in html.lower()):
-                    yield sse("error", {"message": "The model returned an empty build. Try again."})
+                else:
+                    build_prompt = f"Build this web app: {user_request}\n\nMake it spectacular — a design people screenshot, with real working features."
+
+                html = None
+                last_error = None
+                for attempt in range(2):
+                    yield sse("status", {"stage": "building"})
+                    result: dict = {}
+                    gen = stream_build(client, build_prompt, result)
+                    while True:
+                        try:
+                            kind, value = await gen.__anext__()
+                        except StopAsyncIteration:
+                            break
+                        if kind == "delta":
+                            yield sse("chunk", {"text": value})
+                    full_text = result.get("text", "")
+                    error_message = result.get("error")
+                    candidate = extract_html(full_text)
+                    if is_complete_html(candidate):
+                        html = candidate
+                        break
+                    last_error = error_message or "The build was cut off before the document finished — retrying."
+                    if attempt == 0:
+                        yield sse("status", {"stage": "retrying"})
+                        await asyncio.sleep(1.5)
+
+                if not html:
+                    message = last_error or "The model returned an empty build. Try again."
+                    yield sse("error", {"message": message})
                     return
 
-                # 3) Stream the code visually
-                step = 220
-                for i in range(0, len(html), step):
-                    yield sse("chunk", {"text": html[i : i + step]})
-                    await asyncio.sleep(0.008)
+                # 2b) Self-healing: parse every inline script with a real JS
+                # engine, verify inline handlers bind to globals, and auto-repair
+                # (max 2 rounds). Incomplete repairs are discarded — a truncated
+                # document is never saved over a complete one.
+                if not is_complete_html(html):
+                    yield sse("error", {"message": last_error or "The build was incomplete. Try again."})
+                    return
+                for repair_round in range(2):
+                    js_errors = await validate_build(client, html)
+                    if not js_errors:
+                        break
+                    yield sse("status", {"stage": "reviewing"})
+                    repair_prompt = (
+                        f"CURRENT CODE (has JavaScript errors that break the whole app):\n"
+                        f"```html\n{html}\n```\n\n"
+                        f"ERRORS FOUND:\n" +
+                        "\n".join(f"- {e}" for e in js_errors) +
+                        "\n\nFix the JavaScript so everything parses cleanly and every inline "
+                        "handler works, keep all features and design unchanged, and return the "
+                        "COMPLETE updated HTML document from <!DOCTYPE html> to </html>. "
+                        "Never truncate or omit any part of the document."
+                    )
+                    result: dict = {}
+                    gen = stream_build(client, repair_prompt, result)
+                    while True:
+                        try:
+                            kind, value = await gen.__anext__()
+                        except StopAsyncIteration:
+                            break
+                        if kind == "delta":
+                            yield sse("chunk", {"text": value})
+                    repaired = extract_html(result.get("text", ""))
+                    if is_complete_html(repaired):
+                        html = repaired
 
-                # 4) Persist version + assistant message
+                # 3) Persist version + assistant message
                 def persist():
                     with SessionLocal() as sdb:
                         p = sdb.get(Project, pid)
@@ -384,13 +583,17 @@ async def generate(pid: str):
                             if description:
                                 p.description = description
                         verb = "Built" if version_number == 1 else "Updated"
-                        msg_text = (
-                            f"{verb} **{p.name}** — version {version_number} is live.\n\n"
-                            f"{description or ''}\n\n"
-                            f"Applied: \"{user_request[:200]}\""
-                            if version_number == 1
-                            else f"Updated **{p.name}** to version {version_number}.\n\nApplied: \"{user_request[:200]}\""
-                        )
+                        if version_number == 1:
+                            msg_text = (
+                                f"{verb} **{p.name}** — version {version_number} is live.\n\n"
+                                f"{description or ''}\n\n"
+                                f"Applied: \"{user_request[:200]}\""
+                            )
+                        else:
+                            msg_text = (
+                                f"Updated **{p.name}** to version {version_number}.\n\n"
+                                f"Applied: \"{user_request[:200]}\""
+                            )
                         m = Message(
                             id=str(uuid.uuid4()), project_id=pid, role="assistant", content=msg_text
                         )
@@ -410,7 +613,10 @@ async def generate(pid: str):
                         "message_id": message_id,
                         "name": name,
                         "description": description,
-                        "elapsed_seconds": round((datetime.now(timezone.utc) - started).total_seconds(), 1),
+                        "chars": len(html),
+                        "elapsed_seconds": round(
+                            (datetime.now(timezone.utc) - started).total_seconds(), 1
+                        ),
                     },
                 )
         except httpx.HTTPError as exc:
