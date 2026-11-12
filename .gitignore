@@ -63,3 +63,7 @@ __pycache__/
 
 # tool results
 tool-results/
+
+# local artifacts
+download/
+upload/
