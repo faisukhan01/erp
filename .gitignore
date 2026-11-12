@@ -60,3 +60,6 @@ db/*.db-journal
 __pycache__/
 *.pyc
 .python-version
+
+# tool results
+tool-results/
