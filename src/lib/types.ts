@@ -31,4 +31,22 @@ export interface ProjectDetail extends ProjectMeta {
   current_html: string | null;
 }
 
+/** Z.AI's build blueprint — shown in chat before the code streams. */
+export interface Blueprint {
+  name: string | null;
+  description: string | null;
+  tagline: string | null;
+  features: string[];
+  palette: string[];
+  vibe: string | null;
+}
+
 export type ViewName = "landing" | "dashboard" | "builder";
+
+export type GenStage =
+  | ""
+  | "connecting"
+  | "planning"
+  | "building"
+  | "retrying"
+  | "saving";
