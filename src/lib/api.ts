@@ -159,6 +159,7 @@ async function once(
   let buffer = "";
   let failed = false;
   let message = "";
+  let doneReceived = false;
 
   const dispatch = (rawEvent: string) => {
     const lines = rawEvent.split("\n");
@@ -174,8 +175,10 @@ async function once(
     if (event === "status") handlers.onStatus?.(String(data.stage || ""));
     else if (event === "plan") handlers.onPlan?.((data.blueprint || {}) as Blueprint);
     else if (event === "chunk") handlers.onChunk?.(String(data.text || ""));
-    else if (event === "done") handlers.onDone?.(data as never);
-    else if (event === "error") {
+    else if (event === "done") {
+      doneReceived = true;
+      handlers.onDone?.(data as never);
+    } else if (event === "error") {
       failed = true;
       message = String(data.message || "Unknown generation error");
     }
@@ -192,6 +195,10 @@ async function once(
   if (buffer.trim()) dispatch(buffer);
 
   if (failed) return { ok: false, retriable: false, message };
+  if (!doneReceived) {
+    // connection dropped before the build finished — retrying is safe
+    return { ok: false, retriable: true, message: "The build stream ended unexpectedly." };
+  }
   return { ok: true, retriable: false };
 }
 

@@ -211,7 +211,13 @@ export const useStore = create<BuildoraState>((set, get) => ({
       rightTab: "code",
     });
     await generateStream(activeProjectId, {
-      onStatus: (stage) => set({ genStage: stage }),
+      onStatus: (stage) =>
+        set((s) => ({
+          genStage: stage,
+          // a "connecting" status means a fresh attempt began — clear the
+          // partially streamed code from the failed attempt
+          streamedCode: stage === "connecting" ? "" : s.streamedCode,
+        })),
       onPlan: (blueprint) => set({ blueprint }),
       onChunk: (text) => set((s) => ({ streamedCode: s.streamedCode + text })),
       onDone: (payload) => {
