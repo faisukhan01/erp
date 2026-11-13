@@ -1,221 +1,155 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="Buildora — describe it, watch it ship" width="100%" />
+<img src="docs/banner.svg" alt="ONYX — The AI-native IDE" width="100%" />
 
-# Buildora
+# ONYX
 
-**An AI app-builder platform where one sentence becomes a stunning, working web app — then refines it through conversation.**
+**A machined-black, AI-native IDE that runs in your browser.**
 
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.128-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
-[![Powered by Z.AI](https://img.shields.io/badge/Brain-Z.AI-f43f5e?style=for-the-badge)](https://z.ai)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon%20Cloud-4169e1?style=for-the-badge&logo=postgresql)](https://neon.tech)
-[![License](https://img.shields.io/badge/License-MIT-f43f5e?style=for-the-badge)](LICENSE)
+Monaco editor. Real terminal. Git bridge. An AI pair programmer that reads your
+workspace and writes code straight into your files — all in one relentless,
+zero-gradient dark canvas.
 
-*Describe it. Watch it ship.*
+`Next.js 16` · `TypeScript 5` · `Monaco` · `xterm.js` · `socket.io` · `Z.AI`
 
 </div>
 
 ---
 
-## What is Buildora?
+## What is Onyx
 
-Buildora is a **Lovable / Base44-class AI app builder** — you describe an app in plain language, Z.AI architects it, and you watch the code stream into existence token by token. Then you keep chatting: *"make the header glassy"*, *"add dark mode"*, and every message intelligently rewrites your app while preserving everything that works.
+Onyx is a Cursor-style development environment that lives entirely in a browser
+tab. Open a file, edit it with a real language server underneath, run it in a
+live shell, commit it with git, and pair with an AI that sees your workspace —
+without ever leaving the page.
 
-## Tech stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · shadcn/ui · Framer Motion · Zustand |
-| **Backend** | FastAPI · SQLAlchemy 2.0 · Pydantic · SSE streaming |
-| **Database** | **PostgreSQL (Neon serverless)** — users, projects, messages, versions |
-| **AI brain** | Z.AI GLM via a Bun streaming worker (token-level relay + JS validator) |
-| **Gateway** | Caddy reverse proxy — one port, `XTransformPort` service routing |
-| **Runtime** | Bun (frontend + AI worker) · Python 3.12 (API) |
-
-```text
-You:  "build a simple calculator with history and a sleek dark design"
-
-      ✦ Connecting          ✓ Planning           ✓ Writing code        ✓ Polishing
-
-      BUILD BLUEPRINT ── Dark Calc · "Calculate in the dark" · minimalist tech
-      ✓ Real-time calculation display   ✓ Persistent history log
-      ✓ Dark mode toggle                ✓ Memory functions
-
-      [ code streaming live... 18,680 characters · 38s ]
-
-      → v1 is live in the preview. Chat to refine. Download when done.
-```
-
-## Why Buildora is different
-
-| | Buildora | Typical AI builders |
-|---|---|---|
-| **Planning** | Visible blueprint (name, features, palette, vibe) before code | Black box |
-| **Code streaming** | True token-level SSE — watch every character land | Wait in silence, then dump |
-| **Self-healing builds** | Every build is parsed with a real JS engine; broken syntax *and* dead event bindings are auto-repaired before you ever see them | Ship broken code, you debug |
-| **Truncation guard** | Incomplete documents are never saved; builds auto-retry and lift output limits to 16K tokens | Mysterious half-apps |
-| **Version time machine** | Every build snapshotted to cloud PostgreSQL, one-click restore | Often paid-tier only |
-| **Live thumbnails** | Dashboard renders your actual apps in scaled iframes | Static icons |
-| **Code ownership** | Single-file HTML export, zero lock-in, no watermarks | Walled gardens |
-
-## Design system — "Obsidian"
-
-Buildora's interface follows a strict editorial-black language:
-
-- **Realistic black canvas** — layered true-black surfaces (`#050505` / `#0a0a0a`), hairline `white/8` borders, no color gradients anywhere.
-- **One signal color** — cold cyan (`#22d3ee`) used sparingly: the mark, live states, focus rings, streaming accents.
-- **Type** — Bricolage Grotesque for display, Inter for body, JetBrains Mono for uppercase micro-labels and technical metadata.
-- **Motion** — restrained and mechanical: caret blinks, a solid cyan stream block, nothing that glows.
+It is not a mockup. The terminal runs real `bash`. The commits are real git
+commits. The AI edits are written to disk the moment you hit **Apply**.
 
 ## Features
 
-- **Blueprint before code** — Z.AI plans the name, tagline, feature set, palette and visual vibe, shown as a beautiful card in chat before a single line is written.
-- **True streaming** — a Bun AI-worker relays Z.AI token deltas through FastAPI SSE straight into the code panel. No fake chunked playback.
-- **Chat-driven iteration** — every message is a full-app rewrite that preserves what works and upgrades the polish.
-- **Self-healing pipeline** — inline `<script>` blocks are parsed with a real JS engine; syntax errors and inline handlers bound to non-global functions are detected and auto-repaired (max 2 rounds) *before* the version is saved.
-- **Completeness guard** — a build only ships if the document actually closes with `</html>`; truncated output is retried, never persisted.
-- **Version time machine** — every build is a row in PostgreSQL; restore any version from the History menu.
-- **Workspace** — resizable panels, syntax-highlighted code view with line numbers and file stats, desktop/mobile viewports, fullscreen mode, open-in-new-tab, one-click download, project rename, search, sort, grid/list layouts.
-- **Resilient by design** — if the backend is restarting, the frontend boots it and retries transparently (the 502 era is over).
+**Editor**
+- Monaco editor with a custom `onyx` theme — hand-tuned token colors on pure black
+- Self-hosted Monaco workers: TypeScript IntelliSense, diagnostics, completions
+- Multi-tab editing with dirty-state tracking, breadcrumbs and a minimap
+- `Ctrl/Cmd + S` to save, `Ctrl + Click` file for anything else — full keyboard coverage
+
+**Terminal**
+- Real bash sessions streamed over socket.io — live stdout/stderr, exit codes
+- Persistent working directory across commands, command history, `Ctrl+C` job kill
+- Sandboxed to the workspace root — `cd ../..` will not save you
+- One-click **Run** for the active file (bun / node / python3 / bash)
+
+**Onyx AI**
+- Streaming chat powered by Z.AI (GLM) with a machined system prompt
+- `@` to attach workspace files as context; files referenced by path auto-attach
+- Complete-file responses carry `path=` on the code fence — hit **Apply** and
+  the file is written to disk and hot-synced into any open editor tab
+- Stop mid-generation, copy any block, or apply straight to the workspace
+
+**Source Control**
+- Live `git status` with change badges in the activity rail and status bar
+- Stage-all + commit from the panel, with commit history viewer
+- One-click repo init if the workspace is not a repository yet
+
+**Workspace**
+- Full file CRUD: create, rename, delete files and folders with context menus
+- Workspace-wide search with case + regex toggles
+- Editor settings (font size, tab size, word wrap, minimap) persisted locally
+
+**Chrome**
+- Command palette (`Ctrl/Cmd + K`) — commands and fuzzy file search
+- Boot sequence, traffic lights, hairline seams, one electric-cyan signal
+- Responsive: desktop panes resize; mobile gets overlay panels
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    subgraph Browser["Browser — Next.js 16 + Tailwind 4 + shadcn/ui"]
-        UI[Landing · Dashboard · Builder]
-    end
-    subgraph Gateway["Caddy Gateway :81"]
-        C[Caddy reverse proxy<br/>XTransformPort routing]
-    end
-    subgraph Services
-        API[FastAPI :8000<br/>projects · chat · versions<br/>SSE generation · validation loop]
-        WORKER[Bun AI Worker :8001<br/>Z.AI chat · token streaming<br/>JS syntax + binding validator]
-        DB[(Neon PostgreSQL<br/>users · projects · messages · versions)]
-    end
-    UI -->|/api/* + XTransformPort| C
-    C -->|:3000| UI
-    C -->|:8000| API
-    API <--> DB
-    API -->|/v1/chat/stream SSE| WORKER
-    API -->|/v1/check-js| WORKER
-    WORKER <-->|Z.AI API| ZAI[Z.AI GLM]
+```
+┌─────────────────────────── Browser ────────────────────────────┐
+│  Next.js 16 (App Router)                                       │
+│  ├─ src/components/ide/*   — IDE shell, editor, chat, terminal │
+│  ├─ src/app/api/ide/*      — filesystem · search · git bridge  │
+│  └─ Zustand                — single IDE state tree             │
+└──────────────┬────────────────────────────┬────────────────────┘
+               │ REST (JSON)                │ socket.io (gateway)
+┌──────────────▼──────────────┐  ┌──────────▼───────────────────┐
+│  /api/ide/fs                │  │  ide-server (port 3003)      │
+│    jailed to workspace root │  │  ├─ real bash sessions       │
+│  /api/ide/search            │  │  └─ Z.AI streaming chat      │
+│    line-level hits          │  │      (GLM · stream: true)    │
+│  /api/ide/git               │  └──────────────────────────────┘
+│    status · log · commit    │
+└─────────────────────────────┘
 ```
 
-**The self-healing loop:**
+- **Sandboxing** — every path is resolved and jailed inside
+  `ide-workspace/`; traversal is rejected at the API layer
+- **No CDN dependency** — Monaco is self-hosted from `public/monaco` with a
+  blob-bootstrap worker fix for the AMD loader
+- **Socket contract** — the IDE client connects via
+  `io("/?XTransformPort=3003")` and never touches a raw port
 
-```mermaid
-flowchart TB
-    A[Z.AI streams app code] --> B[Extract complete HTML?]
-    B -- truncated --> C[Discard + retry build]
-    B -- complete --> D[Parse every inline script<br/>with real JS engine]
-    D -- syntax error --> E[Auto-repair round<br/>with precise error report]
-    D -- inline handler not global --> E
-    D -- clean --> F[Persist version to PostgreSQL]
-    E --> B
-```
-
-## Quickstart
+## Quick start
 
 ```bash
-# 1. Frontend (Next.js 16)
+# 1. install
 bun install
-bun run dev                    # http://localhost:3000
 
-# 2. AI worker (Bun + Z.AI)
-cd mini-services/ai-worker
-bun install
-bun run dev                    # listens on :8001
+# 2. self-host monaco assets (already gitignored)
+mkdir -p public/monaco && cp -r node_modules/monaco-editor/min/vs public/monaco/vs
 
-# 3. FastAPI backend
-cd mini-services/api
-pip install -r requirements.txt
-cp .env.example .env           # put your Neon PostgreSQL URL here (or leave as-is for SQLite)
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+# 3. web app (port 3000)
+bun run dev
+
+# 4. ide-server — terminal + AI (port 3003)
+cd mini-services/ide-server && bun install && bun run dev
 ```
 
-Open the app and type: *"a habit tracker with streaks and a weekly heatmap"* — then watch it ship.
+Open the app, wait for the boot sequence, and start editing the seeded
+`nebula-demo` workspace. Type in the terminal, hit **Run**, ask Onyx AI
+to refactor something, then **Apply** it.
 
-> The Next.js boot endpoint (`/api/boot`) auto-spawns and health-checks both mini-services, so the frontend is self-healing in dev too.
+> The AI needs `z-ai-web-dev-sdk` credentials in the environment.
 
-## Environment
+## The workspace
 
-| Service | File | Key | Purpose |
-|---|---|---|---|
-| FastAPI | `mini-services/api/.env` | `DATABASE_URL` | Neon PostgreSQL connection string |
-| FastAPI | `mini-services/api/.env` | `AI_WORKER_URL` | defaults to `http://127.0.0.1:8001` |
-| Frontend | `.env` | `DATABASE_URL` | only needed for Prisma tooling |
+`ide-workspace/` is a real, seeded project with its own git repository:
 
-`.env` files are git-ignored. `Z.AI` credentials are read by `z-ai-web-dev-sdk` from its own config.
-
-## API reference
-
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/health` | Liveness + database check |
-| `POST` | `/api/users` | Create/fetch an anonymous workspace user |
-| `GET` | `/api/projects?user_id=` | List projects with version counts |
-| `POST` | `/api/projects` | Create project from a prompt |
-| `GET` | `/api/projects/{id}` | Full detail: messages, versions, current HTML |
-| `PATCH` | `/api/projects/{id}` | Rename / update description |
-| `DELETE` | `/api/projects/{id}` | Delete project + cascade |
-| `GET` | `/api/projects/{id}/preview` | Raw generated app as HTML (new tab, thumbnails) |
-| `POST` | `/api/projects/{id}/chat` | Append a user message |
-| `POST` | `/api/projects/{id}/generate` | **SSE stream**: `status` → `plan` → `chunk*` → `done` |
-| `GET` | `/api/projects/{id}/versions` | Version list |
-| `POST` | `/api/projects/{id}/restore` | Restore a version |
-
-## Project structure
-
-```text
+```
+ide-workspace/
 ├── src/
-│   ├── app/                    # Next.js App Router (single-page orchestrator)
-│   │   ├── api/boot/           # self-healing mini-service supervisor
-│   │   └── page.tsx            # view routing: landing → dashboard → builder
-│   ├── components/buildora/    # landing, dashboard, builder workspaces
-│   └── lib/                    # gateway API client, SSE parser, Zustand store
-├── mini-services/
-│   ├── api/                    # FastAPI: models, schemas, prompts, generation
-│   └── ai-worker/              # Bun: Z.AI chat, token streaming, JS validator
-├── docs/                       # animated brand assets
-└── prisma/                     # optional local Prisma tooling
+│   ├── main.ts        # runnable entry
+│   └── utils.ts       # fibonacci, greet — try "add a memoized variant"
+├── package.json
+└── README.md
 ```
 
-## Data model
+Point `IDE_WORKSPACE` at any directory to open a different project.
 
-```mermaid
-erDiagram
-    USER ||--o{ PROJECT : owns
-    PROJECT ||--o{ MESSAGE : contains
-    PROJECT ||--o{ VERSION : snapshots
-    VERSION {
-        int version_number
-        text html_code
-        text summary
-    }
-    USER { string id PK }
-    PROJECT { string name  string current_version_id }
-```
+## Tech stack
 
-## Roadmap
+| Layer         | Tools                                            |
+| ------------- | ------------------------------------------------ |
+| Framework     | Next.js 16 (App Router), React 19, TypeScript 5  |
+| Editor        | Monaco Editor (self-hosted, custom theme)        |
+| Terminal      | xterm.js + socket.io + real bash                 |
+| AI            | Z.AI (GLM) streaming chat completions            |
+| State         | Zustand                                          |
+| Styling       | Tailwind CSS 4 — flat black canvas, zero gradients |
+| Type          | Space Grotesk · JetBrains Mono · Unbounded       |
 
-- [ ] Supabase Auth (Google / GitHub sign-in)
-- [ ] Multi-file exports (Vite project scaffold)
-- [ ] Image-to-app (screenshot → rebuild)
-- [ ] Realtime collaboration on the builder canvas
-- [ ] One-click deploy targets (Vercel / Netlify)
+## Design doctrine
 
-## License
-
-MIT — see [LICENSE](LICENSE).
+1. **Black owns the screen.** Layered solids (#030303 → #060606 → #0e0e0e),
+   never a gradient.
+2. **One signal color.** Electric cyan `#00e5ff` — cursor, focus, the live dot.
+   Everything else is ink: white, gray, gone.
+3. **Type is the interface.** Unbounded for the wordmark, Space Grotesk for the
+   chrome, JetBrains Mono for everything a developer reads.
+4. **Real beats fake.** Real shell, real git, real files on real disk.
 
 ---
 
 <div align="center">
-
-**Built with [Z.AI](https://z.ai) as the brain · FastAPI as the spine · Next.js 16 as the face**
-
-If Buildora impressed you, star the repo — it helps more than you know.
-
+<sub>ONYX — carved from black. Powered by Z.AI.</sub>
 </div>
