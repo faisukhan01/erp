@@ -85,12 +85,12 @@ function AssistantMarkdown({ text }: { text: string }) {
         strong: ({ children }) => <strong className="text-zinc-100 font-semibold">{children}</strong>,
         em: ({ children }) => <em className="text-zinc-300">{children}</em>,
         code: ({ children }) => (
-          <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[12px] text-fuchsia-200">
+          <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[12px] text-rose-200">
             {children}
           </code>
         ),
         a: ({ children, href }) => (
-          <a href={href} target="_blank" rel="noreferrer" className="text-fuchsia-300 underline underline-offset-2">
+          <a href={href} target="_blank" rel="noreferrer" className="text-rose-300 underline underline-offset-2">
             {children}
           </a>
         ),
@@ -107,12 +107,12 @@ function BlueprintCard({ bp }: { bp: Blueprint }) {
       initial={{ opacity: 0, y: 10, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.35 }}
-      className="mt-1 overflow-hidden rounded-xl border border-fuchsia-500/25 bg-gradient-to-br from-fuchsia-500/[0.08] to-amber-400/[0.04]"
+      className="mt-1 overflow-hidden rounded-xl border border-rose-500/25 bg-gradient-to-br from-rose-500/[0.08] to-orange-500/[0.06]"
       aria-label="Build blueprint"
     >
       <div className="flex items-center gap-2 border-b border-white/[0.06] px-3.5 py-2.5">
-        <Palette className="h-3.5 w-3.5 text-fuchsia-300" />
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-fuchsia-300">
+        <Palette className="h-3.5 w-3.5 text-rose-300" />
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-rose-300">
           Build blueprint
         </span>
         {bp.vibe && (
@@ -124,7 +124,7 @@ function BlueprintCard({ bp }: { bp: Blueprint }) {
       <div className="px-3.5 py-3 space-y-3">
         <div>
           <div className="text-sm font-semibold text-zinc-100">{bp.name || "Your app"}</div>
-          {bp.tagline && <div className="text-xs text-fuchsia-200/80 mt-0.5">{bp.tagline}</div>}
+          {bp.tagline && <div className="text-xs text-rose-200/80 mt-0.5">{bp.tagline}</div>}
           {bp.description && <div className="mt-1 text-xs text-zinc-400">{bp.description}</div>}
         </div>
         {bp.features.length > 0 && (
@@ -137,7 +137,7 @@ function BlueprintCard({ bp }: { bp: Blueprint }) {
                 transition={{ delay: 0.1 + i * 0.08 }}
                 className="flex items-start gap-2 text-xs text-zinc-300"
               >
-                <Check className="mt-0.5 h-3 w-3 shrink-0 text-emerald-400" />
+                <Check className="mt-0.5 h-3 w-3 shrink-0 text-rose-400" />
                 {f}
               </motion.li>
             ))}
@@ -180,7 +180,7 @@ function GenerationBubble() {
       exit={{ opacity: 0 }}
       className="flex justify-start"
     >
-      <div className="w-full max-w-[92%] rounded-2xl rounded-bl-md border border-fuchsia-500/20 bg-fuchsia-500/[0.05] px-3.5 py-3">
+      <div className="w-full max-w-[92%] rounded-2xl rounded-bl-md border border-rose-500/20 bg-rose-500/[0.05] px-3.5 py-3">
         {/* stepper */}
         <div className="flex items-center gap-1.5 flex-wrap">
           {STAGES.map((s, i) => {
@@ -191,9 +191,9 @@ function GenerationBubble() {
                 key={s.key}
                 className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium transition-colors ${
                   done
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                    ? "border-white/15 bg-white/[0.06] text-zinc-300"
                     : active
-                      ? "animate-pulse-ring border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-200"
+                      ? "animate-pulse-ring border-rose-500/40 bg-rose-500/15 text-rose-200"
                       : "border-white/[0.06] bg-white/[0.02] text-zinc-600"
                 }`}
               >
@@ -203,21 +203,21 @@ function GenerationBubble() {
             );
           })}
           <span className="ml-auto flex items-center gap-1 text-[10px] text-zinc-500 tabular-nums">
-            <Loader2 className="h-3 w-3 animate-spin text-fuchsia-400" />
+            <Loader2 className="h-3 w-3 animate-spin text-rose-400" />
             {elapsed}s
           </span>
         </div>
 
         {/* live code counter */}
         <div className="mt-2.5 flex items-center gap-2 text-[11px] text-zinc-500">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse" />
           <span className="tabular-nums">{streamedCode.length.toLocaleString()}</span> characters written
           <span className="text-zinc-600">— Z.AI is typing…</span>
         </div>
 
         {/* mini progress shimmer */}
         <div className="relative mt-2.5 h-1 overflow-hidden rounded-full bg-white/[0.05]" aria-hidden>
-          <div className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-fuchsia-400/80 to-transparent" />
+          <div className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-rose-400/80 to-transparent" />
         </div>
       </div>
     </motion.div>
@@ -338,8 +338,8 @@ export default function Builder() {
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
-            <div className="absolute -inset-3 rounded-full bg-fuchsia-500/20 blur-xl animate-pulse" aria-hidden />
-            <Loader2 className="h-8 w-8 animate-spin text-fuchsia-400 relative" />
+            <div className="absolute -inset-3 rounded-full bg-rose-500/20 blur-xl animate-pulse" aria-hidden />
+            <Loader2 className="h-8 w-8 animate-spin text-rose-400 relative" />
           </div>
           <p className="text-sm text-zinc-500">Opening workspace…</p>
         </div>
@@ -366,9 +366,9 @@ export default function Builder() {
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-fuchsia-500 via-fuchsia-400 to-amber-400 p-[1.2px] shrink-0 hidden sm:block">
+        <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-rose-500 via-rose-500 to-orange-500 p-[1.2px] shrink-0 hidden sm:block">
           <div className="h-full w-full rounded-[7px] bg-zinc-950 flex items-center justify-center">
-            <Wand2 className="h-3.5 w-3.5 text-fuchsia-400" />
+            <Wand2 className="h-3.5 w-3.5 text-rose-400" />
           </div>
         </div>
         <div className="min-w-0">
@@ -382,7 +382,7 @@ export default function Builder() {
                 if (e.key === "Enter") void commitRename();
                 if (e.key === "Escape") setRenaming(false);
               }}
-              className="h-7 w-48 rounded-lg border-fuchsia-500/40 bg-white/5 text-sm"
+              className="h-7 w-48 rounded-lg border-rose-500/40 bg-white/5 text-sm"
               aria-label="Project name"
             />
           ) : (
@@ -399,12 +399,12 @@ export default function Builder() {
           )}
           <div className="flex items-center gap-2">
             {version > 0 && (
-              <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-300">
+              <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-rose-500/25 bg-rose-500/10 px-2 py-0.5 text-[10px] text-rose-300">
                 <Check className="h-3 w-3" /> v{version} live
               </span>
             )}
             {isGenerating && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-fuchsia-500/25 bg-fuchsia-500/10 px-2 py-0.5 text-[10px] text-fuchsia-300">
+              <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/25 bg-rose-500/10 px-2 py-0.5 text-[10px] text-rose-300">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 {genStage === "planning" ? "planning" : "building"}…
               </span>
@@ -426,7 +426,7 @@ export default function Builder() {
               <ChevronDown className="ml-1 h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="border-white/10 bg-zinc-900 text-zinc-200 max-h-80 overflow-y-auto buildora-scroll w-72">
+          <DropdownMenuContent align="end" className="border-white/10 bg-[#0e0e11] text-zinc-200 max-h-80 overflow-y-auto buildora-scroll w-72">
             <DropdownMenuLabel className="text-xs text-zinc-500">Version history</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-white/10" />
             {sortedVersions.map((v) => (
@@ -440,7 +440,7 @@ export default function Builder() {
                 }}
                 className="gap-2 cursor-pointer focus:bg-white/10 items-start py-2"
               >
-                <span className="font-mono text-[10px] text-fuchsia-300 mt-0.5 shrink-0">v{v.version_number}</span>
+                <span className="font-mono text-[10px] text-rose-300 mt-0.5 shrink-0">v{v.version_number}</span>
                 <div className="min-w-0">
                   <div className="text-xs truncate max-w-[220px]">{v.summary || `Version ${v.version_number}`}</div>
                   <div className="text-[10px] text-zinc-600">
@@ -477,9 +477,9 @@ export default function Builder() {
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="mx-auto h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/25 to-amber-400/10 border border-white/10 flex items-center justify-center mb-4"
+              className="mx-auto h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-500/25 to-orange-500/10 border border-white/10 flex items-center justify-center mb-4"
             >
-              <Sparkles className="h-6 w-6 text-fuchsia-300" />
+              <Sparkles className="h-6 w-6 text-rose-300" />
             </motion.div>
             <p className="text-sm font-medium text-zinc-300">Your app is being conceived…</p>
             <p className="mt-1 text-xs text-zinc-600 max-w-[240px] mx-auto">
@@ -496,7 +496,7 @@ export default function Builder() {
             className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
           >
             {m.role === "user" ? (
-              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-gradient-to-br from-fuchsia-500/90 to-fuchsia-600/90 text-white px-3.5 py-2.5 text-sm shadow-lg shadow-fuchsia-950/40">
+              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-gradient-to-br from-rose-500 to-orange-500 text-white px-3.5 py-2.5 text-sm shadow-lg shadow-rose-950/40">
                 {m.content}
               </div>
             ) : m.content.startsWith("Generation failed:") ? (
@@ -517,7 +517,7 @@ export default function Builder() {
               </div>
             ) : (
               <div className="max-w-[88%] rounded-2xl rounded-bl-md border border-white/[0.07] bg-white/[0.04] px-3.5 py-2.5 text-sm text-zinc-300">
-                <div className="flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-wider text-fuchsia-300/80 font-medium">
+                <div className="flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-wider text-rose-300/80 font-medium">
                   <Sparkles className="h-3 w-3" /> Buildora AI
                 </div>
                 <AssistantMarkdown text={m.content} />
@@ -546,7 +546,7 @@ export default function Builder() {
                 key={s}
                 onClick={() => !isGenerating && void sendMessage(s)}
                 disabled={isGenerating}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-zinc-400 hover:text-zinc-100 hover:border-fuchsia-500/40 hover:bg-fuchsia-500/10 transition-colors disabled:opacity-40"
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-zinc-400 hover:text-zinc-100 hover:border-rose-500/40 hover:bg-rose-500/10 transition-colors disabled:opacity-40"
               >
                 {s}
               </button>
@@ -557,7 +557,7 @@ export default function Builder() {
       </div>
 
       <div className="border-t border-white/[0.06] p-3">
-        <div className="relative rounded-xl border border-white/10 bg-white/[0.04] focus-within:border-fuchsia-500/50 transition-colors">
+        <div className="relative rounded-xl border border-white/10 bg-white/[0.04] focus-within:border-rose-500/50 transition-colors">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -576,7 +576,7 @@ export default function Builder() {
             onClick={send}
             disabled={!input.trim() || isGenerating}
             size="icon"
-            className="absolute right-2.5 bottom-2.5 h-8 w-8 rounded-lg bg-gradient-to-r from-fuchsia-500 to-amber-400 text-zinc-950 hover:opacity-90 disabled:opacity-30"
+            className="absolute right-2.5 bottom-2.5 h-8 w-8 rounded-lg bg-gradient-to-r from-rose-500 to-orange-500 text-white hover:opacity-90 disabled:opacity-30"
             aria-label="Send message"
           >
             {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <SendHorizontal className="h-4 w-4" />}
@@ -604,7 +604,7 @@ export default function Builder() {
             aria-pressed={activeTab === "code"}
           >
             <Code2 className="h-3.5 w-3.5" /> Code
-            {isGenerating && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+            {isGenerating && <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse" />}
           </button>
         </div>
         <div className="flex items-center gap-1.5">
@@ -699,9 +699,9 @@ export default function Builder() {
                     ? { repeat: Infinity, duration: 2.4, ease: "linear" }
                     : { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
                 }
-                className="h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/30 to-amber-400/20 border border-white/10 flex items-center justify-center mb-4"
+                className="h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-500/30 to-orange-500/20 border border-white/10 flex items-center justify-center mb-4"
               >
-                <Sparkles className="h-6 w-6 text-fuchsia-300" />
+                <Sparkles className="h-6 w-6 text-rose-300" />
               </motion.div>
               <p className="text-sm font-medium text-zinc-300">
                 {isGenerating ? "Z.AI is writing your app…" : "No preview yet"}
@@ -717,7 +717,7 @@ export default function Builder() {
           <div className="h-full flex flex-col min-h-0">
             <div className="flex items-center justify-between border-b border-white/[0.05] bg-black/30 px-3 py-1.5 text-[11px] text-zinc-500">
               <span className="inline-flex items-center gap-1.5 font-mono">
-                <FileCode2 className="h-3.5 w-3.5 text-fuchsia-300" /> index.html
+                <FileCode2 className="h-3.5 w-3.5 text-rose-300" /> index.html
               </span>
               {codeStats && (
                 <span className="tabular-nums">
@@ -728,7 +728,7 @@ export default function Builder() {
             <div ref={codeScrollRef} className="flex-1 min-h-0 overflow-auto buildora-scroll">
               {streamedCode || html ? (
                 isGenerating ? (
-                  <pre className="p-4 text-[11.5px] leading-[1.6] font-mono text-emerald-100/90 whitespace-pre-wrap break-words min-h-full">
+                  <pre className="p-4 text-[11.5px] leading-[1.6] font-mono text-zinc-200 whitespace-pre-wrap break-words min-h-full">
                     <code>{streamedCode}</code>
                   </pre>
                 ) : (
@@ -763,7 +763,7 @@ export default function Builder() {
 
   // -------------------------------------------------------------- layout
   return (
-    <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+    <div className="h-dvh flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
       {topBar}
 
       {/* mobile tabs */}
@@ -783,7 +783,7 @@ export default function Builder() {
           <Eye className="h-3.5 w-3.5" /> Preview
         </button>
         {isGenerating && (
-          <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-fuchsia-300">
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-rose-300">
             <Loader2 className="h-3 w-3 animate-spin" /> building…
           </span>
         )}
@@ -795,7 +795,7 @@ export default function Builder() {
           <Panel defaultSize={38} minSize={24} className="min-h-0">
             <div className="h-full border-r border-white/[0.06] min-h-0">{chatPanel}</div>
           </Panel>
-          <PanelResizeHandle className="w-1 bg-white/[0.03] hover:bg-fuchsia-500/30 data-[resize-handle-state=drag]:bg-fuchsia-500/50" />
+          <PanelResizeHandle className="w-1 bg-white/[0.03] hover:bg-rose-500/30 data-[resize-handle-state=drag]:bg-rose-500/50" />
           <Panel defaultSize={62} minSize={30} className="min-h-0">
             <div className="h-full min-h-0">{previewPanel}</div>
           </Panel>

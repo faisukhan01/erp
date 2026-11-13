@@ -75,14 +75,14 @@ export default function Home() {
           className="flex flex-col items-center gap-5"
         >
           <div className="relative">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-amber-400 p-[1.5px] animate-pulse">
+            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-500 to-orange-500 p-[1.5px] animate-pulse">
               <div className="h-full w-full rounded-[14px] bg-zinc-950" />
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm text-zinc-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 animate-bounce [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 animate-bounce [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 animate-bounce [animation-delay:300ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-bounce [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-bounce [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-bounce [animation-delay:300ms]" />
             <span className="ml-2">Waking the machines…</span>
           </div>
         </motion.div>
@@ -108,7 +108,7 @@ export default function Home() {
       <Toaster theme="dark" position="bottom-center" richColors closeButton />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent className="border-white/10 bg-zinc-900 text-zinc-100">
+        <AlertDialogContent className="border-white/10 bg-[#0e0e11] text-zinc-100">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete “{deleteTarget?.name}”?</AlertDialogTitle>
             <AlertDialogDescription className="text-zinc-400">
