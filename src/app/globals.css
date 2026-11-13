@@ -43,90 +43,102 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* ------------------------------------------------------------------ */
+/* BUILDORA · OBSIDIAN — premium black & gold design system           */
+/* Canvas #030303 · surfaces #0a0a0c · single gold accent #fbbf24     */
+/* ------------------------------------------------------------------ */
+
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.75rem;
+  --background: #030303;
+  --foreground: #fafafa;
+  --card: #0a0a0c;
+  --card-foreground: #fafafa;
+  --popover: #0c0c0f;
+  --popover-foreground: #fafafa;
+  --primary: #fbbf24;
+  --primary-foreground: #0c0a09;
+  --secondary: #16161a;
+  --secondary-foreground: #e4e4e7;
+  --muted: #16161a;
+  --muted-foreground: #8f8f99;
+  --accent: #17171c;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: rgba(251, 191, 36, 0.5);
+  --chart-1: #fbbf24;
+  --chart-2: #34d399;
+  --chart-3: #f87171;
+  --chart-4: #a3e635;
+  --chart-5: #fb923c;
+  --sidebar: #0a0a0c;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #fbbf24;
+  --sidebar-primary-foreground: #0c0a09;
+  --sidebar-accent: #17171c;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: rgba(251, 191, 36, 0.5);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #030303;
+  --foreground: #fafafa;
+  --card: #0a0a0c;
+  --card-foreground: #fafafa;
+  --popover: #0c0c0f;
+  --popover-foreground: #fafafa;
+  --primary: #fbbf24;
+  --primary-foreground: #0c0a09;
+  --secondary: #16161a;
+  --secondary-foreground: #e4e4e7;
+  --muted: #16161a;
+  --muted-foreground: #8f8f99;
+  --accent: #17171c;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: rgba(251, 191, 36, 0.5);
+  --chart-1: #fbbf24;
+  --chart-2: #34d399;
+  --chart-3: #f87171;
+  --chart-4: #a3e635;
+  --chart-5: #fb923c;
+  --sidebar: #0a0a0c;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #fbbf24;
+  --sidebar-primary-foreground: #0c0a09;
+  --sidebar-accent: #17171c;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: rgba(251, 191, 36, 0.5);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
   }
   ::selection {
     background: rgba(251, 191, 36, 0.35);
-    color: #0a0a0a;
+    color: #fffbe8;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
   }
 }
 
 /* ------------------------------------------------------------------ */
-/* Buildora motion system                                              */
+/* Motion library — keep every legacy class name working               */
 /* ------------------------------------------------------------------ */
 
 @keyframes buildora-aurora-a {
@@ -150,6 +162,7 @@
   50% { transform: translateY(-10px); }
 }
 .animate-float { animation: buildora-float 5s ease-in-out infinite; }
+.animate-float-slow { animation: buildora-float 8s ease-in-out infinite; }
 
 @keyframes buildora-caret {
   0%, 45% { opacity: 1; }
@@ -184,12 +197,189 @@
   0% { background-position: 0 0; }
   100% { background-position: 56px 56px; }
 }
-.animate-grid-pan {
-  animation: buildora-grid-pan 6s linear infinite;
+.animate-grid-pan { animation: buildora-grid-pan 6s linear infinite; }
+
+/* --- new Obsidian motion ------------------------------------------ */
+
+/* rotating conic border — register the custom property */
+@property --buildora-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes buildora-border-spin {
+  to { --buildora-angle: 360deg; }
+}
+
+/* conic border card: wrap content in .conic-card, always-on subtle gold sweep */
+.conic-card {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(#0a0a0c, #0a0a0c) padding-box,
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05)) border-box;
+  border: 1px solid transparent;
+}
+.conic-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--buildora-angle),
+    transparent 0deg,
+    transparent 290deg,
+    rgba(251, 191, 36, 0.85) 335deg,
+    rgba(255, 244, 214, 0.95) 350deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: buildora-border-spin 5s linear infinite;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* hover-triggered conic sweep (for grid cards) */
+.hover-conic {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.hover-conic::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--buildora-angle),
+    transparent 0deg,
+    transparent 300deg,
+    rgba(251, 191, 36, 0.9) 345deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: buildora-border-spin 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+.hover-conic:hover::before { opacity: 1; }
+
+/* infinite marquee — duplicate the track content twice inside .marquee */
+@keyframes buildora-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: buildora-marquee 32s linear infinite;
+}
+.marquee-fast { animation-duration: 22s; }
+.marquee:hover { animation-play-state: paused; }
+
+/* gold gradient text */
+.gold-text {
+  background: linear-gradient(100deg, #fde68a 0%, #fbbf24 35%, #fffbeb 50%, #fbbf24 65%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gold-text-animated {
+  background: linear-gradient(100deg, #fde68a, #fbbf24, #fffbeb, #fbbf24, #f59e0b, #fde68a);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: buildora-shimmer 6s linear infinite;
+}
+
+/* film grain — apply on a fixed, pointer-events-none overlay div */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.028;
+}
+
+/* breathing gold glow */
+@keyframes buildora-glow-breathe {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
+.animate-glow-breathe { animation: buildora-glow-breathe 5s ease-in-out infinite; }
+
+/* slow spin for logo rings */
+@keyframes buildora-spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: buildora-spin-slow 14s linear infinite; }
+.animate-spin-slower { animation: buildora-spin-slow 26s linear infinite; }
+
+/* dashed connector flow for "how it works" */
+@keyframes buildora-dash-flow {
+  to { stroke-dashoffset: -24; }
+}
+.animate-dash-flow {
+  stroke-dasharray: 6 6;
+  animation: buildora-dash-flow 1.4s linear infinite;
+}
+
+/* soft entrance */
+@keyframes buildora-rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-rise { animation: buildora-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* radial spotlight that follows the cursor (set --spot-x/--spot-y in JS) */
+.spotlight {
+  background: radial-gradient(
+    560px circle at var(--spot-x, 50%) var(--spot-y, 0%),
+    rgba(251, 191, 36, 0.055),
+    transparent 70%
+  );
+}
+
+/* vertical scan line for the streaming code panel */
+@keyframes buildora-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(calc(100cqh)); opacity: 0; }
+}
+.scan-line {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 96px;
+  background: linear-gradient(to bottom, transparent, rgba(251, 191, 36, 0.05), transparent);
+  animation: buildora-scan 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* shimmering skeleton */
+@keyframes buildora-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(110deg, #0d0d10 40%, #1a1a1f 50%, #0d0d10 60%);
+  background-size: 200% 100%;
+  animation: buildora-skeleton 1.8s ease-in-out infinite;
 }
 
 /* ------------------------------------------------------------------ */
-/* Buildora — slim custom scrollbars                                   */
+/* Scrollbars                                                          */
 /* ------------------------------------------------------------------ */
 .buildora-scroll::-webkit-scrollbar,
 [role="log"]::-webkit-scrollbar {
@@ -202,19 +392,47 @@
 }
 .buildora-scroll::-webkit-scrollbar-thumb,
 [role="log"]::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
 }
 .buildora-scroll::-webkit-scrollbar-thumb:hover,
 [role="log"]::-webkit-scrollbar-thumb:hover {
-  background: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.4);
 }
 .buildora-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
 
 /* resizable handle affordance */
 [data-panel-resize-handle-id] {
   transition: background-color 150ms ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Accessibility — honor reduced motion                                */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora-a,
+  .animate-aurora-b,
+  .animate-aurora-c,
+  .animate-float,
+  .animate-float-slow,
+  .animate-grid-pan,
+  .marquee,
+  .conic-card::before,
+  .hover-conic::before,
+  .animate-glow-breathe,
+  .animate-spin-slow,
+  .animate-spin-slower,
+  .animate-dash-flow,
+  .scan-line,
+  .skeleton-shimmer,
+  .gold-text-animated,
+  .animate-rise {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }

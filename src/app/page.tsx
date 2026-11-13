@@ -69,22 +69,58 @@ export default function Home() {
 
   if (!booted) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#030303] flex items-center justify-center relative overflow-hidden">
+        {/* ambient */}
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/[0.06] blur-[130px]" />
+          <div
+            className="absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
+              maskImage: "radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, transparent 100%)",
+            }}
+          />
+          <div className="noise-overlay absolute inset-0" />
+        </div>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-5"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center gap-7 relative"
         >
-          <div className="relative">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-400/10 animate-pulse">
-              <Blocks className="h-6 w-6 text-amber-400" />
+          {/* orbiting logo */}
+          <div className="relative h-24 w-24">
+            <div className="animate-spin-slow absolute inset-0 rounded-full border border-dashed border-amber-400/25" aria-hidden />
+            <div className="animate-spin-slower absolute inset-2.5 rounded-full border border-white/[0.06]" aria-hidden>
+              <span className="absolute -top-[3px] left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative">
+                <div className="animate-glow-breathe absolute -inset-4 rounded-full bg-amber-400/20 blur-xl" aria-hidden />
+                <div className="animate-pulse-ring relative flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-400/10">
+                  <Blocks className="h-6 w-6 text-amber-400" />
+                </div>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-zinc-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:300ms]" />
-            <span className="ml-2">Waking the machines…</span>
+
+          <div className="text-center">
+            <p className="gold-text-animated text-lg font-semibold tracking-tight">Buildora</p>
+            <div className="mt-2 flex items-center justify-center gap-2 text-xs text-zinc-500">
+              <span className="h-1 w-1 rounded-full bg-amber-400 animate-bounce [animation-delay:0ms]" />
+              <span className="h-1 w-1 rounded-full bg-amber-400 animate-bounce [animation-delay:150ms]" />
+              <span className="h-1 w-1 rounded-full bg-amber-400 animate-bounce [animation-delay:300ms]" />
+              <span className="ml-1">Waking the machines…</span>
+            </div>
+          </div>
+
+          {/* progress line */}
+          <div className="relative h-[2px] w-44 overflow-hidden rounded-full bg-white/[0.06]" aria-hidden>
+            <div className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
           </div>
         </motion.div>
       </div>
