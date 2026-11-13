@@ -120,8 +120,8 @@
     @apply bg-background text-foreground;
   }
   ::selection {
-    background: rgba(217, 70, 239, 0.35);
-    color: #fff;
+    background: rgba(251, 191, 36, 0.35);
+    color: #0a0a0a;
   }
 }
 
@@ -174,9 +174,9 @@
 .animate-stream-line { animation: buildora-stream-line 2.4s ease-in-out infinite; }
 
 @keyframes buildora-pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(217, 70, 239, 0.45); }
-  70% { box-shadow: 0 0 0 10px rgba(217, 70, 239, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(217, 70, 239, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.40); }
+  70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
 }
 .animate-pulse-ring { animation: buildora-pulse-ring 2.2s ease-out infinite; }
 
@@ -207,7 +207,7 @@
 }
 .buildora-scroll::-webkit-scrollbar-thumb:hover,
 [role="log"]::-webkit-scrollbar-thumb:hover {
-  background: rgba(217, 70, 239, 0.35);
+  background: rgba(251, 191, 36, 0.35);
 }
 .buildora-scroll {
   scrollbar-width: thin;

@@ -111,7 +111,7 @@ function RotatingPlaceholder() {
   return (
     <span>
       {current.slice(0, subIndex)}
-      <span className="animate-caret text-fuchsia-400">|</span>
+      <span className="animate-caret text-amber-400">|</span>
     </span>
   );
 }
@@ -120,11 +120,11 @@ function BlueprintVisual() {
   return (
     <div className="mt-5 space-y-2.5" aria-hidden>
       <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.03] px-3 py-2">
-        <PenTool className="h-3.5 w-3.5 text-fuchsia-300" />
+        <PenTool className="h-3.5 w-3.5 text-amber-300" />
         <span className="text-xs text-zinc-300 font-medium">Aurora Finance</span>
         <span className="ml-auto flex gap-1.5">
-          <span className="h-3 w-3 rounded-full bg-fuchsia-400" />
-          <span className="h-3 w-3 rounded-full bg-amber-300" />
+          <span className="h-3 w-3 rounded-full bg-amber-400" />
+          <span className="h-3 w-3 rounded-full bg-zinc-400" />
           <span className="h-3 w-3 rounded-full bg-emerald-400" />
         </span>
       </div>
@@ -154,7 +154,7 @@ function StreamVisual() {
       {lines.map((w, i) => (
         <div key={i} className="relative h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
           <div
-            className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-fuchsia-400/70 to-transparent"
+            className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-amber-400/70 to-transparent"
             style={{ animationDelay: `${i * 0.45}s` }}
           />
           <div className="absolute inset-y-0 left-0 rounded-full bg-white/[0.07]" style={{ width: `${w}%` }} />
@@ -170,7 +170,7 @@ function StreamVisual() {
 function ChatVisual() {
   return (
     <div className="mt-4 space-y-2" aria-hidden>
-      <div className="ml-auto w-fit max-w-[85%] rounded-xl rounded-br-sm bg-gradient-to-br from-fuchsia-500/80 to-fuchsia-600/80 px-3 py-1.5 text-[11px] text-white">
+      <div className="ml-auto w-fit max-w-[85%] rounded-xl rounded-br-sm bg-amber-400 px-3 py-1.5 text-[11px] font-medium text-zinc-950">
         make the cards glassy
       </div>
       <div className="w-fit max-w-[90%] rounded-xl rounded-bl-sm border border-white/[0.07] bg-white/[0.04] px-3 py-1.5 text-[11px] text-zinc-300">
@@ -192,7 +192,7 @@ function VersionsVisual() {
           key={row.v}
           className={`flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-[11px] ${
             row.now
-              ? "border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-200"
+              ? "border-amber-400/30 bg-amber-400/10 text-amber-200"
               : "border-white/[0.06] bg-white/[0.02] text-zinc-500"
           }`}
         >
@@ -208,11 +208,11 @@ function VersionsVisual() {
 function DevicesVisual() {
   return (
     <div className="mt-4 flex items-end gap-3" aria-hidden>
-      <div className="animate-float h-16 w-24 rounded-lg border border-white/10 bg-gradient-to-br from-fuchsia-500/20 to-amber-400/10 p-1.5">
+      <div className="animate-float h-16 w-24 rounded-lg border border-white/10 bg-white/[0.04] p-1.5">
         <div className="h-full w-full rounded-md bg-black/40 p-1">
           <div className="h-1 w-2/3 rounded-full bg-white/20" />
           <div className="mt-1 h-1 w-1/2 rounded-full bg-white/10" />
-          <div className="mt-1.5 h-4 w-full rounded-sm bg-fuchsia-500/20" />
+          <div className="mt-1.5 h-4 w-full rounded-sm bg-amber-400/25" />
         </div>
       </div>
       <div className="animate-float h-20 w-11 rounded-lg border border-white/10 bg-gradient-to-b from-white/10 to-transparent p-1 [animation-delay:1.2s]">
@@ -272,13 +272,12 @@ export default function Landing({
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col relative overflow-x-clip">
-      {/* ------------------------------------------------ aurora background */}
+      {/* ------------------------------------------------ ambient background */}
       <div className="pointer-events-none fixed inset-0" aria-hidden>
-        <div className="animate-aurora-a absolute -top-48 left-[8%] h-[560px] w-[820px] rounded-full bg-fuchsia-600/25 blur-[150px]" />
-        <div className="animate-aurora-b absolute top-[30%] -left-56 h-[480px] w-[480px] rounded-full bg-violet-600/15 blur-[130px]" />
-        <div className="animate-aurora-c absolute bottom-[-10%] right-[-6%] h-[460px] w-[560px] rounded-full bg-amber-500/12 blur-[140px]" />
+        <div className="absolute -top-40 left-1/2 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-amber-500/[0.07] blur-[160px]" />
+        <div className="absolute top-[55%] -left-40 h-[380px] w-[380px] rounded-full bg-white/[0.025] blur-[140px]" />
         <div
-          className="animate-grid-pan absolute inset-0 opacity-[0.10]"
+          className="animate-grid-pan absolute inset-0 opacity-[0.09]"
           style={{
             backgroundImage:
               "linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px)",
@@ -290,23 +289,21 @@ export default function Landing({
       </div>
 
       {/* ---------------------------------------------------------------- nav */}
-      <header className="relative z-10 sticky top-0 border-b border-white/[0.05] bg-zinc-950/60 backdrop-blur-xl">
+      <header className="relative z-10 sticky top-0 border-b border-white/[0.06] bg-zinc-950/70 backdrop-blur-xl">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 via-fuchsia-400 to-amber-400 p-[1.5px] shadow-lg shadow-fuchsia-950/40">
-              <div className="h-full w-full rounded-[10px] bg-zinc-950 flex items-center justify-center">
-                <Blocks className="h-4 w-4 text-fuchsia-400" />
-              </div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-400/30 bg-amber-400/10">
+              <Blocks className="h-4 w-4 text-amber-400" />
             </div>
             <span className="text-lg font-semibold tracking-tight">Buildora</span>
-            <span className="hidden sm:inline-flex items-center rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-2 py-0.5 text-[10px] font-medium text-fuchsia-300 uppercase tracking-wider">
+            <span className="hidden sm:inline-flex items-center rounded-full border border-amber-400/25 bg-amber-400/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 uppercase tracking-wider">
               Z.AI inside
             </span>
           </div>
           <Button
             variant="outline"
             onClick={onDashboard}
-            className="border-white/15 bg-white/5 hover:bg-white/10 hover:text-white text-zinc-200 rounded-xl"
+            className="border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:text-white text-zinc-200 rounded-xl"
           >
             {projectCount > 0 ? `My Projects (${projectCount})` : "My Projects"}
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -322,7 +319,7 @@ export default function Landing({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs text-zinc-300 backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-zinc-300 backdrop-blur"
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
@@ -339,7 +336,7 @@ export default function Landing({
           >
             Describe it.
             <br />
-            <span className="animate-shimmer bg-[linear-gradient(110deg,#e879f9,45%,#fcd34d,55%,#e879f9)] bg-clip-text text-transparent">
+            <span className="animate-shimmer bg-[linear-gradient(110deg,#fcd34d,45%,#fffbeb,55%,#fcd34d)] bg-clip-text text-transparent">
               Watch it ship.
             </span>
           </motion.h1>
@@ -361,14 +358,10 @@ export default function Landing({
             initial={{ opacity: 0, y: 22, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.24 }}
-            className="mt-10 relative group"
+            className="mt-10 relative"
           >
-            <div
-              className="absolute -inset-[1.5px] rounded-3xl bg-gradient-to-r from-fuchsia-500/70 via-violet-500/30 to-amber-400/70 opacity-60 blur-md group-focus-within:opacity-100 transition-opacity duration-500"
-              aria-hidden
-            />
-            <div className="relative rounded-3xl border border-white/10 bg-zinc-900/90 backdrop-blur p-5 text-left shadow-2xl shadow-fuchsia-950/30">
-              <div className="flex items-center gap-2 text-[11px] text-fuchsia-300/90 font-medium tracking-wide uppercase">
+            <div className="relative rounded-2xl border border-white/10 bg-zinc-900/80 backdrop-blur p-5 text-left shadow-2xl shadow-black/50 transition-colors duration-300 focus-within:border-amber-400/40">
+              <div className="flex items-center gap-2 text-[11px] text-amber-300/90 font-medium tracking-wide uppercase">
                 <Sparkles className="h-3.5 w-3.5" />
                 Build anything
               </div>
@@ -399,7 +392,7 @@ export default function Landing({
                 <Button
                   onClick={submit}
                   disabled={!prompt.trim()}
-                  className="group/btn relative h-11 px-6 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-zinc-950 font-semibold hover:opacity-90 transition-all disabled:opacity-40 shadow-lg shadow-fuchsia-950/40"
+                  className="group/btn relative h-11 px-6 rounded-xl bg-amber-400 text-zinc-950 font-semibold hover:bg-amber-300 transition-all disabled:opacity-40 shadow-lg shadow-black/40"
                 >
                   Start building
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
@@ -419,7 +412,7 @@ export default function Landing({
               <button
                 key={ex}
                 onClick={() => setPrompt(ex)}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-100 hover:border-fuchsia-500/40 hover:bg-fuchsia-500/10 transition-colors"
+                className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-100 hover:border-amber-400/35 hover:bg-amber-400/[0.08] transition-colors"
               >
                 {ex}
               </button>
@@ -432,7 +425,7 @@ export default function Landing({
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-4xl font-bold tracking-tight">
               Everything Lovable does.{" "}
-              <span className="bg-gradient-to-r from-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-transparent">
                 Then some.
               </span>
             </h2>
@@ -450,14 +443,14 @@ export default function Landing({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-                  className={`group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] p-6 hover:border-fuchsia-500/30 hover:bg-fuchsia-500/[0.04] transition-colors overflow-hidden ${f.span}`}
+                  className={`group relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 hover:border-amber-400/25 hover:bg-white/[0.045] transition-colors overflow-hidden ${f.span}`}
                 >
                   <div
-                    className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-amber-400/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     aria-hidden
                   />
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-fuchsia-500/25 to-amber-400/10 border border-white/10 flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <f.icon className="h-5 w-5 text-fuchsia-300" />
+                  <div className="h-10 w-10 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <f.icon className="h-5 w-5 text-amber-300" />
                   </div>
                   <h3 className="mt-4 font-semibold text-zinc-100">{f.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{f.body}</p>
@@ -470,7 +463,7 @@ export default function Landing({
 
         {/* how it works */}
         <section className="mx-auto max-w-4xl px-4 sm:px-6 pb-16" aria-label="How it works">
-          <div className="rounded-3xl border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-transparent p-8 sm:p-10">
+          <div className="rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-transparent p-8 sm:p-10">
             <h2 className="text-center text-xl sm:text-2xl font-semibold tracking-tight mb-9">
               Three steps to shipped
             </h2>
@@ -482,7 +475,7 @@ export default function Landing({
               ].map((s) => (
                 <div key={s.n} className="text-center sm:text-left">
                   <div className="flex items-center gap-3 sm:justify-start justify-center">
-                    <div className="text-3xl font-bold bg-gradient-to-br from-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
+                    <div className="text-3xl font-bold bg-gradient-to-br from-amber-200 to-amber-400 bg-clip-text text-transparent">
                       {s.n}
                     </div>
                     <s.icon className="h-4 w-4 text-zinc-600" />
@@ -497,8 +490,8 @@ export default function Landing({
 
         {/* CTA band */}
         <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-20">
-          <div className="relative overflow-hidden rounded-3xl border border-fuchsia-500/20 bg-gradient-to-br from-fuchsia-950/40 via-zinc-950 to-amber-950/20 p-10 text-center">
-            <div className="animate-aurora-a pointer-events-none absolute -top-20 left-1/4 h-64 w-96 rounded-full bg-fuchsia-600/20 blur-[100px]" aria-hidden />
+          <div className="relative overflow-hidden rounded-2xl border border-amber-400/15 bg-gradient-to-b from-amber-950/[0.15] via-zinc-950 to-zinc-950 p-10 text-center">
+            <div className="pointer-events-none absolute -top-24 left-1/2 h-56 w-[480px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[110px]" aria-hidden />
             <h2 className="relative text-2xl sm:text-3xl font-bold tracking-tight">
               Your app is one sentence away.
             </h2>
@@ -509,7 +502,7 @@ export default function Landing({
                 composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
                 composerRef.current?.querySelector("textarea")?.focus();
               }}
-              className="relative mt-7 h-12 px-8 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-zinc-950 font-semibold hover:opacity-90 shadow-lg shadow-fuchsia-950/50"
+              className="relative mt-7 h-12 px-8 rounded-xl bg-amber-400 text-zinc-950 font-semibold hover:bg-amber-300 shadow-lg shadow-black/40"
             >
               <Wand2 className="mr-2 h-4 w-4" />
               Start building free
@@ -522,7 +515,7 @@ export default function Landing({
       <footer className="relative z-10 mt-auto border-t border-white/[0.06] bg-zinc-950/80 backdrop-blur pb-[env(safe-area-inset-bottom)]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
           <div className="flex items-center gap-2">
-            <Blocks className="h-3.5 w-3.5 text-fuchsia-400" />
+            <Blocks className="h-3.5 w-3.5 text-amber-400" />
             <span className="font-medium text-zinc-400">Buildora</span>
             <span>— describe it, watch it ship.</span>
           </div>
