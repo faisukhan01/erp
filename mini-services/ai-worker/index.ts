@@ -36,13 +36,28 @@ async function getZAI() {
   return zaiInstance;
 }
 
-/** Parse an OpenAI-style SSE byte stream into {content} deltas. */
-async function* sseDeltas(body: ReadableStream<Uint8Array>) {
+/** Parse an OpenAI-style SSE byte stream into {content} deltas.
+ *  Throws when no new delta arrives within `idleMs` — a stalled upstream
+ *  must never wedge the whole build pipeline. */
+async function* sseDeltas(body: ReadableStream<Uint8Array>, idleMs = 90_000) {
   const reader = body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
   while (true) {
-    const { done, value } = await reader.read();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const guard = new Promise<never>((_, reject) => {
+      timer = setTimeout(
+        () => reject(new Error(`Z.AI stream stalled — no tokens for ${idleMs / 1000}s`)),
+        idleMs
+      );
+    });
+    let chunk: ReadableStreamReadResult<Uint8Array>;
+    try {
+      chunk = await Promise.race([reader.read(), guard]);
+    } finally {
+      clearTimeout(timer!);
+    }
+    const { done, value } = chunk;
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
     const parts = buffer.split("\n");
@@ -125,6 +140,15 @@ Bun.serve({
           async start(controller) {
             const enc = new TextEncoder();
             let full = "";
+            // keep-alive pings keep intermediaries warm and tell consumers
+            // the relay is alive even while the model thinks
+            const keepalive = setInterval(() => {
+              try {
+                controller.enqueue(enc.encode(`data: ${JSON.stringify({ keepalive: true })}\n\n`));
+              } catch {
+                /* consumer gone — the main loop will surface it */
+              }
+            }, 15000);
             try {
               for await (const delta of sseDeltas(upstream)) {
                 full += delta;
@@ -137,6 +161,7 @@ Bun.serve({
               const message = err instanceof Error ? err.message : "stream failed";
               controller.enqueue(enc.encode(`data: ${JSON.stringify({ error: message })}\n\n`));
             } finally {
+              clearInterval(keepalive);
               controller.close();
             }
           },
