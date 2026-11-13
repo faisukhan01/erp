@@ -8,9 +8,9 @@
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
-[![Powered by Z.AI](https://img.shields.io/badge/Brain-Z.AI-e879f9?style=for-the-badge)](https://z.ai)
+[![Powered by Z.AI](https://img.shields.io/badge/Brain-Z.AI-f43f5e?style=for-the-badge)](https://z.ai)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon%20Cloud-4169e1?style=for-the-badge&logo=postgresql)](https://neon.tech)
-[![License](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-f43f5e?style=for-the-badge)](LICENSE)
 
 *Describe it. Watch it ship.*
 
@@ -21,6 +21,17 @@
 ## What is Buildora?
 
 Buildora is a **Lovable / Base44-class AI app builder** — you describe an app in plain language, Z.AI architects it, and you watch the code stream into existence token by token. Then you keep chatting: *"make the header glassy"*, *"add dark mode"*, and every message intelligently rewrites your app while preserving everything that works.
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · shadcn/ui · Framer Motion · Zustand |
+| **Backend** | FastAPI · SQLAlchemy 2.0 · Pydantic · SSE streaming |
+| **Database** | **PostgreSQL (Neon serverless)** — users, projects, messages, versions |
+| **AI brain** | Z.AI GLM via a Bun streaming worker (token-level relay + JS validator) |
+| **Gateway** | Caddy reverse proxy — one port, `XTransformPort` service routing |
+| **Runtime** | Bun (frontend + AI worker) · Python 3.12 (API) |
 
 ```text
 You:  "build a simple calculator with history and a sleek dark design"
@@ -101,7 +112,6 @@ flowchart TB
 ```bash
 # 1. Frontend (Next.js 16)
 bun install
-cp .env.example .env           # optional: only for Prisma local dev
 bun run dev                    # http://localhost:3000
 
 # 2. AI worker (Bun + Z.AI)
@@ -112,8 +122,8 @@ bun run dev                    # listens on :8001
 # 3. FastAPI backend
 cd mini-services/api
 pip install -r requirements.txt
-cp .env.example .env           # put your Neon PostgreSQL URL here
-./run.sh                       # or: uvicorn main:app --port 8000 --reload
+cp .env.example .env           # put your Neon PostgreSQL URL here (or leave as-is for SQLite)
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Open the app and type: *"a habit tracker with streaks and a weekly heatmap"* — then watch it ship.
