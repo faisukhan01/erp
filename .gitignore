@@ -67,3 +67,4 @@ tool-results/
 # local artifacts
 download/
 upload/
+db/
