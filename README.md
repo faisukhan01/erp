@@ -8,7 +8,7 @@
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
-[![Powered by Z.AI](https://img.shields.io/badge/Brain-Z.AI-e879f9?style=for-the-badge)](https://z.ai)
+[![Powered by Z.AI](https://img.shields.io/badge/Brain-Z.AI-fbbf24?style=for-the-badge)](https://z.ai)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon%20Cloud-4169e1?style=for-the-badge&logo=postgresql)](https://neon.tech)
 [![License](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
 
