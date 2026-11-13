@@ -41,7 +41,7 @@ function Thumb({ project, tall }: { project: ProjectMeta; tall?: boolean }) {
   if (!project.current_version_id) {
     return (
       <div
-        className={`relative w-full overflow-hidden ${tall ? "aspect-[4/3]" : "aspect-square"} bg-gradient-to-br from-fuchsia-950/60 via-zinc-900 to-amber-950/30`}
+        className={`relative w-full overflow-hidden ${tall ? "aspect-[4/3]" : "aspect-square"} bg-zinc-900`}
         aria-hidden
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-zinc-600">
@@ -109,7 +109,7 @@ export default function Dashboard({
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col relative overflow-x-clip">
       {/* ambient */}
       <div className="pointer-events-none fixed inset-0" aria-hidden>
-        <div className="animate-aurora-a absolute -top-32 left-1/4 h-96 w-[640px] rounded-full bg-fuchsia-600/15 blur-[140px]" />
+        <div className="animate-aurora-a absolute -top-32 left-1/4 h-96 w-[640px] rounded-full bg-amber-400/[0.07] blur-[140px]" />
         <div className="animate-aurora-b absolute bottom-0 -right-24 h-72 w-96 rounded-full bg-amber-500/10 blur-[120px]" />
       </div>
 
@@ -117,16 +117,16 @@ export default function Dashboard({
       <header className="relative z-10 border-b border-white/[0.06] bg-zinc-950/70 backdrop-blur sticky top-0">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3.5 flex items-center justify-between">
           <button onClick={onNew} className="flex items-center gap-2.5 group" aria-label="Buildora home">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 via-fuchsia-400 to-amber-400 p-[1.5px] shadow-lg shadow-fuchsia-950/40">
+            <div className="h-9 w-9 rounded-xl bg-amber-400/30 p-[1.5px] shadow-lg shadow-black/30">
               <div className="h-full w-full rounded-[10px] bg-zinc-950 flex items-center justify-center">
-                <Blocks className="h-4 w-4 text-fuchsia-400" />
+                <Blocks className="h-4 w-4 text-amber-400" />
               </div>
             </div>
             <span className="text-lg font-semibold tracking-tight">Buildora</span>
           </button>
           <Button
             onClick={onNew}
-            className="h-10 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-zinc-950 font-semibold hover:opacity-90 shadow-lg shadow-fuchsia-950/40"
+            className="h-10 rounded-xl bg-amber-400 text-zinc-950 font-semibold hover:bg-amber-300 shadow-lg shadow-black/30"
           >
             <Plus className="mr-1.5 h-4 w-4" />
             New project
@@ -173,7 +173,7 @@ export default function Dashboard({
               <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.04] p-0.5">
                 <button
                   onClick={() => setLayout("grid")}
-                  className={`rounded-lg p-1.5 transition-colors ${layout === "grid" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-lg p-1.5 transition-colors ${layout === "grid" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-500 hover:text-zinc-300"}`}
                   aria-label="Grid view"
                   aria-pressed={layout === "grid"}
                 >
@@ -181,7 +181,7 @@ export default function Dashboard({
                 </button>
                 <button
                   onClick={() => setLayout("list")}
-                  className={`rounded-lg p-1.5 transition-colors ${layout === "list" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-lg p-1.5 transition-colors ${layout === "list" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-500 hover:text-zinc-300"}`}
                   aria-label="List view"
                   aria-pressed={layout === "list"}
                 >
@@ -200,8 +200,8 @@ export default function Dashboard({
           </div>
         ) : projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02] py-24 text-center">
-            <div className="animate-float h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-amber-400/10 border border-white/10 flex items-center justify-center mb-5">
-              <Rocket className="h-6 w-6 text-fuchsia-300" />
+            <div className="animate-float h-14 w-14 rounded-2xl bg-amber-400/10 border border-white/10 flex items-center justify-center mb-5">
+              <Rocket className="h-6 w-6 text-amber-300/40" />
             </div>
             <h2 className="text-lg font-semibold">Launch your first app</h2>
             <p className="mt-1.5 max-w-sm text-sm text-zinc-500">
@@ -209,7 +209,7 @@ export default function Dashboard({
             </p>
             <Button
               onClick={onNew}
-              className="mt-6 h-11 px-6 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-zinc-950 font-semibold hover:opacity-90"
+              className="mt-6 h-11 px-6 rounded-xl bg-amber-400 text-zinc-950 font-semibold hover:bg-amber-300"
             >
               <Plus className="mr-2 h-4 w-4" />
               Start building
@@ -227,11 +227,11 @@ export default function Dashboard({
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: Math.min(i * 0.05, 0.4) }}
-                className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.03] hover:border-fuchsia-500/30 transition-colors overflow-hidden"
+                className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.03] hover:border-amber-400/25 transition-colors overflow-hidden"
               >
                 <button
                   onClick={() => onOpen(p.id)}
-                  className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-500/50 rounded-2xl"
+                  className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/30 rounded-2xl"
                   aria-label={`Open project ${p.name}`}
                 >
                   <Thumb project={p} tall />
@@ -249,7 +249,7 @@ export default function Dashboard({
                     </p>
                     <div className="mt-3 flex items-center justify-between text-[11px] text-zinc-600">
                       <span>Updated {timeAgo(p.updated_at)}</span>
-                      <span className="inline-flex items-center gap-1 text-fuchsia-400/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="inline-flex items-center gap-1 text-amber-400/80 opacity-0 group-hover:opacity-100 transition-opacity">
                         Open <ArrowUpRight className="h-3 w-3" />
                       </span>
                     </div>
@@ -276,11 +276,11 @@ export default function Dashboard({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="group relative flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.03] hover:border-fuchsia-500/30 transition-colors p-3 pr-4"
+                className="group relative flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.03] hover:border-amber-400/25 transition-colors p-3 pr-4"
               >
                 <button
                   onClick={() => onOpen(p.id)}
-                  className="flex min-w-0 flex-1 items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-500/50 rounded-2xl"
+                  className="flex min-w-0 flex-1 items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/30 rounded-2xl"
                   aria-label={`Open project ${p.name}`}
                 >
                   <div className="w-16 shrink-0 rounded-xl overflow-hidden border border-white/[0.06]">
@@ -302,7 +302,7 @@ export default function Dashboard({
                   <span className="hidden sm:block text-[11px] text-zinc-600 shrink-0">
                     {timeAgo(p.updated_at)}
                   </span>
-                  <ArrowUpRight className="h-4 w-4 text-zinc-600 group-hover:text-fuchsia-400 transition-colors shrink-0" />
+                  <ArrowUpRight className="h-4 w-4 text-zinc-600 group-hover:text-amber-400 transition-colors shrink-0" />
                 </button>
                 <button
                   onClick={(e) => {
@@ -331,7 +331,7 @@ export default function Dashboard({
       <footer className="relative z-10 mt-auto border-t border-white/[0.06] bg-zinc-950/80 backdrop-blur pb-[env(safe-area-inset-bottom)]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 flex items-center justify-between text-xs text-zinc-500">
           <div className="flex items-center gap-2">
-            <Blocks className="h-3.5 w-3.5 text-fuchsia-400" />
+            <Blocks className="h-3.5 w-3.5 text-amber-400" />
             <span className="font-medium text-zinc-400">Buildora</span>
           </div>
           <span>Powered by Z.AI · Neon PostgreSQL</span>

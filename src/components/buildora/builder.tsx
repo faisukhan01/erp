@@ -85,12 +85,12 @@ function AssistantMarkdown({ text }: { text: string }) {
         strong: ({ children }) => <strong className="text-zinc-100 font-semibold">{children}</strong>,
         em: ({ children }) => <em className="text-zinc-300">{children}</em>,
         code: ({ children }) => (
-          <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[12px] text-fuchsia-200">
+          <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[12px] text-amber-200">
             {children}
           </code>
         ),
         a: ({ children, href }) => (
-          <a href={href} target="_blank" rel="noreferrer" className="text-fuchsia-300 underline underline-offset-2">
+          <a href={href} target="_blank" rel="noreferrer" className="text-amber-300 underline underline-offset-2">
             {children}
           </a>
         ),
@@ -107,12 +107,12 @@ function BlueprintCard({ bp }: { bp: Blueprint }) {
       initial={{ opacity: 0, y: 10, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.35 }}
-      className="mt-1 overflow-hidden rounded-xl border border-fuchsia-500/25 bg-gradient-to-br from-fuchsia-500/[0.08] to-amber-400/[0.04]"
+      className="mt-1 overflow-hidden rounded-xl border border-amber-400/25 bg-amber-400/[0.05]"
       aria-label="Build blueprint"
     >
       <div className="flex items-center gap-2 border-b border-white/[0.06] px-3.5 py-2.5">
-        <Palette className="h-3.5 w-3.5 text-fuchsia-300" />
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-fuchsia-300">
+        <Palette className="h-3.5 w-3.5 text-amber-300" />
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-300">
           Build blueprint
         </span>
         {bp.vibe && (
@@ -124,7 +124,7 @@ function BlueprintCard({ bp }: { bp: Blueprint }) {
       <div className="px-3.5 py-3 space-y-3">
         <div>
           <div className="text-sm font-semibold text-zinc-100">{bp.name || "Your app"}</div>
-          {bp.tagline && <div className="text-xs text-fuchsia-200/80 mt-0.5">{bp.tagline}</div>}
+          {bp.tagline && <div className="text-xs text-amber-200/80 mt-0.5">{bp.tagline}</div>}
           {bp.description && <div className="mt-1 text-xs text-zinc-400">{bp.description}</div>}
         </div>
         {bp.features.length > 0 && (
@@ -180,7 +180,7 @@ function GenerationBubble() {
       exit={{ opacity: 0 }}
       className="flex justify-start"
     >
-      <div className="w-full max-w-[92%] rounded-2xl rounded-bl-md border border-fuchsia-500/20 bg-fuchsia-500/[0.05] px-3.5 py-3">
+      <div className="w-full max-w-[92%] rounded-2xl rounded-bl-md border border-amber-400/20 bg-amber-400/[0.05] px-3.5 py-3">
         {/* stepper */}
         <div className="flex items-center gap-1.5 flex-wrap">
           {STAGES.map((s, i) => {
@@ -193,7 +193,7 @@ function GenerationBubble() {
                   done
                     ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
                     : active
-                      ? "animate-pulse-ring border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-200"
+                      ? "animate-pulse border-amber-400/40 bg-amber-400/15 text-amber-200"
                       : "border-white/[0.06] bg-white/[0.02] text-zinc-600"
                 }`}
               >
@@ -203,7 +203,7 @@ function GenerationBubble() {
             );
           })}
           <span className="ml-auto flex items-center gap-1 text-[10px] text-zinc-500 tabular-nums">
-            <Loader2 className="h-3 w-3 animate-spin text-fuchsia-400" />
+            <Loader2 className="h-3 w-3 animate-spin text-amber-400" />
             {elapsed}s
           </span>
         </div>
@@ -217,7 +217,7 @@ function GenerationBubble() {
 
         {/* mini progress shimmer */}
         <div className="relative mt-2.5 h-1 overflow-hidden rounded-full bg-white/[0.05]" aria-hidden>
-          <div className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-fuchsia-400/80 to-transparent" />
+          <div className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
         </div>
       </div>
     </motion.div>
@@ -338,8 +338,8 @@ export default function Builder() {
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
-            <div className="absolute -inset-3 rounded-full bg-fuchsia-500/20 blur-xl animate-pulse" aria-hidden />
-            <Loader2 className="h-8 w-8 animate-spin text-fuchsia-400 relative" />
+            <div className="absolute -inset-3 rounded-full bg-amber-400/20 blur-xl animate-pulse" aria-hidden />
+            <Loader2 className="h-8 w-8 animate-spin text-amber-400 relative" />
           </div>
           <p className="text-sm text-zinc-500">Opening workspace…</p>
         </div>
@@ -366,9 +366,9 @@ export default function Builder() {
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-fuchsia-500 via-fuchsia-400 to-amber-400 p-[1.2px] shrink-0 hidden sm:block">
+        <div className="h-7 w-7 rounded-lg bg-amber-400/30 p-[1.2px] shrink-0 hidden sm:block">
           <div className="h-full w-full rounded-[7px] bg-zinc-950 flex items-center justify-center">
-            <Wand2 className="h-3.5 w-3.5 text-fuchsia-400" />
+            <Wand2 className="h-3.5 w-3.5 text-amber-400" />
           </div>
         </div>
         <div className="min-w-0">
@@ -382,7 +382,7 @@ export default function Builder() {
                 if (e.key === "Enter") void commitRename();
                 if (e.key === "Escape") setRenaming(false);
               }}
-              className="h-7 w-48 rounded-lg border-fuchsia-500/40 bg-white/5 text-sm"
+              className="h-7 w-48 rounded-lg border-amber-400/40 bg-white/5 text-sm"
               aria-label="Project name"
             />
           ) : (
@@ -404,7 +404,7 @@ export default function Builder() {
               </span>
             )}
             {isGenerating && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-fuchsia-500/25 bg-fuchsia-500/10 px-2 py-0.5 text-[10px] text-fuchsia-300">
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/25 bg-amber-400/10 px-2 py-0.5 text-[10px] text-amber-300">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 {genStage === "planning" ? "planning" : "building"}…
               </span>
@@ -438,9 +438,9 @@ export default function Builder() {
                     reloadPreview();
                   });
                 }}
-                className="gap-2 cursor-pointer focus:bg-white/10 items-start py-2"
+                className={`gap-2 cursor-pointer focus:bg-white/10 items-start py-2 ${v.id === detail?.current_version_id ? "border border-amber-400/30 bg-amber-400/10 text-amber-200" : ""}`}
               >
-                <span className="font-mono text-[10px] text-fuchsia-300 mt-0.5 shrink-0">v{v.version_number}</span>
+                <span className="font-mono text-[10px] text-amber-300 mt-0.5 shrink-0">v{v.version_number}</span>
                 <div className="min-w-0">
                   <div className="text-xs truncate max-w-[220px]">{v.summary || `Version ${v.version_number}`}</div>
                   <div className="text-[10px] text-zinc-600">
@@ -477,9 +477,9 @@ export default function Builder() {
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="mx-auto h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/25 to-amber-400/10 border border-white/10 flex items-center justify-center mb-4"
+              className="mx-auto h-14 w-14 rounded-2xl bg-amber-400/10 border border-white/10 flex items-center justify-center mb-4"
             >
-              <Sparkles className="h-6 w-6 text-fuchsia-300" />
+              <Sparkles className="h-6 w-6 text-amber-300" />
             </motion.div>
             <p className="text-sm font-medium text-zinc-300">Your app is being conceived…</p>
             <p className="mt-1 text-xs text-zinc-600 max-w-[240px] mx-auto">
@@ -496,7 +496,7 @@ export default function Builder() {
             className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
           >
             {m.role === "user" ? (
-              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-gradient-to-br from-fuchsia-500/90 to-fuchsia-600/90 text-white px-3.5 py-2.5 text-sm shadow-lg shadow-fuchsia-950/40">
+              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-amber-400 text-zinc-950 px-3.5 py-2.5 text-sm shadow-lg shadow-black/30">
                 {m.content}
               </div>
             ) : m.content.startsWith("Generation failed:") ? (
@@ -517,7 +517,7 @@ export default function Builder() {
               </div>
             ) : (
               <div className="max-w-[88%] rounded-2xl rounded-bl-md border border-white/[0.07] bg-white/[0.04] px-3.5 py-2.5 text-sm text-zinc-300">
-                <div className="flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-wider text-fuchsia-300/80 font-medium">
+                <div className="flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-wider text-amber-300/80 font-medium">
                   <Sparkles className="h-3 w-3" /> Buildora AI
                 </div>
                 <AssistantMarkdown text={m.content} />
@@ -546,7 +546,7 @@ export default function Builder() {
                 key={s}
                 onClick={() => !isGenerating && void sendMessage(s)}
                 disabled={isGenerating}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-zinc-400 hover:text-zinc-100 hover:border-fuchsia-500/40 hover:bg-fuchsia-500/10 transition-colors disabled:opacity-40"
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-zinc-400 hover:text-zinc-100 hover:border-amber-400/40 hover:bg-amber-400/10 transition-colors disabled:opacity-40"
               >
                 {s}
               </button>
@@ -557,7 +557,7 @@ export default function Builder() {
       </div>
 
       <div className="border-t border-white/[0.06] p-3">
-        <div className="relative rounded-xl border border-white/10 bg-white/[0.04] focus-within:border-fuchsia-500/50 transition-colors">
+        <div className="relative rounded-xl border border-white/10 bg-white/[0.04] focus-within:border-amber-400/50 transition-colors">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -576,7 +576,7 @@ export default function Builder() {
             onClick={send}
             disabled={!input.trim() || isGenerating}
             size="icon"
-            className="absolute right-2.5 bottom-2.5 h-8 w-8 rounded-lg bg-gradient-to-r from-fuchsia-500 to-amber-400 text-zinc-950 hover:opacity-90 disabled:opacity-30"
+            className="absolute right-2.5 bottom-2.5 h-8 w-8 rounded-lg bg-amber-400 text-zinc-950 hover:bg-amber-300 disabled:opacity-30"
             aria-label="Send message"
           >
             {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <SendHorizontal className="h-4 w-4" />}
@@ -593,14 +593,14 @@ export default function Builder() {
         <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.03] p-0.5">
           <button
             onClick={() => setRightTab("preview")}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "preview" ? "bg-white/10 text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "preview" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400 hover:text-zinc-200"}`}
             aria-pressed={activeTab === "preview"}
           >
             <Eye className="h-3.5 w-3.5" /> Preview
           </button>
           <button
             onClick={() => setRightTab("code")}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "code" ? "bg-white/10 text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "code" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400 hover:text-zinc-200"}`}
             aria-pressed={activeTab === "code"}
           >
             <Code2 className="h-3.5 w-3.5" /> Code
@@ -613,7 +613,7 @@ export default function Builder() {
               <div className="hidden sm:flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.03] p-0.5 mr-1">
                 <button
                   onClick={() => setDevice("desktop")}
-                  className={`rounded-md p-1.5 transition-colors ${device === "desktop" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-md p-1.5 transition-colors ${device === "desktop" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-500 hover:text-zinc-300"}`}
                   aria-label="Desktop viewport"
                   aria-pressed={device === "desktop"}
                 >
@@ -621,7 +621,7 @@ export default function Builder() {
                 </button>
                 <button
                   onClick={() => setDevice("mobile")}
-                  className={`rounded-md p-1.5 transition-colors ${device === "mobile" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-md p-1.5 transition-colors ${device === "mobile" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-500 hover:text-zinc-300"}`}
                   aria-label="Mobile viewport"
                   aria-pressed={device === "mobile"}
                 >
@@ -699,9 +699,9 @@ export default function Builder() {
                     ? { repeat: Infinity, duration: 2.4, ease: "linear" }
                     : { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
                 }
-                className="h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/30 to-amber-400/20 border border-white/10 flex items-center justify-center mb-4"
+                className="h-14 w-14 rounded-2xl bg-amber-400/10 border border-white/10 flex items-center justify-center mb-4"
               >
-                <Sparkles className="h-6 w-6 text-fuchsia-300" />
+                <Sparkles className="h-6 w-6 text-amber-300" />
               </motion.div>
               <p className="text-sm font-medium text-zinc-300">
                 {isGenerating ? "Z.AI is writing your app…" : "No preview yet"}
@@ -717,7 +717,7 @@ export default function Builder() {
           <div className="h-full flex flex-col min-h-0">
             <div className="flex items-center justify-between border-b border-white/[0.05] bg-black/30 px-3 py-1.5 text-[11px] text-zinc-500">
               <span className="inline-flex items-center gap-1.5 font-mono">
-                <FileCode2 className="h-3.5 w-3.5 text-fuchsia-300" /> index.html
+                <FileCode2 className="h-3.5 w-3.5 text-amber-300" /> index.html
               </span>
               {codeStats && (
                 <span className="tabular-nums">
@@ -770,20 +770,20 @@ export default function Builder() {
       <div className="flex sm:hidden items-center gap-1 border-b border-white/[0.06] px-3 py-1.5">
         <button
           onClick={() => setMobileTab("chat")}
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${mobileTab === "chat" ? "bg-white/10 text-white" : "text-zinc-400"}`}
+          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${mobileTab === "chat" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400"}`}
           aria-pressed={mobileTab === "chat"}
         >
           <MessageSquare className="h-3.5 w-3.5" /> Chat
         </button>
         <button
           onClick={() => setMobileTab("preview")}
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${mobileTab === "preview" ? "bg-white/10 text-white" : "text-zinc-400"}`}
+          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${mobileTab === "preview" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400"}`}
           aria-pressed={mobileTab === "preview"}
         >
           <Eye className="h-3.5 w-3.5" /> Preview
         </button>
         {isGenerating && (
-          <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-fuchsia-300">
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-amber-300">
             <Loader2 className="h-3 w-3 animate-spin" /> building…
           </span>
         )}
@@ -795,7 +795,7 @@ export default function Builder() {
           <Panel defaultSize={38} minSize={24} className="min-h-0">
             <div className="h-full border-r border-white/[0.06] min-h-0">{chatPanel}</div>
           </Panel>
-          <PanelResizeHandle className="w-1 bg-white/[0.03] hover:bg-fuchsia-500/30 data-[resize-handle-state=drag]:bg-fuchsia-500/50" />
+          <PanelResizeHandle className="w-1 bg-white/[0.03] hover:bg-amber-400/30 data-[resize-handle-state=drag]:bg-amber-400/50" />
           <Panel defaultSize={62} minSize={30} className="min-h-0">
             <div className="h-full min-h-0">{previewPanel}</div>
           </Panel>
