@@ -121,8 +121,13 @@ export const useStore = create<BuildoraState>((set, get) => ({
   },
 
   newProject: async (prompt) => {
-    const { userId } = get();
-    if (!userId) throw new Error("Workspace is still initializing — try again in a second.");
+    let { userId } = get();
+    if (!userId) {
+      // self-heal: the boot may have raced the first time — retry once
+      await get().init();
+      userId = get().userId;
+    }
+    if (!userId) throw new Error("The builder backend is still waking up — try again in a few seconds.");
     const detail = await createProject(userId, prompt);
     await get().loadProjects();
     set({
@@ -150,7 +155,11 @@ export const useStore = create<BuildoraState>((set, get) => ({
 
   goDashboard: () => {
     set({ view: "dashboard", activeProjectId: null, detail: null });
-    void get().loadProjects();
+    if (!get().userId) {
+      void get().init().then(() => get().loadProjects());
+    } else {
+      void get().loadProjects();
+    }
   },
 
   doRenameProject: async (id, name) => {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Blocks } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import {
@@ -75,14 +76,14 @@ export default function Home() {
           className="flex flex-col items-center gap-5"
         >
           <div className="relative">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-amber-400 p-[1.5px] animate-pulse">
-              <div className="h-full w-full rounded-[14px] bg-zinc-950" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-400/10 animate-pulse">
+              <Blocks className="h-6 w-6 text-amber-400" />
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm text-zinc-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 animate-bounce [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 animate-bounce [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 animate-bounce [animation-delay:300ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:300ms]" />
             <span className="ml-2">Waking the machines…</span>
           </div>
         </motion.div>
