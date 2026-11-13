@@ -107,7 +107,7 @@ function BlueprintCard({ bp }: { bp: Blueprint }) {
       initial={{ opacity: 0, y: 10, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.35 }}
-      className="mt-1 overflow-hidden rounded-xl border border-amber-400/25 bg-amber-400/[0.05]"
+      className="conic-card mt-1 rounded-xl"
       aria-label="Build blueprint"
     >
       <div className="flex items-center gap-2 border-b border-white/[0.06] px-3.5 py-2.5">
@@ -196,7 +196,7 @@ function GenerationBubble() {
       exit={{ opacity: 0 }}
       className="flex justify-start"
     >
-      <div className="w-full max-w-[92%] rounded-2xl rounded-bl-md border border-amber-400/20 bg-amber-400/[0.05] px-3.5 py-3">
+      <div className="conic-card w-full max-w-[92%] rounded-2xl rounded-bl-md px-3.5 py-3">
         {/* stepper */}
         <div className="flex items-center gap-1.5 flex-wrap">
           {STAGES.map((s, i) => {
@@ -368,13 +368,18 @@ export default function Builder() {
 
   if (detailLoading || (!detail && !detailLoading)) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
+      <div className="min-h-screen bg-[#030303] text-zinc-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5">
           <div className="relative">
-            <div className="absolute -inset-3 rounded-full bg-amber-400/20 blur-xl animate-pulse" aria-hidden />
-            <Loader2 className="h-8 w-8 animate-spin text-amber-400 relative" />
+            <div className="absolute -inset-5 rounded-full bg-amber-400/20 blur-2xl animate-glow-breathe" aria-hidden />
+            <div className="relative h-14 w-14 rounded-2xl border border-amber-400/25 bg-amber-400/10 flex items-center justify-center animate-pulse-ring">
+              <Loader2 className="h-6 w-6 animate-spin text-amber-400" />
+            </div>
           </div>
-          <p className="text-sm text-zinc-500">Opening workspace…</p>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-sm font-medium text-zinc-300">Opening workspace…</p>
+            <p className="text-xs text-zinc-600">Loading project, versions and preview</p>
+          </div>
         </div>
       </div>
     );
@@ -388,19 +393,19 @@ export default function Builder() {
 
   // -------------------------------------------------------------- chrome
   const topBar = (
-    <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] bg-zinc-950/80 backdrop-blur px-3 sm:px-4 py-2.5">
+    <div className="flex items-center justify-between gap-2 sm:gap-3 border-b border-white/[0.06] bg-[#030303]/80 backdrop-blur-xl px-3 sm:px-4 py-2.5">
       <div className="flex items-center gap-2 min-w-0">
         <Button
           variant="ghost"
           size="icon"
           onClick={goDashboard}
-          className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-white/10 shrink-0"
+          className="h-8 w-8 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-amber-400/30 shrink-0 transition-all"
           aria-label="Back to projects"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div className="h-7 w-7 rounded-lg bg-amber-400/30 p-[1.2px] shrink-0 hidden sm:block">
-          <div className="h-full w-full rounded-[7px] bg-zinc-950 flex items-center justify-center">
+        <div className="h-7 w-7 rounded-lg bg-amber-400/30 p-[1.2px] shrink-0 hidden sm:block shadow-[0_0_20px_rgba(251,191,36,0.2)]">
+          <div className="h-full w-full rounded-[7px] bg-[#030303] flex items-center justify-center">
             <Wand2 className="h-3.5 w-3.5 text-amber-400" />
           </div>
         </div>
@@ -415,7 +420,7 @@ export default function Builder() {
                 if (e.key === "Enter") void commitRename();
                 if (e.key === "Escape") setRenaming(false);
               }}
-              className="h-7 w-48 rounded-lg border-amber-400/40 bg-white/5 text-sm"
+              className="h-7 w-48 rounded-lg border-amber-400/40 bg-white/[0.05] text-sm text-zinc-100 caret-amber-400"
               aria-label="Project name"
             />
           ) : (
@@ -432,12 +437,12 @@ export default function Builder() {
           )}
           <div className="flex items-center gap-2">
             {version > 0 && (
-              <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-300">
+              <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300 shadow-[inset_0_1px_0_rgba(52,211,153,0.15)]">
                 <Check className="h-3 w-3" /> v{version} live
               </span>
             )}
             {isGenerating && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/25 bg-amber-400/10 px-2 py-0.5 text-[10px] text-amber-300">
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/25 bg-amber-400/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 shadow-[inset_0_1px_0_rgba(251,191,36,0.2)]">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 {genStage === "planning" ? "planning" : "building"}…
               </span>
@@ -451,7 +456,7 @@ export default function Builder() {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 border-white/10 bg-white/5 hover:bg-white/10 text-xs text-zinc-300"
+              className="h-8 rounded-lg border-white/[0.08] bg-white/[0.04] hover:bg-white/10 hover:border-amber-400/30 text-xs text-zinc-300 transition-colors"
               disabled={sortedVersions.length === 0}
             >
               <Layers className="mr-1 h-3.5 w-3.5" />
@@ -459,7 +464,7 @@ export default function Builder() {
               <ChevronDown className="ml-1 h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="border-white/10 bg-zinc-900 text-zinc-200 max-h-80 overflow-y-auto buildora-scroll w-72">
+          <DropdownMenuContent align="end" className="border-white/[0.08] bg-[#0a0a0c] text-zinc-200 max-h-80 overflow-y-auto buildora-scroll w-72 shadow-2xl shadow-black/60">
             <DropdownMenuLabel className="text-xs text-zinc-500">Version history</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-white/10" />
             {sortedVersions.map((v) => (
@@ -489,7 +494,7 @@ export default function Builder() {
           size="sm"
           onClick={download}
           disabled={!html}
-          className="h-8 border-white/10 bg-white/5 hover:bg-white/10 text-xs text-zinc-300"
+          className="h-8 rounded-lg border-white/[0.08] bg-white/[0.04] hover:bg-white/10 hover:border-amber-400/30 text-xs text-zinc-300 transition-colors"
         >
           <Download className="mr-1 h-3.5 w-3.5" />
           <span className="hidden sm:inline">Download</span>
@@ -503,17 +508,20 @@ export default function Builder() {
     !isGenerating && version > 0 && !lastGenFailed && detail?.messages.length ? detail.messages.length > 1 : false;
 
   const chatPanel = (
-    <div className="flex flex-col h-full min-h-0 bg-zinc-950">
+    <div className="flex flex-col h-full min-h-0 bg-[#030303]">
       <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-4 buildora-scroll" role="log" aria-label="Chat with Buildora AI">
         {detail?.messages.length === 0 && (
           <div className="text-center py-10 px-4">
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="mx-auto h-14 w-14 rounded-2xl bg-amber-400/10 border border-white/10 flex items-center justify-center mb-4"
-            >
-              <Sparkles className="h-6 w-6 text-amber-300" />
-            </motion.div>
+            <div className="relative mx-auto mb-4 h-14 w-14">
+              <div className="absolute -inset-4 rounded-full bg-amber-400/15 blur-xl animate-glow-breathe" aria-hidden />
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                className="relative h-14 w-14 rounded-2xl bg-amber-400/10 border border-amber-400/25 flex items-center justify-center"
+              >
+                <Sparkles className="h-6 w-6 text-amber-300" />
+              </motion.div>
+            </div>
             <p className="text-sm font-medium text-zinc-300">Your app is being conceived…</p>
             <p className="mt-1 text-xs text-zinc-600 max-w-[240px] mx-auto">
               Z.AI is planning the blueprint, then it will write every line in front of you.
@@ -529,7 +537,7 @@ export default function Builder() {
             className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
           >
             {m.role === "user" ? (
-              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-amber-400 text-zinc-950 px-3.5 py-2.5 text-sm shadow-lg shadow-black/30">
+              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-amber-400 text-[#0c0a09] px-3.5 py-2.5 text-sm shadow-[0_4px_24px_-6px_rgba(251,191,36,0.35)]">
                 {m.content}
               </div>
             ) : m.content.startsWith("Generation failed:") ? (
@@ -549,9 +557,9 @@ export default function Builder() {
                 </Button>
               </div>
             ) : (
-              <div className="max-w-[88%] rounded-2xl rounded-bl-md border border-white/[0.07] bg-white/[0.04] px-3.5 py-2.5 text-sm text-zinc-300">
-                <div className="flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-wider text-amber-300/80 font-medium">
-                  <Sparkles className="h-3 w-3" /> Buildora AI
+              <div className="max-w-[88%] rounded-2xl rounded-bl-md border border-white/[0.07] bg-white/[0.035] px-3.5 py-2.5 text-sm text-zinc-300 transition-colors hover:border-white/[0.12]">
+                <div className="flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-wider font-medium">
+                  <Sparkles className="h-3 w-3 text-amber-300" /> <span className="gold-text">Buildora AI</span>
                 </div>
                 <AssistantMarkdown text={m.content} />
               </div>
@@ -589,8 +597,8 @@ export default function Builder() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="border-t border-white/[0.06] p-3">
-        <div className="relative rounded-xl border border-white/10 bg-white/[0.04] focus-within:border-amber-400/50 transition-colors">
+      <div className="border-t border-white/[0.06] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="relative rounded-xl border border-white/[0.08] bg-white/[0.04] transition-all duration-300 focus-within:border-amber-400/50 focus-within:bg-white/[0.05] focus-within:shadow-[0_0_30px_-10px_rgba(251,191,36,0.35)]">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -609,7 +617,7 @@ export default function Builder() {
             onClick={send}
             disabled={!input.trim() || isGenerating}
             size="icon"
-            className="absolute right-2.5 bottom-2.5 h-8 w-8 rounded-lg bg-amber-400 text-zinc-950 hover:bg-amber-300 disabled:opacity-30"
+            className="absolute right-2.5 bottom-2.5 h-8 w-8 rounded-lg bg-amber-400 text-[#0c0a09] shadow-[0_4px_16px_-4px_rgba(251,191,36,0.5)] hover:bg-amber-300 hover:shadow-[0_0_24px_-4px_rgba(251,191,36,0.7)] disabled:opacity-30 transition-shadow"
             aria-label="Send message"
           >
             {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <SendHorizontal className="h-4 w-4" />}
@@ -621,19 +629,19 @@ export default function Builder() {
 
   // -------------------------------------------------------------- preview panel
   const previewPanel = (
-    <div className="flex flex-col h-full min-h-0 bg-zinc-900/40">
+    <div className="flex flex-col h-full min-h-0 bg-[#050505]">
       <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] px-3 py-2">
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.03] p-0.5">
+        <div className="flex items-center gap-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-0.5">
           <button
             onClick={() => setRightTab("preview")}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "preview" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400 hover:text-zinc-200"}`}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "preview" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(251,191,36,0.15)]" : "border border-transparent text-zinc-400 hover:text-zinc-200"}`}
             aria-pressed={activeTab === "preview"}
           >
             <Eye className="h-3.5 w-3.5" /> Preview
           </button>
           <button
             onClick={() => setRightTab("code")}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "code" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400 hover:text-zinc-200"}`}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === "code" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(251,191,36,0.15)]" : "border border-transparent text-zinc-400 hover:text-zinc-200"}`}
             aria-pressed={activeTab === "code"}
           >
             <Code2 className="h-3.5 w-3.5" /> Code
@@ -643,10 +651,10 @@ export default function Builder() {
         <div className="flex items-center gap-1.5">
           {activeTab === "preview" && (
             <>
-              <div className="hidden sm:flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.03] p-0.5 mr-1">
+              <div className="hidden sm:flex items-center gap-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-0.5 mr-1">
                 <button
                   onClick={() => setDevice("desktop")}
-                  className={`rounded-md p-1.5 transition-colors ${device === "desktop" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-lg p-1.5 transition-colors ${device === "desktop" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(251,191,36,0.15)]" : "border border-transparent text-zinc-500 hover:text-zinc-300"}`}
                   aria-label="Desktop viewport"
                   aria-pressed={device === "desktop"}
                 >
@@ -654,7 +662,7 @@ export default function Builder() {
                 </button>
                 <button
                   onClick={() => setDevice("mobile")}
-                  className={`rounded-md p-1.5 transition-colors ${device === "mobile" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-lg p-1.5 transition-colors ${device === "mobile" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(251,191,36,0.15)]" : "border border-transparent text-zinc-500 hover:text-zinc-300"}`}
                   aria-label="Mobile viewport"
                   aria-pressed={device === "mobile"}
                 >
@@ -667,7 +675,7 @@ export default function Builder() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setFullscreen(true)}
-                    className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-white/10"
+                    className="h-8 w-8 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-white/15 transition-all"
                     aria-label="Fullscreen preview"
                   >
                     <Maximize2 className="h-3.5 w-3.5" />
@@ -679,7 +687,7 @@ export default function Builder() {
                       window.open(previewUrl(detail!.id), "_blank", "noopener");
                       toast.success("Opened in a new tab");
                     }}
-                    className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-white/10"
+                    className="h-8 w-8 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-white/15 transition-all"
                     aria-label="Open preview in new tab"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -693,7 +701,7 @@ export default function Builder() {
               variant="ghost"
               size="icon"
               onClick={copyCode}
-              className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-white/10"
+              className="h-8 w-8 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-white/15 transition-all"
               aria-label="Copy code"
             >
               <Copy className="h-3.5 w-3.5" />
@@ -703,7 +711,7 @@ export default function Builder() {
             variant="ghost"
             size="icon"
             onClick={reloadPreview}
-            className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-white/10"
+            className="h-8 w-8 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-white/15 transition-all"
             aria-label="Reload preview"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -714,7 +722,7 @@ export default function Builder() {
       <div className="flex-1 min-h-0 relative">
         {activeTab === "preview" ? (
           html ? (
-            <div className={`h-full w-full flex justify-center bg-zinc-950/60 ${device === "mobile" ? "py-4" : ""}`}>
+            <div className={`h-full w-full flex justify-center bg-[#030303]/60 ${device === "mobile" ? "py-4" : ""}`}>
               <iframe
                 key={previewNonce}
                 title={`${name} preview`}
@@ -725,17 +733,20 @@ export default function Builder() {
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center px-6">
-              <motion.div
-                animate={isGenerating ? { rotate: 360 } : { y: [0, -6, 0] }}
-                transition={
-                  isGenerating
-                    ? { repeat: Infinity, duration: 2.4, ease: "linear" }
-                    : { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
-                }
-                className="h-14 w-14 rounded-2xl bg-amber-400/10 border border-white/10 flex items-center justify-center mb-4"
-              >
-                <Sparkles className="h-6 w-6 text-amber-300" />
-              </motion.div>
+              <div className="relative mb-4">
+                <div className="absolute -inset-4 rounded-full bg-amber-400/15 blur-xl animate-glow-breathe" aria-hidden />
+                <motion.div
+                  animate={isGenerating ? { rotate: 360 } : { y: [0, -6, 0] }}
+                  transition={
+                    isGenerating
+                      ? { repeat: Infinity, duration: 2.4, ease: "linear" }
+                      : { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
+                  }
+                  className="relative h-14 w-14 rounded-2xl bg-amber-400/10 border border-amber-400/25 flex items-center justify-center"
+                >
+                  <Sparkles className="h-6 w-6 text-amber-300" />
+                </motion.div>
+              </div>
               <p className="text-sm font-medium text-zinc-300">
                 {isGenerating ? "Z.AI is writing your app…" : "No preview yet"}
               </p>
@@ -748,8 +759,13 @@ export default function Builder() {
           )
         ) : (
           <div className="h-full flex flex-col min-h-0">
-            <div className="flex items-center justify-between border-b border-white/[0.05] bg-black/30 px-3 py-1.5 text-[11px] text-zinc-500">
-              <span className="inline-flex items-center gap-1.5 font-mono">
+            <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/40 px-3 py-1.5 text-[11px] text-zinc-500">
+              <span className="inline-flex items-center gap-2 font-mono">
+                <span className="flex items-center gap-1.5" aria-hidden>
+                  <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-amber-400/60" />
+                </span>
                 <FileCode2 className="h-3.5 w-3.5 text-amber-300" /> index.html
               </span>
               {codeStats && (
@@ -758,35 +774,38 @@ export default function Builder() {
                 </span>
               )}
             </div>
-            <div ref={codeScrollRef} className="flex-1 min-h-0 overflow-auto buildora-scroll">
-              {streamedCode || html ? (
-                isGenerating ? (
-                  <pre className="p-4 text-[11.5px] leading-[1.6] font-mono text-emerald-100/90 whitespace-pre-wrap break-words min-h-full">
-                    <code>{streamedCode}</code>
-                  </pre>
+            <div className="relative flex-1 min-h-0 overflow-hidden">
+              {isGenerating && <div className="scan-line" aria-hidden />}
+              <div ref={codeScrollRef} className="h-full overflow-auto buildora-scroll">
+                {streamedCode || html ? (
+                  isGenerating ? (
+                    <pre className="p-4 text-[11.5px] leading-[1.6] font-mono text-emerald-100/90 whitespace-pre-wrap break-words min-h-full">
+                      <code>{streamedCode}</code>
+                    </pre>
+                  ) : (
+                    <SyntaxHighlighter
+                      language="html"
+                      style={oneDark}
+                      showLineNumbers
+                      wrapLongLines
+                      customStyle={{
+                        margin: 0,
+                        background: "transparent",
+                        fontSize: "11.5px",
+                        lineHeight: 1.6,
+                        minHeight: "100%",
+                      }}
+                      lineNumberStyle={{ color: "rgba(255,255,255,0.18)", minWidth: "2.2em" }}
+                    >
+                      {html}
+                    </SyntaxHighlighter>
+                  )
                 ) : (
-                  <SyntaxHighlighter
-                    language="html"
-                    style={oneDark}
-                    showLineNumbers
-                    wrapLongLines
-                    customStyle={{
-                      margin: 0,
-                      background: "transparent",
-                      fontSize: "11.5px",
-                      lineHeight: 1.6,
-                      minHeight: "100%",
-                    }}
-                    lineNumberStyle={{ color: "rgba(255,255,255,0.18)", minWidth: "2.2em" }}
-                  >
-                    {html}
-                  </SyntaxHighlighter>
-                )
-              ) : (
-                <div className="h-full flex items-center justify-center text-xs text-zinc-600">
-                  Code appears here, live, as Z.AI writes it.
-                </div>
-              )}
+                  <div className="h-full flex items-center justify-center text-xs text-zinc-600">
+                    Code appears here, live, as Z.AI writes it.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -796,21 +815,21 @@ export default function Builder() {
 
   // -------------------------------------------------------------- layout
   return (
-    <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+    <div className="h-dvh flex flex-col bg-[#030303] text-zinc-100 overflow-hidden">
       {topBar}
 
       {/* mobile tabs */}
-      <div className="flex sm:hidden items-center gap-1 border-b border-white/[0.06] px-3 py-1.5">
+      <div className="flex sm:hidden items-center gap-2 border-b border-white/[0.06] bg-[#030303] px-3 py-1.5">
         <button
           onClick={() => setMobileTab("chat")}
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${mobileTab === "chat" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400"}`}
+          className={`inline-flex h-12 items-center gap-1.5 rounded-xl px-4 text-xs font-medium transition-colors ${mobileTab === "chat" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(251,191,36,0.15)]" : "border border-transparent text-zinc-400"}`}
           aria-pressed={mobileTab === "chat"}
         >
           <MessageSquare className="h-3.5 w-3.5" /> Chat
         </button>
         <button
           onClick={() => setMobileTab("preview")}
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${mobileTab === "preview" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200" : "text-zinc-400"}`}
+          className={`inline-flex h-12 items-center gap-1.5 rounded-xl px-4 text-xs font-medium transition-colors ${mobileTab === "preview" ? "border border-amber-400/40 bg-amber-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(251,191,36,0.15)]" : "border border-transparent text-zinc-400"}`}
           aria-pressed={mobileTab === "preview"}
         >
           <Eye className="h-3.5 w-3.5" /> Preview
@@ -840,16 +859,16 @@ export default function Builder() {
 
       {/* fullscreen preview */}
       <Dialog open={fullscreen} onOpenChange={setFullscreen}>
-        <DialogContent className="max-w-[100vw] sm:max-w-[95vw] h-[95vh] p-0 sm:p-1 border-white/10 bg-zinc-950 overflow-hidden [&>button]:hidden">
+        <DialogContent className="max-w-[100vw] sm:max-w-[95vw] h-[95vh] p-0 sm:p-1 border-white/[0.08] bg-[#030303] overflow-hidden [&>button]:hidden">
           <DialogTitle className="sr-only">Fullscreen preview of {name}</DialogTitle>
-          <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.06]">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.06] bg-white/[0.03]">
             <span className="text-xs text-zinc-400 font-medium truncate">{name} — fullscreen preview</span>
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={reloadPreview}
-                className="h-7 w-7 text-zinc-400 hover:text-white"
+                className="h-7 w-7 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-white/15 transition-all"
                 aria-label="Reload fullscreen preview"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
@@ -858,7 +877,7 @@ export default function Builder() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setFullscreen(false)}
-                className="h-7 w-7 text-zinc-400 hover:text-white"
+                className="h-7 w-7 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 hover:ring-1 hover:ring-white/15 transition-all"
                 aria-label="Exit fullscreen"
               >
                 <X className="h-4 w-4" />
