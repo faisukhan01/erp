@@ -171,7 +171,23 @@ function GenerationBubble() {
     return () => clearInterval(t);
   }, [genStartedAt]);
 
+  // honest stall detection: if no new code has arrived for a while, say so
+  // instead of claiming "typing…" forever
+  const lastChangeRef = useRef(Date.now());
+  useEffect(() => {
+    lastChangeRef.current = Date.now();
+  }, [streamedCode.length]);
+  const [idleFor, setIdleFor] = useState(0);
+  useEffect(() => {
+    const t = setInterval(
+      () => setIdleFor(Math.round((Date.now() - lastChangeRef.current) / 1000)),
+      5000
+    );
+    return () => clearInterval(t);
+  }, []);
+
   const current = stageIndex(genStage);
+  const stalled = idleFor >= 45 && genStage !== "connecting";
 
   return (
     <motion.div
@@ -209,10 +225,27 @@ function GenerationBubble() {
         </div>
 
         {/* live code counter */}
-        <div className="mt-2.5 flex items-center gap-2 text-[11px] text-zinc-500">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="tabular-nums">{streamedCode.length.toLocaleString()}</span> characters written
-          <span className="text-zinc-600">— Z.AI is typing…</span>
+        <div className="mt-2.5 flex items-center gap-2 text-[11px]">
+          {stalled ? (
+            <>
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-amber-200/90">
+                Still thinking — large builds can take a couple of minutes…
+              </span>
+              <span className="text-zinc-600">
+                auto-recovers if the connection drops
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="tabular-nums text-zinc-500">
+                {streamedCode.length.toLocaleString()}
+              </span>
+              <span className="text-zinc-500">characters written</span>
+              <span className="text-zinc-600">— Z.AI is typing…</span>
+            </>
+          )}
         </div>
 
         {/* mini progress shimmer */}
