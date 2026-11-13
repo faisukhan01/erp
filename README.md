@@ -59,6 +59,15 @@ You:  "build a simple calculator with history and a sleek dark design"
 | **Live thumbnails** | Dashboard renders your actual apps in scaled iframes | Static icons |
 | **Code ownership** | Single-file HTML export, zero lock-in, no watermarks | Walled gardens |
 
+## Design system — "Obsidian"
+
+Buildora's interface follows a strict editorial-black language:
+
+- **Realistic black canvas** — layered true-black surfaces (`#050505` / `#0a0a0a`), hairline `white/8` borders, no color gradients anywhere.
+- **One signal color** — cold cyan (`#22d3ee`) used sparingly: the mark, live states, focus rings, streaming accents.
+- **Type** — Bricolage Grotesque for display, Inter for body, JetBrains Mono for uppercase micro-labels and technical metadata.
+- **Motion** — restrained and mechanical: caret blinks, a solid cyan stream block, nothing that glows.
+
 ## Features
 
 - **Blueprint before code** — Z.AI plans the name, tagline, feature set, palette and visual vibe, shown as a beautiful card in chat before a single line is written.

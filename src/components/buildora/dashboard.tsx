@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
-  Blocks,
   FolderOpen,
   Layers,
   LayoutGrid,
@@ -37,23 +36,34 @@ function timeAgo(iso: string): string {
   return `${days}d ago`;
 }
 
+function Wordmark() {
+  return (
+    <span className="flex items-center gap-2.5">
+      <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[6px] border border-white/15 bg-white/[0.03]">
+        <span className="h-[7px] w-[7px] rounded-[2px] bg-cyan-400" />
+      </span>
+      <span className="font-display text-[17px] font-bold tracking-tight text-white">buildora</span>
+    </span>
+  );
+}
+
 function Thumb({ project, tall }: { project: ProjectMeta; tall?: boolean }) {
   if (!project.current_version_id) {
     return (
       <div
-        className={`relative w-full overflow-hidden ${tall ? "aspect-[4/3]" : "aspect-square"} bg-gradient-to-br from-rose-950/40 via-[#0b0b0e] to-orange-950/20`}
+        className={`relative w-full overflow-hidden border-b border-white/[0.06] bg-[#0d0d0d] ${tall ? "aspect-[4/3]" : "aspect-square"}`}
         aria-hidden
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-zinc-600">
-          <Rocket className="h-6 w-6" />
-          <span className="text-[10px] uppercase tracking-widest">awaiting first build</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-zinc-700">
+          <Rocket className="h-5 w-5" />
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em]">awaiting first build</span>
         </div>
       </div>
     );
   }
   return (
     <div
-      className={`relative w-full overflow-hidden bg-zinc-900 ${tall ? "aspect-[4/3]" : "aspect-square"}`}
+      className={`relative w-full overflow-hidden bg-[#0d0d0d] ${tall ? "aspect-[4/3]" : "aspect-square"}`}
       aria-hidden
     >
       <iframe
@@ -64,7 +74,6 @@ function Thumb({ project, tall }: { project: ProjectMeta; tall?: boolean }) {
         tabIndex={-1}
         className="pointer-events-none absolute left-0 top-0 h-[400%] w-[400%] origin-top-left scale-[0.25] border-0 bg-white"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-transparent to-transparent" />
     </div>
   );
 }
@@ -106,27 +115,19 @@ export default function Dashboard({
   const totalVersions = projects.reduce((acc, p) => acc + p.version_count, 0);
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 text-zinc-100 flex flex-col relative overflow-x-clip">
-      {/* ambient */}
-      <div className="pointer-events-none fixed inset-0" aria-hidden>
-        <div className="animate-aurora-a absolute -top-32 left-1/4 h-96 w-[640px] rounded-full bg-rose-600/[0.12] blur-[140px]" />
-        <div className="animate-aurora-b absolute bottom-0 -right-24 h-72 w-96 rounded-full bg-orange-500/[0.08] blur-[120px]" />
-      </div>
-
+    <div className="flex min-h-[100dvh] flex-col overflow-x-clip bg-[#050505] text-zinc-100">
       {/* nav */}
-      <header className="relative z-10 border-b border-white/[0.06] bg-zinc-950/70 backdrop-blur sticky top-0">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3.5 flex items-center justify-between">
-          <button onClick={onNew} className="flex items-center gap-2.5 group" aria-label="Buildora home">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-rose-500 to-orange-500 p-[1.5px] shadow-[0_0_28px_rgba(244,63,94,0.3)]">
-              <div className="h-full w-full rounded-[10px] bg-zinc-950 flex items-center justify-center">
-                <Blocks className="h-4 w-4 text-rose-400" />
-              </div>
-            </div>
-            <span className="font-display text-lg font-semibold tracking-tight">Buildora</span>
+      <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-[#050505]/85 backdrop-blur-md">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+          <button onClick={onNew} className="flex items-center gap-3" aria-label="Buildora home">
+            <Wordmark />
+            <span className="hidden rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-zinc-500 sm:inline-block">
+              workspace
+            </span>
           </button>
           <Button
             onClick={onNew}
-            className="h-10 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 text-white font-semibold hover:opacity-90 shadow-[0_10px_36px_-10px_rgba(244,63,94,0.55)]"
+            className="h-9 rounded-lg bg-white px-4 text-[13px] font-semibold text-black hover:bg-zinc-200"
           >
             <Plus className="mr-1.5 h-4 w-4" />
             New project
@@ -134,46 +135,57 @@ export default function Dashboard({
         </div>
       </header>
 
-      <main className="relative z-10 flex-1 mx-auto w-full max-w-6xl px-4 sm:px-6 py-10">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
         {/* header + stats */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight">My Projects</h1>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[11px] tracking-[0.2em] text-cyan-400">00</span>
+              <span className="h-px w-8 bg-white/15" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+                Workspace
+              </span>
+            </div>
+            <h1 className="mt-3 font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
+              My Projects
+            </h1>
             <p className="mt-1.5 text-sm text-zinc-500">
               {projects.length === 0
                 ? "Nothing here yet — your first build is one sentence away."
-                : `${projects.length} project${projects.length === 1 ? "" : "s"} · ${totalVersions} version${totalVersions === 1 ? "" : "s"} · saved to cloud PostgreSQL`}
+                : `${projects.length} project${projects.length === 1 ? "" : "s"} · ${totalVersions} version${totalVersions === 1 ? "" : "s"} · saved to PostgreSQL`}
             </p>
           </div>
           {projects.length > 0 && (
             <div className="flex w-full flex-wrap items-center gap-2">
               <div className="relative w-full sm:w-auto">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500" />
+                <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-600" />
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search projects…"
-                  className="h-9 w-full sm:w-56 rounded-xl border-white/10 bg-white/[0.04] pl-8 text-sm placeholder:text-zinc-600"
+                  className="h-9 w-full rounded-lg border-white/10 bg-white/[0.03] pl-8 text-sm placeholder:text-zinc-600 sm:w-56"
                   aria-label="Search projects"
                 />
               </div>
               <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
                 <SelectTrigger
-                  className="h-9 w-[130px] rounded-xl border-white/10 bg-white/[0.04] text-sm"
+                  className="h-9 w-[130px] rounded-lg border-white/10 bg-white/[0.03] text-sm"
                   aria-label="Sort projects"
                 >
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="border-white/10 bg-[#0e0e11]">
+                <SelectContent className="border-white/10 bg-[#0a0a0a]">
                   <SelectItem value="recent">Most recent</SelectItem>
                   <SelectItem value="name">Name A–Z</SelectItem>
                   <SelectItem value="versions">Most versions</SelectItem>
                 </SelectContent>
               </Select>
-              <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.04] p-0.5">
+              <div className="flex items-center rounded-lg border border-white/10 bg-white/[0.03] p-0.5">
                 <button
                   onClick={() => setLayout("grid")}
-                  className={`rounded-lg p-1.5 transition-colors ${layout === "grid" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-md p-1.5 transition-colors ${
+                    layout === "grid" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"
+                  }`}
                   aria-label="Grid view"
                   aria-pressed={layout === "grid"}
                 >
@@ -181,7 +193,9 @@ export default function Dashboard({
                 </button>
                 <button
                   onClick={() => setLayout("list")}
-                  className={`rounded-lg p-1.5 transition-colors ${layout === "list" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-md p-1.5 transition-colors ${
+                    layout === "list" ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"
+                  }`}
                   aria-label="List view"
                   aria-pressed={layout === "list"}
                 >
@@ -195,61 +209,63 @@ export default function Dashboard({
         {loading ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-56 rounded-2xl border border-white/[0.06] bg-white/[0.03] animate-pulse" />
+              <div key={i} className="h-56 animate-pulse rounded-xl border border-white/[0.06] bg-white/[0.02]" />
             ))}
           </div>
         ) : projects.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02] py-24 text-center">
-            <div className="animate-float h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-500/20 to-orange-500/10 border border-white/10 flex items-center justify-center mb-5">
-              <Rocket className="h-6 w-6 text-rose-300" />
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.12] bg-white/[0.01] py-24 text-center">
+            <div className="animate-float mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03]">
+              <Rocket className="h-5 w-5 text-cyan-400" />
             </div>
-            <h2 className="text-lg font-semibold">Launch your first app</h2>
+            <h2 className="font-display text-lg font-semibold tracking-tight">Launch your first app</h2>
             <p className="mt-1.5 max-w-sm text-sm text-zinc-500">
               Describe anything — a dashboard, a game, a store — and watch Buildora build it live.
             </p>
             <Button
               onClick={onNew}
-              className="mt-6 h-11 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 text-white font-semibold hover:opacity-90"
+              className="mt-6 h-10 rounded-lg bg-white px-6 text-sm font-semibold text-black hover:bg-zinc-200"
             >
               <Plus className="mr-2 h-4 w-4" />
               Start building
             </Button>
           </div>
         ) : visible.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.02] py-16 text-center text-sm text-zinc-500">
+          <div className="rounded-xl border border-dashed border-white/[0.12] bg-white/[0.01] py-16 text-center text-sm text-zinc-500">
             No projects match “{query}”.
           </div>
         ) : layout === "grid" ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pb-6">
+          <div className="grid gap-4 pb-6 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((p, i) => (
               <motion.div
                 key={p.id}
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: Math.min(i * 0.05, 0.4) }}
-                className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.03] hover:border-rose-500/25 transition-colors overflow-hidden"
+                className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[#0a0a0a] transition-colors duration-300 hover:border-white/[0.18]"
               >
                 <button
                   onClick={() => onOpen(p.id)}
-                  className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50 rounded-2xl"
+                  className="block w-full rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/40"
                   aria-label={`Open project ${p.name}`}
                 >
                   <Thumb project={p} tall />
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold text-zinc-100 truncate group-hover:text-white">{p.name}</h3>
+                      <h3 className="truncate font-display text-[15px] font-semibold text-zinc-100">
+                        {p.name}
+                      </h3>
                       {p.version_count > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-zinc-400 shrink-0">
+                        <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-white/10 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
                           <Layers className="h-3 w-3" />v{p.version_count}
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-xs leading-relaxed text-zinc-500 line-clamp-2 min-h-[2rem]">
+                    <p className="mt-1 line-clamp-2 min-h-[2rem] text-xs leading-relaxed text-zinc-500">
                       {p.description || p.initial_prompt}
                     </p>
-                    <div className="mt-3 flex items-center justify-between text-[11px] text-zinc-600">
-                      <span>Updated {timeAgo(p.updated_at)}</span>
-                      <span className="inline-flex items-center gap-1 text-rose-400/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="mt-3 flex items-center justify-between font-mono text-[10.5px] text-zinc-600">
+                      <span>{timeAgo(p.updated_at)}</span>
+                      <span className="inline-flex items-center gap-1 text-cyan-400/90 opacity-0 transition-opacity group-hover:opacity-100">
                         Open <ArrowUpRight className="h-3 w-3" />
                       </span>
                     </div>
@@ -260,7 +276,7 @@ export default function Dashboard({
                     e.stopPropagation();
                     onDelete(p.id);
                   }}
-                  className="absolute top-3 right-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 h-7 w-7 rounded-lg flex items-center justify-center text-zinc-400 bg-zinc-950/60 backdrop-blur hover:text-red-400 hover:bg-red-500/20 transition-all focus-visible:opacity-100"
+                  className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg bg-[#050505]/70 text-zinc-400 opacity-100 backdrop-blur transition-all hover:bg-red-500/15 hover:text-red-400 focus-visible:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                   aria-label={`Delete project ${p.name}`}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -273,43 +289,43 @@ export default function Dashboard({
             {visible.map((p, i) => (
               <motion.div
                 key={p.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="group relative flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.03] hover:border-rose-500/25 transition-colors p-3 pr-4"
+                className="group relative flex items-center gap-4 rounded-xl border border-white/[0.08] bg-[#0a0a0a] p-3 pr-4 transition-colors duration-300 hover:border-white/[0.18]"
               >
                 <button
                   onClick={() => onOpen(p.id)}
-                  className="flex min-w-0 flex-1 items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50 rounded-2xl"
+                  className="flex min-w-0 flex-1 items-center gap-4 rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/40"
                   aria-label={`Open project ${p.name}`}
                 >
-                  <div className="w-16 shrink-0 rounded-xl overflow-hidden border border-white/[0.06]">
+                  <div className="w-16 shrink-0 overflow-hidden rounded-lg border border-white/[0.07]">
                     <Thumb project={p} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-zinc-100 truncate">{p.name}</h3>
+                      <h3 className="truncate font-display text-[15px] font-semibold text-zinc-100">{p.name}</h3>
                       {p.version_count > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-zinc-400">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-white/10 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
                           <Layers className="h-3 w-3" />v{p.version_count}
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 text-xs text-zinc-500 truncate">
+                    <p className="mt-0.5 truncate text-xs text-zinc-500">
                       {p.description || p.initial_prompt}
                     </p>
                   </div>
-                  <span className="hidden sm:block text-[11px] text-zinc-600 shrink-0">
+                  <span className="hidden shrink-0 font-mono text-[10.5px] text-zinc-600 sm:block">
                     {timeAgo(p.updated_at)}
                   </span>
-                  <ArrowUpRight className="h-4 w-4 text-zinc-600 group-hover:text-rose-400 transition-colors shrink-0" />
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-zinc-600 transition-colors group-hover:text-cyan-400" />
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onDelete(p.id);
                   }}
-                  className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 h-7 w-7 rounded-lg flex items-center justify-center text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-all focus-visible:opacity-100"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-zinc-500 opacity-100 transition-all hover:bg-red-500/10 hover:text-red-400 focus-visible:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                   aria-label={`Delete project ${p.name}`}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -319,7 +335,7 @@ export default function Dashboard({
           </div>
         )}
 
-        {/* hidden helper for a11y discoverability of empty folders */}
+        {/* a11y helper */}
         {projects.length > 0 && visible.length > 0 && (
           <div className="sr-only">
             <FolderOpen /> project list
@@ -328,13 +344,13 @@ export default function Dashboard({
       </main>
 
       {/* sticky footer */}
-      <footer className="relative z-10 mt-auto border-t border-white/[0.06] bg-zinc-950/80 backdrop-blur pb-[env(safe-area-inset-bottom)]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 flex items-center justify-between text-xs text-zinc-500">
-          <div className="flex items-center gap-2">
-            <Blocks className="h-3.5 w-3.5 text-rose-400" />
-            <span className="font-medium text-zinc-400">Buildora</span>
-          </div>
-          <span>Powered by Z.AI · Neon PostgreSQL</span>
+      <footer className="mt-auto border-t border-white/[0.07] pb-[env(safe-area-inset-bottom)]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-600 sm:px-6">
+          <span className="inline-flex items-center gap-2.5">
+            <span className="h-[6px] w-[6px] rounded-[2px] bg-cyan-400" />
+            buildora
+          </span>
+          <span>Z.AI · FastAPI · PostgreSQL · Next.js</span>
         </div>
       </footer>
     </div>

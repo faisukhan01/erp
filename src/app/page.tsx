@@ -68,22 +68,20 @@ export default function Home() {
 
   if (!booted) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-[#050505]">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-5"
+          className="flex flex-col items-center gap-6"
         >
-          <div className="relative">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-500 to-orange-500 p-[1.5px] animate-pulse">
-              <div className="h-full w-full rounded-[14px] bg-zinc-950" />
-            </div>
+          <div className="animate-pulse relative flex h-12 w-12 items-center justify-center rounded-xl border border-white/15 bg-white/[0.03]">
+            <span className="h-2 w-2 rounded-[2px] bg-cyan-400" />
           </div>
-          <div className="flex items-center gap-2 text-sm text-zinc-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-bounce [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-bounce [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-bounce [animation-delay:300ms]" />
-            <span className="ml-2">Waking the machines…</span>
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">
+            <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-400 [animation-delay:0ms]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-400 [animation-delay:150ms]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-400 [animation-delay:300ms]" />
+            <span className="ml-2">Waking the machines</span>
           </div>
         </motion.div>
       </div>
@@ -108,7 +106,7 @@ export default function Home() {
       <Toaster theme="dark" position="bottom-center" richColors closeButton />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent className="border-white/10 bg-[#0e0e11] text-zinc-100">
+        <AlertDialogContent className="border-white/10 bg-[#0a0a0a] text-zinc-100">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete “{deleteTarget?.name}”?</AlertDialogTitle>
             <AlertDialogDescription className="text-zinc-400">
@@ -117,7 +115,7 @@ export default function Home() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-white/10 bg-white/5 text-zinc-200 hover:bg-white/10 hover:text-white">
+            <AlertDialogCancel className="border-white/10 bg-white/[0.03] text-zinc-200 hover:bg-white/[0.08] hover:text-white">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

@@ -30,41 +30,22 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
+# env files — never commit secrets
+.env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-local-*
-.claude
-.z-ai-config
-*.log
-dev.log
-dev.out.log
-test
-prompt
 
-server.log
-# Skills directory
-/skills/
-# Buildora specifics
-!.env.example
-upload/
-db/*.db
-db/*.db-journal
-__pycache__/
-*.pyc
-.python-version
-
-# tool results
-tool-results/
-
-# local artifacts
-download/
-upload/
-db/
+# buildora
+/db/
+/dev.log
+/logs/
+.zscripts/
+mini-services/api/__pycache__/
+mini-services/api/api.log
+mini-services/ai-worker/*.log
+*.db
+*.sqlite3

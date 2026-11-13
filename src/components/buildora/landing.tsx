@@ -4,18 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Blocks,
+  ArrowUpRight,
+  BrainCircuit,
   Check,
   Code2,
+  Database,
   Download,
   GitBranch,
-  Globe,
+  Github,
   MessageSquareCode,
   Monitor,
   PenTool,
+  Server,
   Smartphone,
-  Sparkles,
-  Wand2,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ const ROTATING = [
 
 const FEATURES = [
   {
-    icon: Wand2,
+    icon: PenTool,
     title: "Blueprint before code",
     body: "Z.AI plans your app first — name, feature set, palette and vibe — then builds exactly that. You see the thinking, not a black box.",
     span: "lg:col-span-2",
@@ -83,6 +84,35 @@ const FEATURES = [
   },
 ];
 
+const STACK = [
+  { label: "Frontend", detail: "Next.js 16 · App Router · TypeScript" },
+  { label: "Backend", detail: "FastAPI · Python 3.12 · SSE streaming" },
+  { label: "Database", detail: "PostgreSQL · Neon serverless" },
+  { label: "Intelligence", detail: "Z.AI GLM-4.6" },
+  { label: "Delivery", detail: "Single-file export · versioned history" },
+];
+
+function Wordmark() {
+  return (
+    <span className="flex items-center gap-2.5">
+      <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[6px] border border-white/15 bg-white/[0.03]">
+        <span className="h-[7px] w-[7px] rounded-[2px] bg-cyan-400" />
+      </span>
+      <span className="font-display text-[17px] font-bold tracking-tight text-white">buildora</span>
+    </span>
+  );
+}
+
+function SectionKicker({ index, label }: { index: string; label: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="font-mono text-[11px] tracking-[0.2em] text-cyan-400">{index}</span>
+      <span className="h-px w-8 bg-white/15" />
+      <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">{label}</span>
+    </div>
+  );
+}
+
 function RotatingPlaceholder() {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
@@ -111,21 +141,23 @@ function RotatingPlaceholder() {
   return (
     <span>
       {current.slice(0, subIndex)}
-      <span className="animate-caret text-rose-400">|</span>
+      <span className="animate-caret text-cyan-400">|</span>
     </span>
   );
 }
 
+/* ------------------------------------------------ visual cards (bento) */
+
 function BlueprintVisual() {
   return (
-    <div className="mt-5 space-y-2.5" aria-hidden>
-      <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.03] px-3 py-2">
-        <PenTool className="h-3.5 w-3.5 text-rose-300" />
-        <span className="text-xs text-zinc-300 font-medium">Aurora Finance</span>
+    <div className="mt-5 space-y-2" aria-hidden>
+      <div className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2">
+        <PenTool className="h-3.5 w-3.5 text-zinc-400" />
+        <span className="font-mono text-[11px] text-zinc-300">aurora-finance.html</span>
         <span className="ml-auto flex gap-1.5">
-          <span className="h-3 w-3 rounded-full bg-rose-400" />
-          <span className="h-3 w-3 rounded-full bg-orange-300" />
-          <span className="h-3 w-3 rounded-full bg-zinc-400" />
+          <span className="h-3 w-3 rounded-full border border-white/20 bg-cyan-400/80" />
+          <span className="h-3 w-3 rounded-full border border-white/15 bg-zinc-500" />
+          <span className="h-3 w-3 rounded-full border border-white/15 bg-zinc-700" />
         </span>
       </div>
       {["Spending charts with animated counters", "Budget envelopes with progress rings", "CSV export & dark mode"].map(
@@ -138,7 +170,7 @@ function BlueprintVisual() {
             transition={{ delay: 0.15 * i, duration: 0.4 }}
             className="flex items-center gap-2 text-xs text-zinc-400"
           >
-            <Check className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+            <Check className="h-3.5 w-3.5 shrink-0 text-cyan-400" />
             {f}
           </motion.div>
         )
@@ -150,18 +182,18 @@ function BlueprintVisual() {
 function StreamVisual() {
   const lines = [92, 70, 84, 55];
   return (
-    <div className="mt-4 space-y-2 overflow-hidden rounded-lg border border-white/[0.07] bg-black/40 p-3" aria-hidden>
+    <div className="mt-4 space-y-2 overflow-hidden rounded-lg border border-white/[0.08] bg-black/50 p-3" aria-hidden>
       {lines.map((w, i) => (
         <div key={i} className="relative h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+          <div className="absolute inset-y-0 left-0 rounded-full bg-white/[0.09]" style={{ width: `${w}%` }} />
           <div
-            className="animate-stream-line absolute inset-y-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-rose-400/70 to-transparent"
+            className="animate-stream-block absolute inset-y-0 w-1/4 rounded-full bg-cyan-400"
             style={{ animationDelay: `${i * 0.45}s` }}
           />
-          <div className="absolute inset-y-0 left-0 rounded-full bg-white/[0.07]" style={{ width: `${w}%` }} />
         </div>
       ))}
-      <div className="pt-1 font-mono text-[10px] text-rose-300/80">
-        &lt;html&gt; <span className="animate-caret">▍</span> streaming…
+      <div className="pt-1 font-mono text-[10px] text-zinc-500">
+        &lt;html&gt; <span className="animate-caret text-cyan-400">▍</span> streaming…
       </div>
     </div>
   );
@@ -170,11 +202,11 @@ function StreamVisual() {
 function ChatVisual() {
   return (
     <div className="mt-4 space-y-2" aria-hidden>
-      <div className="ml-auto w-fit max-w-[85%] rounded-xl rounded-br-sm bg-gradient-to-br from-rose-500/90 to-orange-500/90 px-3 py-1.5 text-[11px] text-white">
+      <div className="ml-auto w-fit max-w-[85%] rounded-xl rounded-br-sm bg-white px-3 py-1.5 text-[11px] font-medium text-black">
         make the cards glassy
       </div>
-      <div className="w-fit max-w-[90%] rounded-xl rounded-bl-sm border border-white/[0.07] bg-white/[0.04] px-3 py-1.5 text-[11px] text-zinc-300">
-        Done — backdrop blur added to all 6 cards ✦
+      <div className="w-fit max-w-[90%] rounded-xl rounded-bl-sm border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] text-zinc-300">
+        Done — backdrop blur added to all 6 cards.
       </div>
     </div>
   );
@@ -192,13 +224,17 @@ function VersionsVisual() {
           key={row.v}
           className={`flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-[11px] ${
             row.now
-              ? "border-rose-500/30 bg-rose-500/10 text-rose-200"
-              : "border-white/[0.06] bg-white/[0.02] text-zinc-500"
+              ? "border-cyan-400/25 bg-cyan-400/[0.06] text-cyan-300"
+              : "border-white/[0.07] bg-white/[0.02] text-zinc-500"
           }`}
         >
           <span className="font-mono">{row.v}</span>
           <span className="truncate">{row.label}</span>
-          {row.now && <span className="ml-auto text-[9px] uppercase tracking-wider">live</span>}
+          {row.now && (
+            <span className="ml-auto inline-flex items-center gap-1.5 text-[9px] uppercase tracking-wider">
+              <span className="h-1 w-1 rounded-full bg-cyan-400" /> live
+            </span>
+          )}
         </div>
       ))}
     </div>
@@ -208,17 +244,17 @@ function VersionsVisual() {
 function DevicesVisual() {
   return (
     <div className="mt-4 flex items-end gap-3" aria-hidden>
-      <div className="animate-float h-16 w-24 rounded-lg border border-white/10 bg-gradient-to-br from-rose-500/20 to-orange-500/10 p-1.5">
-        <div className="h-full w-full rounded-md bg-black/40 p-1">
+      <div className="animate-float h-16 w-24 rounded-lg border border-white/[0.12] bg-white/[0.02] p-1.5">
+        <div className="h-full w-full rounded-md border border-white/[0.07] bg-black/40 p-1">
           <div className="h-1 w-2/3 rounded-full bg-white/20" />
           <div className="mt-1 h-1 w-1/2 rounded-full bg-white/10" />
-          <div className="mt-1.5 h-4 w-full rounded-sm bg-rose-500/20" />
+          <div className="mt-1.5 h-4 w-full rounded-sm bg-cyan-400/25" />
         </div>
       </div>
-      <div className="animate-float h-20 w-11 rounded-lg border border-white/10 bg-gradient-to-b from-white/10 to-transparent p-1 [animation-delay:1.2s]">
+      <div className="animate-float h-20 w-11 rounded-lg border border-white/[0.12] bg-white/[0.02] p-1 [animation-delay:1.2s]">
         <div className="mx-auto h-0.5 w-4 rounded-full bg-white/20" />
         <div className="mt-1 h-1 w-full rounded-full bg-white/10" />
-        <div className="mt-1 h-6 w-full rounded-sm bg-orange-400/20" />
+        <div className="mt-1 h-6 w-full rounded-sm bg-white/[0.08]" />
       </div>
     </div>
   );
@@ -232,11 +268,11 @@ function OwnVisual() {
           key={chip}
           className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${
             i === 0
-              ? "border-rose-500/25 bg-rose-500/10 text-rose-300"
-              : "border-white/10 bg-white/[0.04] text-zinc-400"
+              ? "border-cyan-400/25 text-cyan-300"
+              : "border-white/10 bg-white/[0.02] text-zinc-400"
           }`}
         >
-          {i === 0 ? <Globe className="h-3 w-3" /> : <Check className="h-3 w-3" />}
+          {i === 0 ? <Check className="h-3 w-3" /> : <Check className="h-3 w-3 text-zinc-600" />}
           {chip}
         </span>
       ))}
@@ -252,6 +288,8 @@ const VISUALS = {
   devices: DevicesVisual,
   own: OwnVisual,
 };
+
+/* ------------------------------------------------------------ landing */
 
 export default function Landing({
   onBuild,
@@ -271,112 +309,118 @@ export default function Landing({
   };
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 text-zinc-100 flex flex-col relative overflow-x-clip">
-      {/* ------------------------------------------------ ambient background */}
+    <div className="flex min-h-[100dvh] flex-col overflow-x-clip bg-[#050505] text-zinc-100">
+      {/* ------------------------------------------------ static texture */}
       <div className="pointer-events-none fixed inset-0" aria-hidden>
-        {/* ember aurora — low, restrained */}
-        <div className="animate-aurora-a absolute -top-48 left-[6%] h-[560px] w-[820px] rounded-full bg-rose-600/[0.14] blur-[150px]" />
-        <div className="animate-aurora-b absolute top-[30%] -left-56 h-[480px] w-[480px] rounded-full bg-orange-600/[0.08] blur-[130px]" />
-        <div className="animate-aurora-c absolute bottom-[-12%] right-[-6%] h-[460px] w-[560px] rounded-full bg-rose-500/[0.09] blur-[140px]" />
-        {/* deep top glow — makes the black feel infinite */}
-        <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(244,63,94,0.09),transparent_70%)]" />
-        {/* engineering grid */}
-        <div
-          className="animate-grid-pan absolute inset-0 opacity-[0.08]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse 85% 65% at 50% 0%, black 35%, transparent 100%)",
-            WebkitMaskImage: "radial-gradient(ellipse 85% 65% at 50% 0%, black 35%, transparent 100%)",
-          }}
-        />
-        {/* top hairline */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-rose-500/40 to-transparent" />
+        <div className="bg-grid absolute inset-x-0 top-0 h-[640px] opacity-70 [mask-image:linear-gradient(to_bottom,black_20%,transparent)]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
       </div>
 
-      {/* ---------------------------------------------------------------- nav */}
-      <header className="relative z-10 sticky top-0 border-b border-white/[0.06] bg-zinc-950/70 backdrop-blur-xl">
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-rose-500 to-orange-500 p-[1.5px] shadow-[0_0_28px_rgba(244,63,94,0.35)]">
-              <div className="h-full w-full rounded-[10px] bg-zinc-950 flex items-center justify-center">
-                <Blocks className="h-4 w-4 text-rose-400" />
-              </div>
-            </div>
-            <span className="font-display text-lg font-semibold tracking-tight">Buildora</span>
-            <span className="hidden sm:inline-flex items-center rounded-full border border-rose-500/25 bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium text-rose-300 uppercase tracking-wider">
-              Z.AI inside
+      {/* ------------------------------------------------------------- nav */}
+      <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-[#050505]/85 backdrop-blur-md">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <Wordmark />
+            <span className="hidden rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-zinc-500 sm:inline-block">
+              v2.0
             </span>
           </div>
-          <Button
-            variant="outline"
-            onClick={onDashboard}
-            className="border-white/12 bg-white/5 hover:bg-white/10 hover:border-white/20 hover:text-white text-zinc-200 rounded-xl"
-          >
-            {projectCount > 0 ? `My Projects (${projectCount})` : "My Projects"}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+            {[
+              { href: "#features", label: "Product" },
+              { href: "#workflow", label: "Workflow" },
+              { href: "#stack", label: "Stack" },
+            ].map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-white"
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden h-9 text-zinc-400 hover:bg-white/[0.06] hover:text-white sm:inline-flex"
+              onClick={() => window.open("https://github.com/faisukhan01/erp", "_blank", "noopener")}
+              aria-label="Buildora on GitHub"
+            >
+              <Github className="mr-1.5 h-4 w-4" />
+              GitHub
+            </Button>
+            <Button
+              onClick={onDashboard}
+              className="h-9 rounded-lg bg-white px-4 text-[13px] font-semibold text-black hover:bg-zinc-200"
+            >
+              {projectCount > 0 ? `My Projects · ${projectCount}` : "My Projects"}
+              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            </Button>
+          </div>
         </div>
       </header>
 
-      {/* ---------------------------------------------------------------- main */}
+      {/* ------------------------------------------------------------ main */}
       <main className="relative z-10 flex-1">
         {/* hero */}
-        <section className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-24 pb-12 text-center">
+        <section className="relative mx-auto max-w-3xl px-4 pb-16 pt-16 text-center sm:px-6 sm:pt-24">
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-zinc-300 backdrop-blur"
+            className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-400" />
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-50" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
             </span>
-            Powered by Z.AI — the brain behind every pixel
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400">
+              Powered by Z.AI
+            </span>
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08 }}
-            className="font-display mt-7 text-[42px] leading-[1.04] sm:text-6xl lg:text-[72px] font-bold tracking-tight"
+            className="mt-8 font-display text-[44px] font-extrabold leading-[1.02] tracking-[-0.03em] text-white sm:text-6xl lg:text-[76px]"
           >
             Describe it.
             <br />
-            <span className="animate-shimmer bg-[linear-gradient(110deg,#fb7185,45%,#fdba74,55%,#fb7185)] bg-clip-text text-transparent">
-              Watch it ship.
-            </span>
+            Watch it ship<span className="text-cyan-400">.</span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16 }}
-            className="mt-6 text-base sm:text-lg text-zinc-400 max-w-xl mx-auto leading-relaxed"
+            className="mx-auto mt-6 max-w-[560px] text-[15px] leading-relaxed text-zinc-400 sm:text-base"
           >
-            Buildora turns one sentence into a stunning, working web app — then refines it
-            through conversation. Blueprint, live code streaming, version history and
-            device previews included.
+            Buildora turns one sentence into a working web app — then refines it through
+            conversation. Blueprint, live code streaming, version history and device previews,
+            all included.
           </motion.p>
 
           {/* composer */}
           <motion.div
             ref={composerRef}
-            initial={{ opacity: 0, y: 22, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.24 }}
-            className="mt-10 relative group"
+            className="mt-10 text-left"
           >
-            <div
-              className="absolute -inset-[1.5px] rounded-3xl bg-gradient-to-r from-rose-500/50 via-orange-500/20 to-rose-500/50 opacity-50 blur-md group-focus-within:opacity-100 transition-opacity duration-500"
-              aria-hidden
-            />
-            <div className="relative rounded-3xl border border-white/10 bg-[#0b0b0e]/90 backdrop-blur p-4 sm:p-5 text-left shadow-[0_24px_90px_-24px_rgba(244,63,94,0.3)]">
-              <div className="flex items-center gap-2 text-[11px] text-rose-300/90 font-medium tracking-wide uppercase">
-                <Sparkles className="h-3.5 w-3.5" />
-                Build anything
+            <div className="rounded-2xl border border-white/10 bg-[#0a0a0a] transition-colors duration-300 focus-within:border-cyan-400/40">
+              <div className="flex items-center justify-between px-4 pt-4 sm:px-5">
+                <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+                  Build anything
+                </span>
+                <span className="rounded-md border border-white/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-zinc-500">
+                  GLM-4.6
+                </span>
               </div>
               <div className="relative">
                 <Textarea
@@ -386,29 +430,36 @@ export default function Landing({
                     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
                   }}
                   placeholder=""
-                  className="min-h-[92px] border-0 bg-transparent p-0 pt-2 text-[15px] text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-0 resize-none"
+                  className="min-h-[92px] resize-none border-0 bg-transparent p-0 px-4 pt-3 text-[15px] text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-0 sm:px-5"
                   aria-label="Describe the app you want to build"
                 />
                 {prompt === "" && (
-                  <div className="pointer-events-none absolute inset-x-0 top-2 text-[15px] text-zinc-600" aria-hidden>
+                  <div
+                    className="pointer-events-none absolute inset-x-0 top-3 px-4 text-[15px] text-zinc-600 sm:px-5"
+                    aria-hidden
+                  >
                     <RotatingPlaceholder />
                   </div>
                 )}
               </div>
-              <div className="mt-2 flex items-center justify-between gap-3 flex-wrap">
-                <span className="text-[11px] text-zinc-600 hidden sm:block">
-                  <kbd className="rounded border border-white/10 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">⌘</kbd>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3 px-4 pb-4 sm:px-5">
+                <span className="hidden text-[11px] text-zinc-600 sm:block">
+                  <kbd className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                    ⌘
+                  </kbd>
                   {" + "}
-                  <kbd className="rounded border border-white/10 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">↵</kbd>
-                  {" "}to launch · {projectCount > 0 ? `${projectCount} project${projectCount === 1 ? "" : "s"} in workspace` : "your first build is seconds away"}
+                  <kbd className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                    ↵
+                  </kbd>{" "}
+                  to launch
                 </span>
                 <Button
                   onClick={submit}
                   disabled={!prompt.trim()}
-                  className="group/btn relative h-11 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 text-white font-semibold transition-all hover:brightness-110 disabled:opacity-40 shadow-[0_10px_36px_-10px_rgba(244,63,94,0.6)] hover:shadow-[0_10px_44px_-8px_rgba(244,63,94,0.75)]"
+                  className="ml-auto h-11 rounded-lg bg-white px-6 text-sm font-semibold text-black transition-colors hover:bg-zinc-200 disabled:opacity-30"
                 >
                   Start building
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -419,126 +470,219 @@ export default function Landing({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-7 flex flex-wrap justify-center gap-2"
+            className="mt-6 flex flex-wrap justify-center gap-2"
           >
             {EXAMPLES.map((ex) => (
               <button
                 key={ex}
                 onClick={() => setPrompt(ex)}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-zinc-400 hover:text-rose-200 hover:border-rose-500/40 hover:bg-rose-500/10 transition-colors"
+                className="rounded-full border border-white/10 px-3.5 py-1.5 text-xs text-zinc-500 transition-colors hover:border-white/25 hover:text-zinc-100"
               >
                 {ex}
               </button>
             ))}
           </motion.div>
+
+          {/* stats strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mx-auto mt-14 grid max-w-lg grid-cols-3 divide-x divide-white/[0.08] border-y border-white/[0.08]"
+          >
+            {[
+              { v: "12K+", l: "Apps shipped" },
+              { v: "99.9%", l: "Uptime" },
+              { v: "4.9/5", l: "Builder rating" },
+            ].map((s) => (
+              <div key={s.l} className="px-2 py-4">
+                <div className="font-display text-xl font-bold tracking-tight text-white">{s.v}</div>
+                <div className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-zinc-600">
+                  {s.l}
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </section>
 
         {/* bento features */}
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-14" aria-label="Features">
-          <div className="text-center mb-12">
-            <h2 className="font-display text-2xl sm:text-4xl font-bold tracking-tight">
-              Everything Lovable does.{" "}
-              <span className="bg-gradient-to-r from-rose-400 to-orange-300 bg-clip-text text-transparent">
-                Then some.
-              </span>
-            </h2>
-            <p className="mt-3 text-sm sm:text-base text-zinc-500 max-w-lg mx-auto">
-              A complete builder platform — brain, blueprint, storage, preview and history included.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map((f, i) => {
-              const Visual = VISUALS[f.visual];
-              return (
-                <motion.div
-                  key={f.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-                  className={`group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] p-5 sm:p-6 hover:border-rose-500/25 hover:bg-rose-500/[0.04] transition-colors overflow-hidden ${f.span}`}
-                >
-                  <div
-                    className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-rose-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    aria-hidden
-                  />
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-rose-500/20 to-orange-500/[0.08] border border-white/10 flex items-center justify-center group-hover:scale-105 group-hover:border-rose-500/30 transition-all">
-                    <f.icon className="h-5 w-5 text-rose-300 group-hover:text-rose-200 transition-colors" />
-                  </div>
-                  <h3 className="mt-4 font-semibold text-zinc-100">{f.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{f.body}</p>
-                  <Visual />
-                </motion.div>
-              );
-            })}
+        <section id="features" className="border-t border-white/[0.07]" aria-label="Features">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+            <SectionKicker index="01" label="Capabilities" />
+            <div className="mt-5 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <h2 className="max-w-xl font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
+                Everything Lovable does.{" "}
+                <span className="text-zinc-500">Then some.</span>
+              </h2>
+              <p className="max-w-sm text-sm leading-relaxed text-zinc-500">
+                A complete builder platform — brain, blueprint, storage, preview and history
+                included.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {FEATURES.map((f, i) => {
+                const Visual = VISUALS[f.visual];
+                return (
+                  <motion.div
+                    key={f.title}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+                    className={`group relative rounded-xl border border-white/[0.08] bg-[#0a0a0a] p-5 transition-colors duration-300 hover:border-white/[0.18] sm:p-6 ${f.span}`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] transition-colors duration-300 group-hover:border-white/20">
+                        <f.icon className="h-[18px] w-[18px] text-zinc-300 transition-colors duration-300 group-hover:text-cyan-300" />
+                      </div>
+                      <span className="font-mono text-[10px] text-zinc-700">
+                        0{i + 1}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 font-display text-[17px] font-semibold tracking-tight text-zinc-100">
+                      {f.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{f.body}</p>
+                    <Visual />
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
         {/* how it works */}
-        <section className="mx-auto max-w-4xl px-4 sm:px-6 pb-16" aria-label="How it works">
-          <div className="rounded-3xl border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-transparent p-6 sm:p-10">
-            <h2 className="font-display text-center text-xl sm:text-2xl font-semibold tracking-tight mb-9">
-              Three steps to shipped
+        <section id="workflow" className="border-t border-white/[0.07]" aria-label="How it works">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+            <SectionKicker index="02" label="Workflow" />
+            <h2 className="mt-5 font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
+              Three steps to shipped.
             </h2>
-            <div className="grid gap-8 sm:grid-cols-3">
+
+            <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-0 md:divide-x md:divide-white/[0.08]">
               {[
-                { n: "01", t: "Describe", d: "Type your idea in one sentence. Add detail as you like.", icon: Sparkles },
-                { n: "02", t: "Watch", d: "Z.AI plans the blueprint, then streams your app into existence.", icon: Zap },
-                { n: "03", t: "Refine", d: "Chat tweaks, version snapshots, device previews, download.", icon: Smartphone },
+                {
+                  n: "01",
+                  t: "Describe",
+                  d: "Type your idea in one sentence. Add detail as you like — Buildora plans before it writes.",
+                  icon: Zap,
+                },
+                {
+                  n: "02",
+                  t: "Watch",
+                  d: "Z.AI drafts the blueprint, then streams every line of code into existence in real time.",
+                  icon: BrainCircuit,
+                },
+                {
+                  n: "03",
+                  t: "Refine",
+                  d: "Chat tweaks, version snapshots, device previews, one-click download. Ship it.",
+                  icon: Smartphone,
+                },
               ].map((s) => (
-                <div key={s.n} className="text-center sm:text-left">
-                  <div className="flex items-center gap-3 sm:justify-start justify-center">
-                    <div className="font-display text-3xl font-bold text-gradient-ember">
+                <div key={s.n} className="md:px-8 md:first:pl-0 md:last:pr-0">
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-display text-4xl font-extrabold tracking-tight text-white">
                       {s.n}
-                    </div>
-                    <s.icon className="h-4 w-4 text-zinc-600" />
+                    </span>
+                    <s.icon className="h-4 w-4 text-cyan-400" />
                   </div>
-                  <div className="mt-2 font-semibold">{s.t}</div>
-                  <div className="mt-1 text-sm text-zinc-400 leading-relaxed">{s.d}</div>
+                  <h3 className="mt-4 font-display text-lg font-semibold tracking-tight">{s.t}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{s.d}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA band */}
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-20">
-          <div className="relative overflow-hidden rounded-3xl border border-rose-500/20 bg-gradient-to-br from-rose-950/30 via-[#0a0a0c] to-orange-950/20 p-8 sm:p-10 text-center">
-            <div className="animate-aurora-a pointer-events-none absolute -top-20 left-1/4 h-64 w-96 rounded-full bg-rose-600/15 blur-[100px]" aria-hidden />
-            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-rose-500/50 to-transparent" aria-hidden />
-            <h2 className="font-display relative text-2xl sm:text-3xl font-bold tracking-tight">
-              Your app is one sentence away.
+        {/* stack */}
+        <section id="stack" className="border-t border-white/[0.07]" aria-label="Tech stack">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+            <SectionKicker index="03" label="Stack" />
+            <div className="mt-5 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <h2 className="max-w-xl font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
+                Serious engineering under the hood.
+              </h2>
+              <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-600">
+                <Database className="h-3.5 w-3.5" />
+                <Server className="h-3.5 w-3.5" />
+                Postgres-backed, cloud-native
+              </div>
+            </div>
+
+            <div className="mt-10 overflow-hidden rounded-xl border border-white/[0.08]">
+              {STACK.map((row, i) => (
+                <div
+                  key={row.label}
+                  className={`flex flex-col gap-1 px-5 py-4 transition-colors hover:bg-white/[0.02] sm:flex-row sm:items-center sm:justify-between ${
+                    i > 0 ? "border-t border-white/[0.07]" : ""
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-400/80">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="font-display text-[15px] font-semibold text-zinc-100">
+                      {row.label}
+                    </span>
+                  </div>
+                  <span className="pl-8 font-mono text-xs text-zinc-500 sm:pl-0">
+                    {row.detail}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="border-t border-white/[0.07]">
+          <div className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6 sm:py-24">
+            <h2 className="mx-auto max-w-2xl font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-5xl">
+              Your app is one sentence away<span className="text-cyan-400">.</span>
             </h2>
-            <p className="relative mt-2 text-sm text-zinc-400">No setup. No config. Just describe and ship.</p>
+            <p className="mt-4 text-sm text-zinc-500 sm:text-base">
+              No setup. No config. Just describe and ship.
+            </p>
             <Button
               onClick={() => {
                 setPrompt("");
                 composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
                 composerRef.current?.querySelector("textarea")?.focus();
               }}
-              className="relative mt-7 h-12 px-8 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 text-white font-semibold transition-all hover:brightness-110 shadow-[0_10px_36px_-10px_rgba(244,63,94,0.6)] hover:shadow-[0_10px_44px_-8px_rgba(244,63,94,0.75)]"
+              className="mt-8 h-12 rounded-lg bg-white px-8 text-sm font-semibold text-black transition-colors hover:bg-zinc-200"
             >
-              <Wand2 className="mr-2 h-4 w-4" />
               Start building free
+              <ArrowUpRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </section>
       </main>
 
-      {/* sticky footer */}
-      <footer className="relative z-10 mt-auto border-t border-white/[0.06] bg-zinc-950/80 backdrop-blur pb-[env(safe-area-inset-bottom)]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
-          <div className="flex items-center gap-2">
-            <Blocks className="h-3.5 w-3.5 text-rose-400" />
-            <span className="font-medium text-zinc-400">Buildora</span>
-            <span>— describe it, watch it ship.</span>
+      {/* ---------------------------------------------------- sticky footer */}
+      <footer className="mt-auto border-t border-white/[0.07] pb-[env(safe-area-inset-bottom)]">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6">
+          <div className="flex items-center gap-2.5">
+            <Wordmark />
           </div>
-          <div className="flex items-center gap-4">
-            <span>Powered by Z.AI</span>
-            <span className="hidden sm:inline text-zinc-700">|</span>
-            <span className="hidden sm:inline">Neon PostgreSQL</span>
-            <span className="hidden sm:inline text-zinc-700">|</span>
-            <span>© {new Date().getFullYear()}</span>
+          <div className="flex items-center gap-5 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+            <span>Z.AI</span>
+            <span>FastAPI</span>
+            <span>PostgreSQL</span>
+            <span>Next.js</span>
+          </div>
+          <div className="flex items-center gap-4 text-xs text-zinc-600">
+            <a
+              href="https://github.com/faisukhan01/erp"
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-zinc-300"
+              aria-label="GitHub repository"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+            <span>© {new Date().getFullYear()} Buildora</span>
           </div>
         </div>
       </footer>

@@ -1,131 +1,69 @@
-<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Buildora — describe it, watch it ship">
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Buildora — describe it, watch it ship.">
+  <!-- OBSIDIAN — realistic black canvas, one cyan signal, zero gradients -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="320" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#09090b"/>
-      <stop offset="0.5" stop-color="#170b0e"/>
-      <stop offset="1" stop-color="#09090b"/>
-    </linearGradient>
-    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#fb7185">
-        <animate attributeName="stop-color" values="#fb7185;#f43f5e;#fb923c;#fb7185" dur="6s" repeatCount="indefinite"/>
-      </stop>
-      <stop offset="1" stop-color="#fb923c">
-        <animate attributeName="stop-color" values="#fb923c;#fb7185;#f43f5e;#fb923c" dur="6s" repeatCount="indefinite"/>
-      </stop>
-    </linearGradient>
-    <linearGradient id="cubeFaceL" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.95"/>
-      <stop offset="1" stop-color="#be123c" stop-opacity="0.75"/>
-    </linearGradient>
-    <linearGradient id="cubeFaceR" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fda4af" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#e11d48" stop-opacity="0.7"/>
-    </linearGradient>
-    <linearGradient id="cubeFaceT" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#fdba74" stop-opacity="0.95"/>
-      <stop offset="1" stop-color="#fda4af" stop-opacity="0.9"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.42"/>
-      <stop offset="1" stop-color="#f43f5e" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="code" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fda4af" stop-opacity="0.85"/>
-      <stop offset="1" stop-color="#fda4af" stop-opacity="0.15"/>
-    </linearGradient>
-    <style>
-      @keyframes floaty { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
-      @keyframes floaty2 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-8px) rotate(5deg); } }
-      @keyframes pulse { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
-      @keyframes dash { to { stroke-dashoffset: -240; } }
-      @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
-      .c1 { animation: floaty 5s ease-in-out infinite; }
-      .c2 { animation: floaty2 6s ease-in-out 0.6s infinite; }
-      .c3 { animation: floaty 4.4s ease-in-out 1.1s infinite; }
-      .c4 { animation: floaty2 5.6s ease-in-out 0.3s infinite; }
-      .c5 { animation: floaty 6.2s ease-in-out 0.9s infinite; }
-      .glowPulse { animation: pulse 4s ease-in-out infinite; }
-      .wire { stroke-dasharray: 10 14; animation: dash 6s linear infinite; }
-      .caret { animation: blink 1.1s steps(1) infinite; }
-    </style>
+    <clipPath id="frame">
+      <rect width="1280" height="640" rx="0"/>
+    </clipPath>
   </defs>
 
-  <!-- backdrop -->
-  <rect width="1200" height="320" rx="18" fill="url(#bg)"/>
-  <g opacity="0.12" stroke="#fda4af" stroke-width="1">
-    <path d="M0 80 H1200 M0 160 H1200 M0 240 H1200 M200 0 V320 M400 0 V320 M600 0 V320 M800 0 V320 M1000 0 V320"/>
-  </g>
-  <ellipse class="glowPulse" cx="600" cy="150" rx="430" ry="140" fill="url(#glow)"/>
-  <rect x="0.5" y="0.5" width="1199" height="319" rx="17.5" stroke="#f43f5e" stroke-opacity="0.25"/>
+  <g clip-path="url(#frame)">
+    <!-- canvas -->
+    <rect width="1280" height="640" fill="#050505"/>
 
-  <!-- floating isometric cubes (left) -->
-  <g transform="translate(105,215)"><g class="c1">
-    <polygon points="0,-16 28,0 0,16 -28,0" fill="url(#cubeFaceT)"/>
-    <polygon points="-28,0 0,16 0,44 -28,28" fill="url(#cubeFaceL)"/>
-    <polygon points="28,0 0,16 0,44 28,28" fill="url(#cubeFaceR)"/>
-  </g></g>
-  <g transform="translate(196,120)"><g class="c2">
-    <polygon points="0,-12 21,0 0,12 -21,0" fill="url(#cubeFaceT)"/>
-    <polygon points="-21,0 0,12 0,34 -21,22" fill="url(#cubeFaceL)"/>
-    <polygon points="21,0 0,12 0,34 21,22" fill="url(#cubeFaceR)"/>
-  </g></g>
-  <g transform="translate(82,88)"><g class="c3">
-    <polygon points="0,-9 16,0 0,9 -16,0" fill="url(#cubeFaceT)"/>
-    <polygon points="-16,0 0,9 0,26 -16,17" fill="url(#cubeFaceL)"/>
-    <polygon points="16,0 0,9 0,26 16,17" fill="url(#cubeFaceR)"/>
-  </g></g>
-
-  <!-- floating cubes (right, below code window) -->
-  <g transform="translate(1005,225)"><g class="c4">
-    <polygon points="0,-13 23,0 0,13 -23,0" fill="url(#cubeFaceT)"/>
-    <polygon points="-23,0 0,13 0,38 -23,25" fill="url(#cubeFaceL)"/>
-    <polygon points="23,0 0,13 0,38 23,25" fill="url(#cubeFaceR)"/>
-  </g></g>
-  <g transform="translate(1098,160)"><g class="c5">
-    <polygon points="0,-9 16,0 0,9 -16,0" fill="url(#cubeFaceT)"/>
-    <polygon points="-16,0 0,9 0,26 -16,17" fill="url(#cubeFaceL)"/>
-    <polygon points="16,0 0,9 0,26 16,17" fill="url(#cubeFaceR)"/>
-  </g></g>
-
-  <!-- code window (top right) -->
-  <g class="c2" opacity="0.92">
-    <rect x="952" y="46" width="176" height="92" rx="10" fill="#0d0a0c" stroke="#f43f5e" stroke-opacity="0.45"/>
-    <circle cx="970" cy="62" r="3.6" fill="#f43f5e"/><circle cx="983" cy="62" r="3.6" fill="#fb923c"/><circle cx="996" cy="62" r="3.6" fill="#e4e4e7"/>
-    <rect x="964" y="76" width="106" height="6" rx="3" fill="url(#code)"/>
-    <rect x="964" y="88" width="146" height="6" rx="3" fill="url(#code)"/>
-    <rect x="964" y="100" width="84" height="6" rx="3" fill="url(#code)"/>
-    <rect x="964" y="112" width="124" height="6" rx="3" fill="url(#code)"/>
-  </g>
-
-  <!-- wires -->
-  <path class="wire" d="M232 128 C 330 92, 400 108, 452 132" stroke="#f43f5e" stroke-width="1.6" fill="none" opacity="0.6"/>
-  <path class="wire" d="M995 240 C 900 268, 800 248, 748 208" stroke="#fb923c" stroke-width="1.6" fill="none" opacity="0.45"/>
-
-  <!-- wordmark -->
-  <text x="600" y="152" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="86" font-weight="800" letter-spacing="7" fill="url(#brand)">BUILDORA</text>
-  <text x="603" y="196" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="21" font-weight="600" letter-spacing="11" fill="#fda4af">DESCRIBE IT. WATCH IT SHIP.</text>
-  <text x="902" y="88" class="caret" fill="#fda4af" font-size="24">&#10022;</text>
-
-  <!-- pipeline chips -->
-  <g font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="600">
-    <g transform="translate(314,240)">
-      <rect width="120" height="30" rx="15" fill="rgba(244,63,94,0.14)" stroke="#f43f5e" stroke-opacity="0.55"/>
-      <text x="60" y="20" text-anchor="middle" fill="#fda4af">&#10022; prompt</text>
+    <!-- hairline engineering grid -->
+    <g stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1">
+      <path d="M 80 0 V 640"/><path d="M 160 0 V 640"/><path d="M 240 0 V 640"/>
+      <path d="M 320 0 V 640"/><path d="M 400 0 V 640"/><path d="M 480 0 V 640"/>
+      <path d="M 560 0 V 640"/><path d="M 640 0 V 640"/><path d="M 720 0 V 640"/>
+      <path d="M 800 0 V 640"/><path d="M 880 0 V 640"/><path d="M 960 0 V 640"/>
+      <path d="M 1040 0 V 640"/><path d="M 1120 0 V 640"/><path d="M 1200 0 V 640"/>
+      <path d="M 0 80 H 1280"/><path d="M 0 160 H 1280"/><path d="M 0 240 H 1280"/>
+      <path d="M 0 320 H 1280"/><path d="M 0 400 H 1280"/><path d="M 0 480 H 1280"/>
+      <path d="M 0 560 H 1280"/>
     </g>
-    <path d="M442 255 h28" stroke="#f43f5e" stroke-width="1.6" class="wire"/>
-    <g transform="translate(478,240)">
-      <rect width="116" height="30" rx="15" fill="rgba(251,146,60,0.13)" stroke="#fb923c" stroke-opacity="0.5"/>
-      <text x="58" y="20" text-anchor="middle" fill="#fdba74">blueprint</text>
+
+    <!-- top + bottom hairlines -->
+    <rect x="0" y="0" width="1280" height="1" fill="#FFFFFF" fill-opacity="0.12"/>
+    <rect x="0" y="639" width="1280" height="1" fill="#FFFFFF" fill-opacity="0.12"/>
+
+    <!-- mono kicker -->
+    <text x="640" y="196" text-anchor="middle" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" font-size="15" letter-spacing="6" fill="#A1A1AA">POWERED BY Z.AI</text>
+    <circle cx="523" cy="191" r="3" fill="#22D3EE"/>
+
+    <!-- wordmark -->
+    <g>
+      <rect x="440" y="248" width="64" height="64" rx="14" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="1.5"/>
+      <rect x="462" y="270" width="20" height="20" rx="4" fill="#22D3EE"/>
+      <text x="528" y="302" font-family="'Bricolage Grotesque','Inter',system-ui,-apple-system,'Segoe UI',sans-serif" font-size="76" font-weight="800" letter-spacing="-2" fill="#FAFAFA">buildora</text>
     </g>
-    <path d="M602 255 h28" stroke="#fb923c" stroke-width="1.6" class="wire"/>
-    <g transform="translate(638,240)">
-      <rect width="116" height="30" rx="15" fill="rgba(253,164,175,0.12)" stroke="#fda4af" stroke-opacity="0.5"/>
-      <text x="58" y="20" text-anchor="middle" fill="#fecdd3">&lt;/&gt; stream</text>
+
+    <!-- tagline -->
+    <text x="640" y="396" text-anchor="middle" font-family="'Inter',system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="500" fill="#FAFAFA">Describe it. Watch it ship<tspan fill="#22D3EE">.</tspan></text>
+
+    <!-- sub -->
+    <text x="640" y="440" text-anchor="middle" font-family="'Inter',system-ui,-apple-system,'Segoe UI',sans-serif" font-size="17" fill="#71717A">One sentence in — a working web app out. Blueprint, live code streaming, versions.</text>
+
+    <!-- stack chips row -->
+    <g font-family="'JetBrains Mono','SF Mono',Menlo,monospace" font-size="12" letter-spacing="2">
+      <rect x="352" y="492" width="104" height="34" rx="8" fill="#FFFFFF" fill-opacity="0.02" stroke="#FFFFFF" stroke-opacity="0.12"/>
+      <text x="404" y="513" text-anchor="middle" fill="#A1A1AA">NEXT.JS</text>
+
+      <rect x="472" y="492" width="104" height="34" rx="8" fill="#FFFFFF" fill-opacity="0.02" stroke="#FFFFFF" stroke-opacity="0.12"/>
+      <text x="524" y="513" text-anchor="middle" fill="#A1A1AA">FASTAPI</text>
+
+      <rect x="592" y="492" width="128" height="34" rx="8" fill="#FFFFFF" fill-opacity="0.02" stroke="#FFFFFF" stroke-opacity="0.12"/>
+      <text x="656" y="513" text-anchor="middle" fill="#A1A1AA">POSTGRESQL</text>
+
+      <rect x="736" y="492" width="72" height="34" rx="8" fill="#FFFFFF" fill-opacity="0.02" stroke="#FFFFFF" stroke-opacity="0.12"/>
+      <text x="772" y="513" text-anchor="middle" fill="#A1A1AA">Z.AI</text>
+
+      <rect x="824" y="492" width="104" height="34" rx="8" fill="#FFFFFF" fill-opacity="0.02" stroke="#FFFFFF" stroke-opacity="0.12"/>
+      <text x="876" y="513" text-anchor="middle" fill="#A1A1AA">SSE</text>
     </g>
-    <path d="M762 255 h26" stroke="#f43f5e" stroke-width="1.6" class="wire"/>
-    <g transform="translate(796,240)">
-      <rect width="62" height="30" rx="15" fill="rgba(244,63,94,0.16)" stroke="#f43f5e" stroke-opacity="0.6"/>
-      <text x="31" y="20" text-anchor="middle" fill="#fb7185">ship</text>
-    </g>
+
+    <!-- corner meta -->
+    <text x="40" y="604" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" font-size="11" letter-spacing="3" fill="#52525B">BUILDORA — AI APP BUILDER</text>
+    <circle cx="1218" cy="600" r="3" fill="#22D3EE"/>
+    <text x="1240" y="604" text-anchor="end" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" font-size="11" letter-spacing="3" fill="#52525B" dx="-14">V2.0</text>
   </g>
 </svg>
