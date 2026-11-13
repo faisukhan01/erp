@@ -420,49 +420,60 @@ async def generate(pid: str):
         Fills result["text"] with the full response and result["error"] if any."""
         collected = []
         error_message = None
-        async with client.stream(
-            "POST",
-            f"{AI_WORKER_URL}/v1/chat/stream",
-            json={
-                "messages": [
-                    {"role": "system", "content": BUILDER_SYSTEM},
-                    {"role": "user", "content": build_prompt},
-                ]
-            },
-            timeout=httpx.Timeout(600.0, connect=15.0),
-        ) as resp:
-            if resp.status_code != 200:
-                body = await resp.aread()
-                result["text"] = ""
-                result["error"] = (
-                    f"AI worker error ({resp.status_code}): {body[:200].decode(errors='ignore')}"
-                )
-                return
-            buffer = ""
-            async for raw in resp.aiter_bytes():
-                buffer += raw.decode(errors="ignore")
-                lines = buffer.split("\n")
-                buffer = lines.pop() or ""
-                for line in lines:
-                    line = line.strip()
-                    if not line.startswith("data:"):
-                        continue
-                    payload = line[5:].strip()
-                    if not payload:
-                        continue
-                    try:
-                        evt = json.loads(payload)
-                    except Exception:
-                        continue
-                    if evt.get("delta"):
-                        collected.append(evt["delta"])
-                        yield "delta", evt["delta"]
-                    elif evt.get("error"):
-                        error_message = evt["error"]
-                    elif evt.get("done"):
-                        pass
-        result["text"] = "".join(collected)
-        result["error"] = error_message
+        try:
+            async with client.stream(
+                "POST",
+                f"{AI_WORKER_URL}/v1/chat/stream",
+                json={
+                    "messages": [
+                        {"role": "system", "content": BUILDER_SYSTEM},
+                        {"role": "user", "content": build_prompt},
+                    ]
+                },
+                # read=110: a stalled Z.AI stream aborts after ~2 min instead of
+                # wedging the build for 10 (the bug users saw as endless 'typing').
+                timeout=httpx.Timeout(600.0, connect=15.0, read=110.0),
+            ) as resp:
+                if resp.status_code != 200:
+                    body = await resp.aread()
+                    result["text"] = ""
+                    result["error"] = (
+                        f"AI worker error ({resp.status_code}): {body[:200].decode(errors='ignore')}"
+                    )
+                    return
+                buffer = ""
+                async for raw in resp.aiter_bytes():
+                    buffer += raw.decode(errors="ignore")
+                    lines = buffer.split("\n")
+                    buffer = lines.pop() or ""
+                    for line in lines:
+                        line = line.strip()
+                        if not line.startswith("data:"):
+                            continue
+                        payload = line[5:].strip()
+                        if not payload:
+                            continue
+                        try:
+                            evt = json.loads(payload)
+                        except Exception:
+                            continue
+                        if evt.get("delta"):
+                            collected.append(evt["delta"])
+                            yield "delta", evt["delta"]
+                        elif evt.get("error"):
+                            error_message = evt["error"]
+                        elif evt.get("done"):
+                            pass
+            result["text"] = "".join(collected)
+            result["error"] = error_message
+        except httpx.ReadTimeout:
+            # stalled upstream — keep the partial text so the caller's retry
+            # loop can attempt a fresh build instead of hanging forever
+            result["text"] = "".join(collected)
+            result["error"] = "The AI stream stalled mid-build and was stopped."
+        except httpx.HTTPError as exc:
+            result["text"] = "".join(collected)
+            result["error"] = f"AI worker connection error: {exc}"
 
     async def stream() -> AsyncGenerator[str, None]:
         started = datetime.now(timezone.utc)
