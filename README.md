@@ -2,25 +2,24 @@
 
 <img src="docs/banner.svg" alt="Buildora — describe it, watch it ship" width="100%" />
 
-# Buildora
+# ⚡ Buildora
 
-**An AI app-builder platform where one sentence becomes a stunning, working web app — then refines it through conversation.**
+### *Describe it. Watch it ship.*
+
+**An open-source, Lovable/Base44-class AI app-builder platform. One sentence becomes a stunning, working web app — streamed live, token by token — then refined through conversation.**
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.128-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
-[![Powered by Z.AI](https://img.shields.io/badge/Brain-Z.AI-fbbf24?style=for-the-badge)](https://z.ai)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon%20Cloud-4169e1?style=for-the-badge&logo=postgresql)](https://neon.tech)
-[![License](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
-
-*Describe it. Watch it ship.*
+[![FastAPI](https://img.shields.io/badge/FastAPI-realtime_SSE-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon_Cloud-4169e1?style=for-the-badge&logo=postgresql)](https://neon.tech)
+[![Brain: Z.AI](https://img.shields.io/badge/Brain-Z.AI-fbbf24?style=for-the-badge)](https://z.ai)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-fbbf24?style=for-the-badge)](LICENSE)
 
 </div>
 
 ---
 
-## What is Buildora?
-
-Buildora is a **Lovable / Base44-class AI app builder** — you describe an app in plain language, Z.AI architects it, and you watch the code stream into existence token by token. Then you keep chatting: *"make the header glassy"*, *"add dark mode"*, and every message intelligently rewrites your app while preserving everything that works.
+## 🎬 What it feels like
 
 ```text
 You:  "build a simple calculator with history and a sleek dark design"
@@ -36,30 +35,47 @@ You:  "build a simple calculator with history and a sleek dark design"
       → v1 is live in the preview. Chat to refine. Download when done.
 ```
 
-## Why Buildora is different
+You type a sentence. **Z.AI** architects a blueprint — name, features, palette, vibe — then streams every character of your app into the code panel in real time. The moment it lands, it's running in the live preview. Every follow-up message (*"make the header glassy"*, *"add dark mode"*) intelligently rewrites the whole app while preserving everything that works, and every build is snapshotted so you can time-travel back to any version.
+
+## 🆚 Why Buildora is different
 
 | | Buildora | Typical AI builders |
 |---|---|---|
 | **Planning** | Visible blueprint (name, features, palette, vibe) before code | Black box |
 | **Code streaming** | True token-level SSE — watch every character land | Wait in silence, then dump |
-| **Self-healing builds** | Every build is parsed with a real JS engine; broken syntax *and* dead event bindings are auto-repaired before you ever see them | Ship broken code, you debug |
-| **Truncation guard** | Incomplete documents are never saved; builds auto-retry and lift output limits to 16K tokens | Mysterious half-apps |
-| **Version time machine** | Every build snapshotted to cloud PostgreSQL, one-click restore | Often paid-tier only |
+| **Self-healing builds** | Parsed with a real JS engine; broken syntax *and* dead event bindings auto-repaired before you ever see them | Ship broken code, you debug |
+| **Truncation guard** | Incomplete documents never saved; builds auto-retry with lifted output limits (16K tokens) | Mysterious half-apps |
+| **Version time machine** | Every build snapshotted to cloud **PostgreSQL**, one-click restore | Often paid-tier only |
 | **Live thumbnails** | Dashboard renders your actual apps in scaled iframes | Static icons |
 | **Code ownership** | Single-file HTML export, zero lock-in, no watermarks | Walled gardens |
 
-## Features
+## ✨ Features
 
-- **Blueprint before code** — Z.AI plans the name, tagline, feature set, palette and visual vibe, shown as a beautiful card in chat before a single line is written.
-- **True streaming** — a Bun AI-worker relays Z.AI token deltas through FastAPI SSE straight into the code panel. No fake chunked playback.
-- **Chat-driven iteration** — every message is a full-app rewrite that preserves what works and upgrades the polish.
-- **Self-healing pipeline** — inline `<script>` blocks are parsed with a real JS engine; syntax errors and inline handlers bound to non-global functions are detected and auto-repaired (max 2 rounds) *before* the version is saved.
-- **Completeness guard** — a build only ships if the document actually closes with `</html>`; truncated output is retried, never persisted.
-- **Version time machine** — every build is a row in PostgreSQL; restore any version from the History menu.
-- **Workspace** — resizable panels, syntax-highlighted code view with line numbers and file stats, desktop/mobile viewports, fullscreen mode, open-in-new-tab, one-click download, project rename, search, sort, grid/list layouts.
-- **Resilient by design** — if the backend is restarting, the frontend boots it and retries transparently (the 502 era is over).
+- 🧠 **Blueprint before code** — Z.AI plans the name, tagline, feature set, palette and vibe, shown as a beautiful animated card in chat before a single line is written.
+- 🌊 **True streaming** — a Bun AI-worker relays Z.AI token deltas through FastAPI SSE straight into the code panel. No fake chunked playback.
+- 💬 **Chat-driven iteration** — every message is a full-app rewrite that preserves what works and upgrades the polish.
+- 🔧 **Self-healing pipeline** — inline `<script>` blocks are parsed with a real JS engine; syntax errors and inline handlers bound to non-global functions are detected and auto-repaired (up to 2 rounds) *before* the version is saved.
+- 🛡️ **Completeness guard** — a build only ships if the document closes with `</html>`; truncated output is retried, never persisted.
+- ⏳ **Version time machine** — every build is a row in PostgreSQL; restore any version from the History menu.
+- 🖥️ **Premium workspace** — resizable panels, syntax-highlighted code with editor chrome and live stats, desktop/mobile viewports, fullscreen mode, open-in-new-tab, one-click download, project rename, search, sort, grid/list layouts.
+- 🗄️ **Cloud persistence** — anonymous workspaces, chat history and version snapshots stored in serverless **Neon PostgreSQL** (with an automatic local SQLite fallback for development).
+- 🩹 **Resilient by design** — stalled streams are detected honestly and auto-recovered; if the backend is restarting, the frontend boots it and retries transparently.
 
-## Architecture
+## 🏗️ Tech Stack
+
+| Layer | Technology | Role |
+|---|---|---|
+| 🎨 **Frontend** | Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS 4, shadcn/ui, Framer Motion, Zustand | The face — landing, dashboard, streaming builder workspace |
+| 🔩 **Backend** | Python 3.11+, FastAPI, SQLAlchemy 2.0, Uvicorn | The spine — REST + **Server-Sent Events** for generation |
+| 🗄️ **Database** | **PostgreSQL (Neon serverless)** — with SQLite dev fallback | The memory — users, projects, chat messages, version snapshots |
+| 🤖 **AI** | **Z.AI (GLM)** via a Bun AI-worker | The brain — blueprinting, code generation, chat refinement |
+| 🔁 **Streaming** | Bun + SSE relay, token-level deltas | Live code as it's written |
+| 🚪 **Gateway** | Caddy reverse proxy (`XTransformPort` routing) | Single-port entry, smart service routing |
+| 🧪 **Validation** | Real JS engine parse + event-binding checker | Self-healing generated code |
+
+> **Database:** Buildora runs on **PostgreSQL**, powered by [Neon](https://neon.tech)'s free serverless tier in production — every project, message and version snapshot lives there. Point `DATABASE_URL` at any PostgreSQL instance, or let it fall back to local SQLite for instant development.
+
+## 📐 Architecture
 
 ```mermaid
 flowchart LR
@@ -96,7 +112,7 @@ flowchart TB
     E --> B
 ```
 
-## Quickstart
+## 🚀 Quickstart
 
 ```bash
 # 1. Frontend (Next.js 16)
@@ -120,17 +136,17 @@ Open the app and type: *"a habit tracker with streaks and a weekly heatmap"* —
 
 > The Next.js boot endpoint (`/api/boot`) auto-spawns and health-checks both mini-services, so the frontend is self-healing in dev too.
 
-## Environment
+## 🔑 Environment
 
 | Service | File | Key | Purpose |
 |---|---|---|---|
-| FastAPI | `mini-services/api/.env` | `DATABASE_URL` | Neon PostgreSQL connection string |
+| FastAPI | `mini-services/api/.env` | `DATABASE_URL` | **Neon PostgreSQL** connection string (`postgresql://…?sslmode=require`) — omit for local SQLite fallback |
 | FastAPI | `mini-services/api/.env` | `AI_WORKER_URL` | defaults to `http://127.0.0.1:8001` |
 | Frontend | `.env` | `DATABASE_URL` | only needed for Prisma tooling |
 
-`.env` files are git-ignored. `Z.AI` credentials are read by `z-ai-web-dev-sdk` from its own config.
+`.env` files are git-ignored. Z.AI credentials are read by `z-ai-web-dev-sdk` from its own config.
 
-## API reference
+## 📡 API reference
 
 | Method | Route | Description |
 |---|---|---|
@@ -147,7 +163,7 @@ Open the app and type: *"a habit tracker with streaks and a weekly heatmap"* —
 | `GET` | `/api/projects/{id}/versions` | Version list |
 | `POST` | `/api/projects/{id}/restore` | Restore a version |
 
-## Project structure
+## 🗂️ Project structure
 
 ```text
 ├── src/
@@ -163,7 +179,7 @@ Open the app and type: *"a habit tracker with streaks and a weekly heatmap"* —
 └── prisma/                     # optional local Prisma tooling
 ```
 
-## Data model
+## 🧬 Data model
 
 ```mermaid
 erDiagram
@@ -179,7 +195,7 @@ erDiagram
     PROJECT { string name  string current_version_id }
 ```
 
-## Roadmap
+## 🗺️ Roadmap
 
 - [ ] Supabase Auth (Google / GitHub sign-in)
 - [ ] Multi-file exports (Vite project scaffold)
@@ -195,7 +211,7 @@ MIT — see [LICENSE](LICENSE).
 
 <div align="center">
 
-**Built with [Z.AI](https://z.ai) as the brain · FastAPI as the spine · Next.js 16 as the face**
+**Built with [Z.AI](https://z.ai) as the brain · FastAPI as the spine · Next.js 16 as the face · PostgreSQL as the memory**
 
 If Buildora impressed you, star the repo — it helps more than you know.
 
