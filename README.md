@@ -40,12 +40,27 @@ commits. The AI edits are written to disk the moment you hit **Apply**.
 - Sandboxed to the workspace root — `cd ../..` will not save you
 - One-click **Run** for the active file (bun / node / python3 / bash)
 
-**Onyx AI**
-- Streaming chat powered by Z.AI (GLM) with a machined system prompt
+**Onyx AI — agent mode**
+- Streaming chat powered by Z.AI (GLM) with an agent-grade system prompt
+- **Writes files to disk by itself** — every `path=` code fence the model
+  closes is auto-saved into the workspace the moment it lands. No Apply
+  button, no copy-paste: build requests produce real files in `src/`
+- Replies collapse each file into a compact **file card** — `saved · 62 ln` —
+  expand to peek at the code, open it in the editor with one click
+- The first written file auto-opens in the editor; explorer, git and live
+  preview all refresh on their own
 - `@` to attach workspace files as context; files referenced by path auto-attach
-- Complete-file responses carry `path=` on the code fence — hit **Apply** and
-  the file is written to disk and hot-synced into any open editor tab
-- Stop mid-generation, copy any block, or apply straight to the workspace
+- Stop mid-generation or copy any block
+
+**Live Preview**
+- The workspace is served at `localhost/api/ide/preview/` — jailed static
+  server with a full MIME map, directory index and sandboxed paths
+- Auto-reload: every HTML page carries a revision poller, so the preview
+  refreshes itself whenever any file changes — editor save, terminal or agent
+- Side-by-side with the editor (`⌘⇧V`, title-bar or palette toggle),
+  full-screen overlay on mobile, and "open in new tab" for the real thing
+- Ask Onyx to "build a snake game" and watch it appear in the pane as the
+  last file finishes writing
 
 **Source Control**
 - Live `git status` with change badges in the activity rail and status bar
@@ -69,6 +84,7 @@ commits. The AI edits are written to disk the moment you hit **Apply**.
 │  Next.js 16 (App Router)                                       │
 │  ├─ src/components/ide/*   — IDE shell, editor, chat, terminal │
 │  ├─ src/app/api/ide/*      — filesystem · search · git bridge  │
+│  │                           · live preview server             │
 │  └─ Zustand                — single IDE state tree             │
 └──────────────┬────────────────────────────┬────────────────────┘
                │ REST (JSON)                │ socket.io (gateway)
