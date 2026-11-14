@@ -4,7 +4,9 @@ import { useCallback, useState } from "react";
 import { ExternalLink, MonitorPlay, RotateCw, X } from "lucide-react";
 import { useIde } from "@/lib/ide/store";
 
-const PREVIEW_URL = "/api/ide/preview/";
+/* index.html explicitly — skips Next.js's trailing-slash 308, which would
+ * break relative asset resolution inside the iframe. */
+const PREVIEW_URL = "/api/ide/preview/index.html";
 
 /**
  * Live preview — an iframe pointed at the workspace preview server.

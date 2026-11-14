@@ -142,6 +142,19 @@ const RELOAD_SCRIPT = `<script>(function(){
   }, 1200);
 })();</script>`;
 
+/**
+ * Next.js strips the trailing slash from /api/ide/preview/ via a 308, which
+ * would make relative asset URLs resolve one level too high. A <base> tag
+ * pins every user page to the workspace root no matter how it was reached.
+ */
+function injectBase(html: string): string {
+  if (/<base\s/i.test(html)) return html; // respect a user-supplied <base>
+  if (/<head[^>]*>/i.test(html)) {
+    return html.replace(/<head[^>]*>/i, (m) => `${m}\n<base href="/api/ide/preview/"/>`);
+  }
+  return `<base href="/api/ide/preview/"/>\n` + html;
+}
+
 function injectReload(html: string): string {
   if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${RELOAD_SCRIPT}\n</body>`);
   return html + RELOAD_SCRIPT;
@@ -249,7 +262,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ path?: stri
     const mime = mimeOf(abs);
 
     if (mime.startsWith("text/html")) {
-      return new NextResponse(injectReload(buf.toString("utf8")), { headers: headers(mime) });
+      return new NextResponse(injectReload(injectBase(buf.toString("utf8"))), {
+        headers: headers(mime),
+      });
     }
 
     return new NextResponse(new Uint8Array(buf), { headers: headers(mime) });
