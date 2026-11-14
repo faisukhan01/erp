@@ -5,6 +5,7 @@ import {
   FolderOpen,
   GitBranch,
   Github,
+  MonitorPlay,
   Play,
   Search,
   SquareTerminal,
@@ -56,6 +57,8 @@ export function TitleBar() {
   const socketStatus = useIde((s) => s.socketStatus);
   const setPaletteOpen = useIde((s) => s.setPaletteOpen);
   const togglePanel = useIde((s) => s.togglePanel);
+  const togglePreview = useIde((s) => s.togglePreview);
+  const previewOpen = useIde((s) => s.previewOpen);
   const activePath = useIde((s) => s.activePath);
 
   const runActive = useCallback(() => {
@@ -121,6 +124,14 @@ export function TitleBar() {
           <Play className="h-3 w-3 fill-[#00e5ff] text-[#00e5ff]" />
           <span className="hidden lg:inline">Run</span>
         </button>
+
+        <IconBtn
+          title="Toggle live preview (⌘⇧V)"
+          onClick={togglePreview}
+          active={previewOpen}
+        >
+          <MonitorPlay className="h-4 w-4" />
+        </IconBtn>
 
         <IconBtn title="Toggle terminal (Ctrl+`)" onClick={togglePanel}>
           <SquareTerminal className="h-4 w-4" />

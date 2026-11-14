@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronRight, MonitorPlay, X } from "lucide-react";
 import { toast } from "sonner";
 import { useIde } from "@/lib/ide/store";
 import { fileGlyph } from "@/lib/ide/langs";
@@ -55,6 +55,8 @@ export function EditorPane() {
   const setActive = useIde((s) => s.setActive);
   const closeTab = useIde((s) => s.closeTab);
   const saveActive = useIde((s) => s.saveActive);
+  const previewOpen = useIde((s) => s.previewOpen);
+  const togglePreview = useIde((s) => s.togglePreview);
 
   const close = useCallback(
     (path: string) => {
@@ -136,6 +138,18 @@ export function EditorPane() {
             SAVE
           </button>
         )}
+        <button
+          type="button"
+          onClick={togglePreview}
+          title="Toggle live preview (⌘⇧V)"
+          aria-pressed={previewOpen}
+          className={`flex shrink-0 items-center gap-1.5 border-l px-3 font-mono text-[10px] transition-colors hover:bg-[#0e0e0e] ${
+            previewOpen ? "text-[#00e5ff]" : "text-[#8a8a8a] hover:text-[#e5e5e5]"
+          }`}
+        >
+          <MonitorPlay className="h-3 w-3" />
+          PREVIEW
+        </button>
       </div>
 
       {/* breadcrumb */}

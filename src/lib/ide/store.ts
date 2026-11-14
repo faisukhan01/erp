@@ -23,6 +23,11 @@ interface OnyxState {
   panelOpen: boolean;
   chatOpen: boolean;
   paletteOpen: boolean;
+  previewOpen: boolean;
+  previewRev: number;
+  togglePreview: () => void;
+  setPreviewOpen: (b: boolean) => void;
+  bumpPreview: () => void;
 
   /* connection */
   socketStatus: SocketStatus;
@@ -128,6 +133,11 @@ export const useIde = create<OnyxState>((set, get) => ({
   panelOpen: true,
   chatOpen: true,
   paletteOpen: false,
+  previewOpen: true,
+  previewRev: 0,
+  togglePreview: () => set((st) => ({ previewOpen: !st.previewOpen })),
+  setPreviewOpen: (b) => set({ previewOpen: b }),
+  bumpPreview: () => set((st) => ({ previewRev: st.previewRev + 1 })),
 
   socketStatus: "connecting",
   setSocketStatus: (s) => set({ socketStatus: s }),

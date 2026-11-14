@@ -25,6 +25,8 @@ export interface ChatMessage {
   createdAt: number;
   streaming?: boolean;
   error?: boolean;
+  /** Files the agent wrote to disk for this message (from ai:file events). */
+  wroteFiles?: { path: string; action: "created" | "updated"; lines: number }[];
 }
 
 export interface ChatContextFile {

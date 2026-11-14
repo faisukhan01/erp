@@ -6,6 +6,7 @@ import {
   FilePlus,
   Files,
   GitCommitHorizontal,
+  MonitorPlay,
   Play,
   RefreshCw,
   Save,
@@ -127,6 +128,9 @@ export function CommandPalette() {
           </CommandItem>
           <CommandItem onSelect={() => run(() => useIde.getState().toggleChat())} className="font-mono text-[12px]">
             <Bot className="mr-2 h-3.5 w-3.5 text-[#6ee7ff]" /> Toggle Onyx AI
+          </CommandItem>
+          <CommandItem onSelect={() => run(() => useIde.getState().togglePreview())} className="font-mono text-[12px]">
+            <MonitorPlay className="mr-2 h-3.5 w-3.5 text-[#6ee7ff]" /> Toggle live preview
           </CommandItem>
           <CommandItem onSelect={() => run(() => clearTerminal())} className="font-mono text-[12px]">
             <Trash2 className="mr-2 h-3.5 w-3.5 text-[#6ee7ff]" /> Clear terminal

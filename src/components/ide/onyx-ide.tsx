@@ -11,6 +11,7 @@ import { ActivityBar } from "./activity-bar";
 import { StatusBar } from "./status-bar";
 import { EditorPane } from "./editor-pane";
 import { TerminalPanel } from "./panel/terminal";
+import { PreviewPane } from "./panel/preview";
 import { AiChat } from "./chat/ai-chat";
 import { CommandPalette } from "./command-palette";
 import { Explorer } from "./sidebar/explorer";
@@ -84,6 +85,7 @@ export function OnyxIDE() {
   const sidebarOpen = useIde((s) => s.sidebarOpen);
   const chatOpen = useIde((s) => s.chatOpen);
   const panelOpen = useIde((s) => s.panelOpen);
+  const previewOpen = useIde((s) => s.previewOpen);
   const isMobile = useIsMobile();
   const bootedOnce = useRef(false);
 
@@ -94,7 +96,7 @@ export function OnyxIDE() {
 
     const mobile = window.matchMedia("(max-width: 767px)").matches;
     if (mobile) {
-      useIde.setState({ sidebarOpen: false, panelOpen: false, chatOpen: false });
+      useIde.setState({ sidebarOpen: false, panelOpen: false, chatOpen: false, previewOpen: false });
     }
 
     getSocket();
@@ -136,6 +138,12 @@ export function OnyxIDE() {
         st.toggleChat();
         return;
       }
+      if (mod && e.shiftKey && e.key.toLowerCase() === "v") {
+        e.preventDefault();
+        e.stopPropagation();
+        st.togglePreview();
+        return;
+      }
       if (e.ctrlKey && e.key === "`") {
         e.preventDefault();
         e.stopPropagation();
@@ -161,6 +169,11 @@ export function OnyxIDE() {
             <div className="min-w-0 flex-1">
               <EditorPane />
             </div>
+            {previewOpen && (
+              <div className="absolute inset-0 z-10 anim-fade">
+                <PreviewPane onClose={() => useIde.setState({ previewOpen: false })} />
+              </div>
+            )}
             {panelOpen && (
               <div className="absolute inset-x-0 bottom-0 z-20 h-[46%] border-t">
                 <TerminalPanel />
@@ -188,7 +201,19 @@ export function OnyxIDE() {
             <Panel minSize={30}>
               <PanelGroup direction="vertical" autoSaveId="onyx-v">
                 <Panel minSize={20}>
-                  <EditorPane />
+                  <PanelGroup direction="horizontal" autoSaveId="onyx-preview">
+                    <Panel minSize={24}>
+                      <EditorPane />
+                    </Panel>
+                    {previewOpen && (
+                      <>
+                        <ResizeHandle />
+                        <Panel defaultSize={42} minSize={18} className="bg-[#050505]">
+                          <PreviewPane onClose={() => useIde.setState({ previewOpen: false })} />
+                        </Panel>
+                      </>
+                    )}
+                  </PanelGroup>
                 </Panel>
                 {panelOpen && (
                   <>

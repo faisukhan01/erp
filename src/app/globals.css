@@ -225,6 +225,7 @@ body {
 }
 .anim-dot { animation: onyx-dot 2s ease-in-out infinite; }
 .anim-spin { animation: onyx-spin 0.9s linear infinite; }
+.anim-spin-once { animation: onyx-spin 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
 
 /* --------------------------------------------------- xterm tuning */
 
