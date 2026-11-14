@@ -1,7 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Check, Copy, FileCode2, Sparkles, Square, SquarePen, X } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  Copy,
+  ExternalLink,
+  FileCode2,
+  Loader2,
+  Sparkles,
+  Square,
+  SquarePen,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import * as api from "@/lib/ide/api";
@@ -15,10 +26,27 @@ const nextMsgId = () => `m-${Date.now().toString(36)}-${++msgSeq}`;
 let aiSeq = 0;
 const nextAiId = () => `ai-${Date.now().toString(36)}-${++aiSeq}`;
 
-/* ------------------------------------------------------------ code blocks */
+/* ------------------------------------------------------------- file cards */
 
-function CodeBlock({ code, lang, path }: { code: string; lang: string; path?: string }) {
+function FileCard({
+  code,
+  lang,
+  path,
+  savedLines,
+  streaming,
+  onOpenFile,
+}: {
+  code: string;
+  lang: string;
+  path: string;
+  savedLines?: number;
+  streaming?: boolean;
+  onOpenFile: (path: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const g = fileGlyph(path.split("/").pop() ?? path);
+  const saved = savedLines !== undefined;
 
   const copy = async () => {
     await navigator.clipboard.writeText(code).catch(() => undefined);
@@ -26,52 +54,100 @@ function CodeBlock({ code, lang, path }: { code: string; lang: string; path?: st
     setTimeout(() => setCopied(false), 1200);
   };
 
-  const apply = async () => {
-    if (!path) return;
+  const reapply = async () => {
     try {
       await api.writeFile(path, code);
       useIde.getState().applyExternal(path, code);
       await useIde.getState().loadTree(true);
       useIde.getState().loadGit();
-      toast.success(`Applied to ${path}`);
+      useIde.getState().bumpPreview();
+      toast.success(`Saved ${path}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Apply failed");
+      toast.error(err instanceof Error ? err.message : "Save failed");
     }
   };
 
   return (
-    <div className="my-2.5 overflow-hidden rounded-[6px] border bg-[#080808]">
-      <div className="flex h-8 items-center gap-2 border-b bg-[#0b0b0b] px-2.5">
-        <span className="font-mono text-[9.5px] uppercase tracking-widest text-[#6ee7ff]">{lang || "code"}</span>
-        {path && <span className="truncate font-mono text-[10px] text-[#8a8a8a]">{path}</span>}
-        <div className="ml-auto flex items-center gap-1">
-          <button
-            type="button"
-            onClick={copy}
-            title="Copy"
-            className="flex h-6 items-center gap-1 rounded-[4px] px-1.5 font-mono text-[9.5px] text-[#8a8a8a] hover:bg-[#161616] hover:text-white"
-          >
-            {copied ? <Check className="h-3 w-3 text-[#00e5ff]" /> : <Copy className="h-3 w-3" />}
-          </button>
-          {path && (
-            <button
-              type="button"
-              onClick={apply}
-              className="flex h-6 items-center gap-1 rounded-[4px] border border-[#00e5ff44] px-2 font-mono text-[9.5px] text-[#00e5ff] transition-colors hover:bg-[#00e5ff14]"
-            >
-              Apply
-            </button>
-          )}
-        </div>
+    <div className="my-2 overflow-hidden rounded-[6px] border bg-[#080808]">
+      <div className="flex h-8 items-center gap-2 px-2.5">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="flex min-w-0 flex-1 items-center gap-2 text-left"
+        >
+          <span className="shrink-0 font-mono text-[9px] font-bold" style={{ color: g.color }}>
+            {g.glyph}
+          </span>
+          <span className="truncate font-mono text-[11px] text-[#d4d4d4]">{path}</span>
+          {saved ? (
+            <span className="flex shrink-0 items-center gap-1 rounded-[3px] border border-[#00e5ff33] bg-[#00e5ff0f] px-1.5 py-px font-mono text-[9px] text-[#00e5ff]">
+              <Check className="h-2.5 w-2.5" /> saved · {savedLines} ln
+            </span>
+          ) : streaming ? (
+            <span className="flex shrink-0 items-center gap-1 rounded-[3px] border px-1.5 py-px font-mono text-[9px] text-[#e0af68]">
+              <Loader2 className="h-2.5 w-2.5 anim-spin" /> writing…
+            </span>
+          ) : null}
+          <ChevronDown
+            className={`ml-auto h-3.5 w-3.5 shrink-0 text-[#5c5c5c] transition-transform ${open ? "rotate-180" : ""}`}
+          />
+        </button>
       </div>
-      <pre className="max-h-[340px] overflow-auto p-3 font-mono text-[11.5px] leading-relaxed text-[#d4d4d4]">
-        <code>{code}</code>
-      </pre>
+
+      {open && (
+        <>
+          <div className="flex h-7 items-center gap-1 border-t bg-[#0b0b0b] px-2.5">
+            <span className="font-mono text-[9.5px] uppercase tracking-widest text-[#6ee7ff]">
+              {lang || "code"}
+            </span>
+            <div className="ml-auto flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => onOpenFile(path)}
+                className="flex h-5 items-center gap-1 rounded-[4px] px-1.5 font-mono text-[9.5px] text-[#8a8a8a] hover:bg-[#161616] hover:text-white"
+              >
+                <ExternalLink className="h-2.5 w-2.5" /> open
+              </button>
+              <button
+                type="button"
+                onClick={copy}
+                title="Copy"
+                className="flex h-5 items-center gap-1 rounded-[4px] px-1.5 font-mono text-[9.5px] text-[#8a8a8a] hover:bg-[#161616] hover:text-white"
+              >
+                {copied ? <Check className="h-3 w-3 text-[#00e5ff]" /> : <Copy className="h-3 w-3" />}
+              </button>
+              {!saved && (
+                <button
+                  type="button"
+                  onClick={reapply}
+                  className="flex h-5 items-center gap-1 rounded-[4px] border border-[#00e5ff44] px-2 font-mono text-[9.5px] text-[#00e5ff] transition-colors hover:bg-[#00e5ff14]"
+                >
+                  save
+                </button>
+              )}
+            </div>
+          </div>
+          <pre className="max-h-[300px] overflow-auto border-t p-3 font-mono text-[11.5px] leading-relaxed text-[#d4d4d4]">
+            <code>{code}</code>
+          </pre>
+        </>
+      )}
     </div>
   );
 }
 
-function Markdown({ content }: { content: string }) {
+function Markdown({
+  content,
+  wroteFiles,
+  streaming,
+  onOpenFile,
+}: {
+  content: string;
+  wroteFiles?: ChatMessage["wroteFiles"];
+  streaming?: boolean;
+  onOpenFile: (path: string) => void;
+}) {
   return (
     <div className="text-[12.5px] leading-relaxed text-[#c9c9c9]">
       <ReactMarkdown
@@ -95,12 +171,23 @@ function Markdown({ content }: { content: string }) {
                 </code>
               );
             }
+            if (path) {
+              const saved = wroteFiles?.find((f) => f.path === path);
+              return (
+                <FileCard
+                  code={text.replace(/\n$/, "")}
+                  lang={langMatch?.[1] ?? ""}
+                  path={path}
+                  savedLines={saved?.lines}
+                  streaming={streaming}
+                  onOpenFile={onOpenFile}
+                />
+              );
+            }
             return (
-              <CodeBlock
-                code={text.replace(/\n$/, "")}
-                lang={langMatch?.[1] ?? ""}
-                path={path}
-              />
+              <pre className="my-2 max-h-[300px] overflow-auto rounded-[6px] border bg-[#080808] p-3 font-mono text-[11.5px] leading-relaxed text-[#d4d4d4]">
+                <code>{text.replace(/\n$/, "")}</code>
+              </pre>
             );
           },
           a({ children, href }) {
@@ -139,10 +226,10 @@ function Markdown({ content }: { content: string }) {
 /* --------------------------------------------------------------- the chat */
 
 const SUGGESTIONS = [
+  "Build a pomodoro timer app",
+  "Build a snake game I can play",
+  "Build a landing page for a coffee shop",
   "Explain this project structure",
-  "Add JSDoc comments to src/utils.ts",
-  "Write a memoized fibonacci and a test",
-  "Review main.ts and suggest improvements",
 ];
 
 export function AiChat() {
@@ -181,25 +268,86 @@ export function AiChat() {
     return flatFiles.filter((f) => f.path.toLowerCase().includes(q)).slice(0, 7);
   }, [mentionQuery, flatFiles]);
 
+  const openInEditor = useCallback((path: string) => {
+    useIde.getState().openFile(path).catch(() => undefined);
+  }, []);
+
   /* socket listeners — registered once, state read via store */
   useEffect(() => {
     const socket = getSocket();
+
     const onDelta = (p: { id: string; delta: string }) => {
       useIde.getState().appendChatDelta(p.id, p.delta);
     };
-    const onDone = (p: { id: string }) => {
-      useIde.getState().patchChat(p.id, { streaming: false });
-      useIde.getState().setChatBusy(false);
+
+    const onFile = (p: {
+      id: string;
+      path: string;
+      action: "created" | "updated";
+      lines: number;
+      bytes?: number;
+    }) => {
+      const st = useIde.getState();
+      const msg = st.chatMessages.find((m) => m.id === p.id);
+      const prev = msg?.wroteFiles ?? [];
+      if (!prev.some((f) => f.path === p.path)) {
+        st.patchChat(p.id, {
+          wroteFiles: [...prev, { path: p.path, action: p.action, lines: p.lines }],
+        });
+      }
+
+      // an open editor tab gets the fresh disk content immediately
+      if (st.contents[p.path] !== undefined) {
+        api
+          .readFile(p.path)
+          .then((content) => useIde.getState().applyExternal(p.path, content))
+          .catch(() => undefined);
+      }
+
+      // refresh workspace views + live preview
+      st.loadTree(true);
+      st.loadGit();
+      st.bumpPreview();
+
+      // first written file of a reply opens in the editor (desktop)
+      if (prev.length === 0) {
+        st.openFile(p.path).catch(() => undefined);
+      }
+      if (
+        typeof window !== "undefined" &&
+        window.matchMedia("(min-width: 768px)").matches &&
+        !useIde.getState().previewOpen
+      ) {
+        useIde.getState().setPreviewOpen(true);
+      }
     };
+
+    const onFileError = (p: { id: string; path: string; error: string }) => {
+      toast.error(`Could not write ${p.path}`, { description: p.error });
+    };
+
+    const onDone = (p: { id: string }) => {
+      const st = useIde.getState();
+      st.patchChat(p.id, { streaming: false });
+      st.setChatBusy(false);
+      st.loadTree(true);
+      st.bumpPreview();
+    };
+
     const onError = (p: { id: string; error: string }) => {
       useIde.getState().patchChat(p.id, { streaming: false, error: true, content: `⚠ ${p.error}` });
       useIde.getState().setChatBusy(false);
     };
+
     socket.on("ai:delta", onDelta);
+    socket.on("ai:file", onFile);
+    socket.on("ai:file-error", onFileError);
     socket.on("ai:done", onDone);
     socket.on("ai:error", onError);
     return () => {
       socket.off("ai:delta", onDelta);
+      socket.off("ai:file", onFile);
+      socket.off("ai:file-error", onFileError);
       socket.off("ai:done", onDone);
       socket.off("ai:error", onError);
     };
@@ -314,7 +462,7 @@ export function AiChat() {
         <Sparkles className="h-3.5 w-3.5 text-[#00e5ff]" />
         <span className="micro-label">Onyx AI</span>
         <span className="rounded-full border px-1.5 py-px font-mono text-[8.5px] uppercase tracking-wider text-[#5c5c5c]">
-          z.ai
+          agent
         </span>
         <div className="ml-auto flex items-center gap-0.5">
           <button
@@ -342,10 +490,11 @@ export function AiChat() {
           {messages.length === 0 ? (
             <div className="flex flex-col items-center pt-10 anim-fade">
               <Sparkles className="h-6 w-6 text-[#00e5ff]" />
-              <p className="mt-4 text-[13px] font-medium text-[#d4d4d4]">Pair with Onyx AI</p>
-              <p className="mt-1.5 max-w-[220px] text-center text-[11px] leading-relaxed text-[#5c5c5c]">
-                Ask anything about your workspace. Type <span className="font-mono text-[#6ee7ff]">@</span> to
-                attach files as context.
+              <p className="mt-4 text-[13px] font-medium text-[#d4d4d4]">Build with Onyx AI</p>
+              <p className="mt-1.5 max-w-[230px] text-center text-[11px] leading-relaxed text-[#5c5c5c]">
+                Ask for an app and Onyx writes the files straight into{" "}
+                <span className="font-mono text-[#6ee7ff]">src/</span> — the live preview refreshes
+                by itself. Type <span className="font-mono text-[#6ee7ff]">@</span> to attach files.
               </p>
               <div className="mt-5 w-full space-y-1.5">
                 {SUGGESTIONS.map((s) => (
@@ -386,7 +535,12 @@ export function AiChat() {
                       <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#00e5ff]" />
                       <div className="min-w-0 flex-1">
                         {m.content ? (
-                          <Markdown content={m.content} />
+                          <Markdown
+                            content={m.content}
+                            wroteFiles={m.wroteFiles}
+                            streaming={m.streaming}
+                            onOpenFile={openInEditor}
+                          />
                         ) : m.streaming ? (
                           <span className="font-mono text-[11px] text-[#5c5c5c] anim-dot">thinking…</span>
                         ) : null}
@@ -394,6 +548,12 @@ export function AiChat() {
                           <span className="ml-0.5 inline-block h-3 w-[6px] translate-y-[2px] bg-[#00e5ff] anim-caret" />
                         )}
                         {m.error && <p className="font-mono text-[11px] text-[#ff5d5d]">{m.content}</p>}
+                        {!m.streaming && !!m.wroteFiles?.length && (
+                          <p className="mt-1.5 font-mono text-[10px] text-[#5c5c5c]">
+                            {m.wroteFiles.length} file{m.wroteFiles.length === 1 ? "" : "s"} written to the
+                            workspace — see explorer &amp; live preview
+                          </p>
+                        )}
                       </div>
                     </div>
                   )}
@@ -466,7 +626,7 @@ export function AiChat() {
               if (e.key === "Escape") setMentionQuery(null);
             }}
             rows={2}
-            placeholder={busy ? "Onyx is thinking…" : "Ask Onyx AI…  @ to attach files"}
+            placeholder={busy ? "Onyx is building…" : "Ask Onyx to build something…  @ to attach files"}
             className="max-h-28 w-full resize-none bg-transparent px-2.5 py-2 text-[12.5px] text-[#e5e5e5] outline-none placeholder:text-[#4a4a4a]"
           />
 
@@ -495,7 +655,7 @@ export function AiChat() {
                 disabled={!input.trim() && attached.length === 0}
                 className="flex h-6 items-center gap-1 rounded-[4px] border border-[#00e5ff44] px-2.5 font-mono text-[9.5px] text-[#00e5ff] transition-colors hover:bg-[#00e5ff14] disabled:border-[#222] disabled:text-[#4a4a4a]"
               >
-                send ⏎
+                build ⏎
               </button>
             )}
           </div>
