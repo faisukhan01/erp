@@ -52,3 +52,7 @@ mini-services/ai-worker/*.log
 /public/monaco
 /ide-workspace/
 dev.log
+
+# mini service logs
+mini-services/*/ide-server.log
+mini-services/*/*.log
