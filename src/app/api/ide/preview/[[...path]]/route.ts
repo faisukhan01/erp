@@ -240,7 +240,11 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ path?: stri
     /* directory (or root) -> index.html */
     const stat = await fs.stat(abs).catch(() => null);
     if (!stat) {
-      if (!rel) return new NextResponse(LANDING_PAGE(), { status: 200, headers: headers(MIME.html) });
+      /* The preview iframe always mounts /index.html (it skips Next's
+       * trailing-slash 308). On an empty workspace that must read as the
+       * armed landing page, not a 404 — otherwise a fresh project looks
+       * broken before the first build. */
+      if (!rel || rel === "index.html") return new NextResponse(LANDING_PAGE(), { status: 200, headers: headers(MIME.html) });
       return new NextResponse(NOT_FOUND_PAGE(rel), { status: 404, headers: headers(MIME.html) });
     }
     if (stat.isDirectory()) {
