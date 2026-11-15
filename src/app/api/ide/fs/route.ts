@@ -104,6 +104,10 @@ export async function GET(req: NextRequest) {
   const op = req.nextUrl.searchParams.get("op");
   try {
     if (op === "tree") {
+      /* Self-heal: the workspace is runtime data outside git, so a sandbox
+       * restore can wipe it. An empty-but-present root beats a 500 that
+       * renders as "Workspace failed to load". */
+      await fs.mkdir(WORKSPACE, { recursive: true });
       const budget = { n: MAX_TREE_NODES };
       const tree = await walk(WORKSPACE, "", budget);
       return NextResponse.json({
