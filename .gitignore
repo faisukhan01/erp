@@ -49,7 +49,9 @@ mini-services/api/api.log
 mini-services/ai-worker/*.log
 *.db
 *.sqlite3
-/public/monaco
+# public/monaco IS tracked on purpose: it is runtime-vendored by
+# setup:monaco, and leaving it untracked meant every sandbox restore
+# wiped it and the editor silently fell back to "LOADING EDITOR".
 /ide-workspace/
 dev.log
 
