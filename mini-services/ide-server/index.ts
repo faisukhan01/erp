@@ -31,9 +31,54 @@ const MAX_FILE_CHARS = 16_000;
 /* ------------------------------------------------------------------ z.ai */
 
 let zaiInstance: Awaited<ReturnType<typeof ZAI.create>> | null = null;
-async function getZAI() {
-  if (!zaiInstance) zaiInstance = await ZAI.create();
+let zaiInstanceAt = 0;
+let zaiInstanceTokened = false;
+const ZAI_CLIENT_TTL_MS = 30 * 60 * 1000; // tokens rotate — rotate the client with them
+const ZAI_TOKENLESS_TTL_MS = 10 * 1000; // boot window: the config has no token yet, retry soon
+
+/** Fresh read of the sandbox Z.AI config — does a real token exist right now? */
+function configHasToken(): boolean {
+  try {
+    const cfg = JSON.parse(fs.readFileSync("/etc/.z-ai-config", "utf8")) as {
+      token?: string;
+      apiKey?: string;
+    };
+    if (cfg.token && cfg.token.length > 0) return true;
+    return Boolean(cfg.apiKey && cfg.apiKey !== "Z.ai");
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * SDK client cache with self-healing. The sandbox config file can change
+ * under a long-running process — boot injects the per-chat token AFTER the
+ * services start, tokens rotate, and a sandbox restore rebuilds the config.
+ * A client created in the tokenless boot window 401s ("missing X-Token
+ * header") forever if cached naively. So the cache is keyed by token
+ * presence, expires on a TTL, and callers force-recreate after auth errors.
+ */
+async function getZAI(force = false) {
+  const tokened = configHasToken();
+  const ttl = tokened ? ZAI_CLIENT_TTL_MS : ZAI_TOKENLESS_TTL_MS;
+  if (
+    !force &&
+    zaiInstance &&
+    tokened === zaiInstanceTokened &&
+    Date.now() - zaiInstanceAt < ttl
+  ) {
+    return zaiInstance;
+  }
+  zaiInstance = await ZAI.create();
+  zaiInstanceAt = Date.now();
+  zaiInstanceTokened = tokened;
   return zaiInstance;
+}
+
+/** Auth-shaped upstream errors worth one fresh-client retry. */
+function isAuthError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /\b401\b|missing x-token|invalid token|unauthorized|token expired/i.test(msg);
 }
 
 /** Parse an OpenAI-style SSE byte stream into content deltas. */
@@ -326,13 +371,27 @@ function sessions(io: Server, socket: IOSocket) {
       if (lastMsg && lastMsg.role === "user") {
         lastMsg.content = `${lastMsg.content}\n\n${AGENT_NUDGE}`;
       }
-      const zai = await getZAI();
-      const upstream = (await zai.chat.completions.create({
-        messages,
-        stream: true,
-        thinking: { type: "disabled" },
-        max_tokens: 16384,
-      })) as ReadableStream<Uint8Array>;
+      let upstream: ReadableStream<Uint8Array>;
+      try {
+        const zai = await getZAI();
+        upstream = (await zai.chat.completions.create({
+          messages,
+          stream: true,
+          thinking: { type: "disabled" },
+          max_tokens: 16384,
+        })) as ReadableStream<Uint8Array>;
+      } catch (err) {
+        if (!isAuthError(err)) throw err;
+        // Stale or tokenless cached client — re-read the config, retry once.
+        console.log("[ide-server] AI auth error — refreshing Z.AI client and retrying once");
+        const zai = await getZAI(true);
+        upstream = (await zai.chat.completions.create({
+          messages,
+          stream: true,
+          thinking: { type: "disabled" },
+          max_tokens: 16384,
+        })) as ReadableStream<Uint8Array>;
+      }
 
       /* agent mode: scan the accumulated reply for closed path= fences and
        * write each one to disk the moment it completes. Signatures dedupe
