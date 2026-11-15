@@ -10,13 +10,17 @@ PROJECT=/home/z/my-project
 
 up() { curl -s -o /dev/null --connect-timeout 2 --max-time 3 "http://localhost:$1" ; }
 
+# Monaco assets: vendored at runtime and tracked in git, but a restore can
+# still race the checkout — re-vendor on every run if the loader is missing.
+# Cheap no-op when present.
+cd "$PROJECT" || exit 1
+[ -f public/monaco/vs/loader.js ] || bun run setup:monaco >/dev/null 2>&1
+
 # Next.js dev server
 if up "$PORT_NEXT"; then
   echo "[keepalive] next dev already up on $PORT_NEXT"
 else
   cd "$PROJECT" || exit 1
-  # monaco assets live outside git — (re)build them if a fresh checkout lost them
-  [ -f public/monaco/vs/loader.js ] || bun run setup:monaco >/dev/null 2>&1
   nohup bun run dev >/dev/null 2>&1 &
   echo $! > "$PROJECT/.zscripts/dev.pid"
   disown $! 2>/dev/null || true
@@ -33,3 +37,8 @@ else
   disown $! 2>/dev/null || true
   echo "[keepalive] ide-server launched on $PORT_IDE"
 fi
+
+# Workspace: runtime data outside git — a sandbox restore wipes it. Recreate
+# the directory so the explorer, preview and git bridge (which resolves
+# through the parent project repo) all come back.
+mkdir -p "$PROJECT/ide-workspace"
