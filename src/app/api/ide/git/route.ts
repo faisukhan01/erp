@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { execFile } from "child_process";
 import { promisify } from "util";
+import fs from "fs/promises";
 import type { GitCommit, GitFile } from "@/lib/ide/types";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +34,27 @@ export async function GET(req: NextRequest) {
       try {
         branch = (await git(["rev-parse", "--abbrev-ref", "HEAD"])).trim();
       } catch {
-        return NextResponse.json({ repo: false, branch: "", files: [] });
+        /* No repo — usually a sandbox restore (the workspace lives outside
+         * git and gets rebuilt empty). Self-heal: init + an initial commit
+         * so the git panel is usable again instead of stuck at "no repo". */
+        try {
+          await fs.mkdir(WORKSPACE, { recursive: true });
+          await git(["init"]);
+          await git(["add", "-A"]);
+          await git([
+            "-c",
+            "user.email=onyx@workspace.local",
+            "-c",
+            "user.name=Onyx Workspace",
+            "commit",
+            "--allow-empty",
+            "-m",
+            "workspace initialized",
+          ]);
+          return NextResponse.json({ repo: true, branch: "main", files: [] });
+        } catch {
+          return NextResponse.json({ repo: false, branch: "", files: [] });
+        }
       }
       const out = await git(["status", "--porcelain", "-z"]);
       const files: GitFile[] = [];
